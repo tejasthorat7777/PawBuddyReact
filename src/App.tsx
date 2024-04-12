@@ -1,9 +1,12 @@
-import Navbar from './Componet/Navbar/Navbar'
-import "./App.css"
+import Navbar from "./Componet/Navbar/Navbar";
+import "./App.css";
+import HeroPage from "./Componet/HeroPage/HeroPage";
 function App() {
- return(
-  <Navbar/>
- )
+  return (
+    <>
+      <HeroPage />
+    </>
+  );
 }
 
-export default App
+export default App;

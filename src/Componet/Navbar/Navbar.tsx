@@ -1,4 +1,3 @@
-import { Container } from "@mui/material";
 import logo from "../../assets/logo.png";
 
 export default function Navbar() {
@@ -7,25 +6,18 @@ export default function Navbar() {
       style={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height: "8vh",
         overflow: "hidden",
+        backgroundColor: "#00111c",
       }}
     >
-      <Container
-        maxWidth="xl"
-        style={{ backgroundColor: "#00111c", height: "8vh", flex: "0 0 auto" }}
-      >
-      </Container>
-      <Container
-        style={{
-          backgroundColor: "#00111c",
-          flex: "1 1 auto",
-          display: "flex",
-          flexDirection: "column",
-          width: "17vw",
-          marginLeft: "0%",
-        }}
-      ></Container>
+      <div style={{ height: "100%", width: "100%" }}>
+        <img
+          src={logo}
+          alt="LOGO"
+          style={{ height: "100%", scale: "0.8", marginLeft: "3.5%" }}
+        />
+      </div>
     </div>
   );
 }
