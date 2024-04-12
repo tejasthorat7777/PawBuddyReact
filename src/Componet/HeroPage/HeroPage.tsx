@@ -14,9 +14,9 @@ export default function HeroPage() {
           flexDirection: "column",
           width: "17vw",
           marginLeft: "0%",
-          height: "100vh",
+          height: "92vh",
           color: "white",
-          padding: "0",
+          padding: "0"
         }}
       >
         <Container
