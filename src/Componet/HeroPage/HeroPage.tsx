@@ -131,51 +131,55 @@ export default function HeroPage() {
                 Dog Food
               </div>
             </CustomAccordionSummary>
-            <CustomAccordionDetails>
-              <CustomButton>
-                <div style={customButtonContainer}>
-                  <img
-                    src={dryfood}
-                    alt="Food Icon"
-                    style={{
-                      height: "1.6em",
-                      margin: "0% 3% 1% 5%",
-                    }}
-                  />
-                  Dry Food
-                </div>
-              </CustomButton>
-            </CustomAccordionDetails>
-            <CustomAccordionDetails>
-              <CustomButton>
-                <div style={customButtonContainer}>
-                  <img
-                    src={gravyfood}
-                    alt="gravyfood"
-                    style={{
-                      height: "1.6em",
-                      margin: "0% 3% 1% 5%",
-                    }}
-                  />
-                  Gravy
-                </div>
-              </CustomButton>
-            </CustomAccordionDetails>
-            <CustomAccordionDetails style={{ borderRadius: "0px 0px 5px 5px" }}>
-              <CustomButton>
-                <div style={customButtonContainer}>
-                  <img
-                    src={dogtreat}
-                    alt="dogtreat"
-                    style={{
-                      height: "1.6em",
-                      margin: "0% 3% 1% 5%",
-                    }}
-                  />
-                  Treats
-                </div>
-              </CustomButton>
-            </CustomAccordionDetails>
+            <div onClick={(e) => e.stopPropagation()}>
+              <CustomAccordionDetails>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={dryfood}
+                      alt="Food Icon"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Dry Food
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+              <CustomAccordionDetails>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={gravyfood}
+                      alt="gravyfood"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Gravy
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+              <CustomAccordionDetails
+                style={{ borderRadius: "0px 0px 5px 5px" }}
+              >
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={dogtreat}
+                      alt="dogtreat"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Treats
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+            </div>
           </CustomAccordion>
           <CustomAccordion
             expanded={isExpanded === "panal2"}
@@ -202,51 +206,56 @@ export default function HeroPage() {
                 Accessories
               </div>
             </CustomAccordionSummary>
-            <CustomAccordionDetails>
-              <CustomButton>
-                <div style={customButtonContainer}>
-                  <img
-                    src={leash}
-                    alt="leash"
-                    style={{
-                      height: "1.6em",
-                      margin: "0% 3% 1% 5%",
-                    }}
-                  />
-                  Leash
-                </div>
-              </CustomButton>
-            </CustomAccordionDetails>
-            <CustomAccordionDetails>
-              <CustomButton>
-                <div style={customButtonContainer}>
-                  <img
-                    src={harness}
-                    alt="harness"
-                    style={{
-                      height: "1.6em",
-                      margin: "0% 3% 1% 5%",
-                    }}
-                  />
-                  Harness
-                </div>
-              </CustomButton>
-            </CustomAccordionDetails>
-            <CustomAccordionDetails style={{ borderRadius: "0px 0px 5px 5px" }}>
-              <CustomButton>
-                <div style={customButtonContainer}>
-                  <img
-                    src={collar}
-                    alt="Collar"
-                    style={{
-                      height: "1.6em",
-                      margin: "0% 3% 1% 5%",
-                    }}
-                  />
-                  Collar
-                </div>
-              </CustomButton>
-            </CustomAccordionDetails>
+            <div onClick={(e) => e.stopPropagation()}>
+              {" "}
+              <CustomAccordionDetails>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={leash}
+                      alt="leash"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Leash
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+              <CustomAccordionDetails>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={harness}
+                      alt="harness"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Harness
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+              <CustomAccordionDetails
+                style={{ borderRadius: "0px 0px 5px 5px" }}
+              >
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={collar}
+                      alt="Collar"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Collar
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+            </div>
           </CustomAccordion>
         </Container>
       </div>
