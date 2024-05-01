@@ -17,6 +17,10 @@ import accessories from "../../assets/dog.png";
 import leash from "../../assets/leash.png";
 import collar from "../../assets/collar.png";
 import harness from "../../assets/harness.png";
+import shampoo from "../../assets/pet-shampoo.png";
+import shampooSented from "../../assets/sentedShampoo.png";
+import shiningShampoo from "../../assets/ShiningShampoo.png";
+import tickAndFleaShampoo from "../../assets/tickandFleaShampoo.png";
 import { useState } from "react";
 
 const CustomButton = styled(Button)({
@@ -252,6 +256,81 @@ export default function HeroPage() {
                       }}
                     />
                     Collar
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+            </div>
+          </CustomAccordion>
+          <CustomAccordion
+            expanded={isExpanded === "panel3"}
+            onClick={() => {
+              handlChange("panel3");
+            }}
+          >
+            <CustomAccordionSummary
+              expandIcon={
+                <ArrowForwardIosSharpIcon
+                  style={{ fontSize: "1rem", color: "white" }}
+                />
+              }
+            >
+              <div style={customButtonContainer}>
+                <img
+                  src={shampoo}
+                  alt="Food Icon"
+                  style={{
+                    height: "1.6em",
+                    margin: "0% 3% 1% 1%",
+                  }}
+                />
+                Shampoo
+              </div>
+            </CustomAccordionSummary>
+            <div onClick={(e) => e.stopPropagation()}>
+              <CustomAccordionDetails>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={shiningShampoo}
+                      alt="Food Icon"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Shining Shampoo
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+              <CustomAccordionDetails>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={tickAndFleaShampoo}
+                      alt="gravyfood"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    Tick and flea Shampoo
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+              <CustomAccordionDetails
+                style={{ borderRadius: "0px 0px 5px 5px" }}
+              >
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={shampooSented}
+                      alt="dogtreat"
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    scented Shampoo
                   </div>
                 </CustomButton>
               </CustomAccordionDetails>
