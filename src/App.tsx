@@ -1,9 +1,11 @@
 import "./App.css";
-import HeroPage from "./Componet/HeroPage/HeroPage";
+import LeftMenu from "./Componet/LeftMenu/LeftMenu";
+import Navbar from "./Componet/Navbar/Navbar";
 function App() {
   return (
     <>
-      <HeroPage />
+      <Navbar />
+      <LeftMenu />
     </>
   );
 }
