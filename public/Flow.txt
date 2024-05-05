@@ -1,1 +1,5 @@
 Left Menu = 1. Home 2.Dog Food 3.Accessories, 4:Shampoo 5:Bathroom Basics
+Navbar - profile icon , logo, search
+profile icon options = profile , setting , contact us, orders , wishList
+profile = DP,first name , last name , DOB , address , phone number, email
+setting = password , default address
