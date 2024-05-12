@@ -1,15 +1,9 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Container,
+  Container
 } from "@mui/material";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
-import Navbar from "../Navbar/Navbar";
 import homeIcon from "../../assets/home.png";
 import foodIcon from "../../assets/pet-food.png";
-import { styled } from "@mui/material/styles";
 import gravyfood from "../../assets/poutine.png";
 import dryfood from "../../assets/bones.png";
 import dogtreat from "../../assets/dog-treat.png";
@@ -26,38 +20,7 @@ import poop from "../../assets/poop.png";
 import scooper from "../../assets/poop-scooper.png";
 import spray from "../../assets/spray.png";
 import { useState } from "react";
-
-const CustomButton = styled(Button)({
-  width: "100%",
-  height: "8%",
-  color: "white",
-  textTransform: "capitalize",
-  "&:hover": {
-    backgroundColor: "#003049",
-  },
-});
-
-const CustomAccordionSummary = styled(AccordionSummary)({
-  borderRadius: "5px 5px 0px 0px",
-  "&:hover": {
-    backgroundColor: "#003049",
-  },
-  "&.Mui-expanded": {
-    backgroundColor: "#597081",
-    color: "black",
-  },
-});
-
-const CustomAccordionDetails = styled(AccordionDetails)({
-  backgroundColor: "#597081",
-  padding: "0",
-});
-
-const CustomAccordion = styled(Accordion)({
-  backgroundColor: "#00111c",
-  boxShadow: "none",
-  color: "white",
-});
+import { CustomButton, CustomAccordionSummary, CustomAccordionDetails, CustomAccordion } from "../../commonFiles/common"
 
 const customButtonContainer = {
   width: "100%",
@@ -69,18 +32,6 @@ const customButtonContainer = {
   color: "white",
 };
 
-const leftNavigation = {
-  backgroundColor: "#00111c",
-  flex: "1 1 auto",
-  display: "flex",
-  flexDirection: "column",
-  width: "17vw",
-  marginLeft: "0%",
-  height: "92vh",
-  color: "white",
-  padding: "0",
-};
-
 const flexCenter = {
   display: "flex",
   justifyContent: "center",
@@ -89,7 +40,7 @@ const flexCenter = {
 };
 
 const greyLine = {
-  width: "98%",
+  width: "95%",
   backgroundColor: "grey",
   height: "1px"
 };
@@ -111,7 +62,17 @@ export default function LeftMenu() {
 
   return (
     <>
-      <div style={leftNavigation}>
+      <div style={{
+        backgroundColor: "#00111c",
+        flex: "1 1 auto",
+        display: "flex",
+        flexDirection: "column",
+        width: "17vw",
+        marginLeft: "0%",
+        height: "92vh",
+        color: "white",
+        padding: "0"
+      }}>
         <Container
           style={{
             height: "100%",
