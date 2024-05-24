@@ -1,0 +1,2 @@
+client -> REST API/server -> Database
+as soon as click on submit then API should get called

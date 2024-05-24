@@ -1,6 +1,4 @@
-import {
-  Container
-} from "@mui/material";
+import { Container } from "@mui/material";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import homeIcon from "../../assets/home.png";
 import foodIcon from "../../assets/pet-food.png";
@@ -20,7 +18,12 @@ import poop from "../../assets/poop.png";
 import scooper from "../../assets/poop-scooper.png";
 import spray from "../../assets/spray.png";
 import { useState } from "react";
-import { CustomButton, CustomAccordionSummary, CustomAccordionDetails, CustomAccordion } from "../../commonFiles/common"
+import {
+  CustomButton,
+  CustomAccordionSummary,
+  CustomAccordionDetails,
+  CustomAccordion,
+} from "../../commonFiles/common";
 
 const customButtonContainer = {
   width: "100%",
@@ -36,19 +39,19 @@ const flexCenter = {
   display: "flex",
   justifyContent: "center",
   marginTop: "5%",
-  alignItems: "center"
+  alignItems: "center",
 };
 
 const greyLine = {
   width: "95%",
   backgroundColor: "grey",
-  height: "1px"
+  height: "1px",
 };
 
 const greyText = {
   color: "grey",
   fontFamily: "cursive",
-  fontSize: "12px"
+  fontSize: "12px",
 };
 
 export default function LeftMenu() {
@@ -56,23 +59,25 @@ export default function LeftMenu() {
 
   const version = "0.0.1";
 
-  const handlChange = (option: string) => {
+  const handlChange = (option) => {
     setIsExpanded((prevState) => (prevState === option ? "" : option));
   };
 
   return (
     <>
-      <div style={{
-        backgroundColor: "#00111c",
-        flex: "1 1 auto",
-        display: "flex",
-        flexDirection: "column",
-        width: "17vw",
-        marginLeft: "0%",
-        height: "92vh",
-        color: "white",
-        padding: "0"
-      }}>
+      <div
+        style={{
+          backgroundColor: "#00111c",
+          flex: "1 1 auto",
+          display: "flex",
+          flexDirection: "column",
+          width: "17vw",
+          marginLeft: "0%",
+          height: "92vh",
+          color: "white",
+          padding: "0",
+        }}
+      >
         <Container
           style={{
             height: "100%",
@@ -398,7 +403,9 @@ export default function LeftMenu() {
           <div style={flexCenter}>
             <div style={greyLine}></div>
           </div>
-          <div style={Object.assign({}, flexCenter, greyText)}>© PawBuddy Version {version}</div>
+          <div style={Object.assign({}, flexCenter, greyText)}>
+            © PawBuddy Version {version}
+          </div>
         </Container>
       </div>
     </>

@@ -1,9 +1,9 @@
 import logo from "../../assets/logo.png";
 import { useState } from "react";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, Tooltip, colors } from "@mui/material";
+import { Box, IconButton, ListItemIcon, Menu, Tooltip } from "@mui/material";
 import { CustomMenuItem } from "../../commonFiles/common";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { Logout, Settings } from "@mui/icons-material";
 import React from "react";
 import CallIcon from '@mui/icons-material/Call';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -40,7 +40,7 @@ export default function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

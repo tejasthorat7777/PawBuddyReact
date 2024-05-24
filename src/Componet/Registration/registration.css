@@ -49,6 +49,14 @@
     height: 60px;
 }
 
+.calendarIcon {
+    position: absolute;
+    left: 74%;
+    top: 36%;
+    color: grey;
+    cursor: pointer;
+}
+
 .grid1 {
     margin-top: 0.5%;
     padding: 2%;
@@ -68,16 +76,6 @@ label {
     color: white;
 }
 
-input[type="date"] {
-    border: none;
-    font-size: 15px;
-    padding: 10px;
-    width: 50%;
-    background-color: rgb(0, 17, 28);
-    color: grey;
-    cursor: pointer;
-}
-
 input[type="text"] {
     border: none;
     font-size: 15px;
@@ -86,6 +84,64 @@ input[type="text"] {
     background-color: rgb(0, 17, 28);
     color: white;
     outline: none;
+}
+
+input[type="password"] {
+    border: none;
+    font-size: 15px;
+    padding: 10px;
+    width: 50%;
+    background-color: rgb(0, 17, 28);
+    color: white;
+    outline: none;
+}
+
+.custom-radio-group {
+    display: flex;
+    gap: 10px;
+}
+
+.custom-radio {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom-radio input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.custom-radio input:before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(0, 17, 28);
+    /* Change this to your desired color */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.custom-radio input:checked:before {
+    opacity: 1;
+}
+
+.custom-radio span {
+    margin-left: 8px;
+    font-size: 15px;
 }
 
 .grid3 {
@@ -97,20 +153,25 @@ input[type="text"] {
 }
 
 .grid-3 {
-    margin-left: 200px;
+    margin-left: 22%;
     width: 30%;
 }
 
-select{
+select {
     outline: none;
     color: white;
     background-color: rgb(0, 17, 28);
     border: none;
     padding: 2%;
 }
+
 #city {
     width: 75%;
     border-radius: 5px;
     font-size: 15px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.submitButton:hover {
+    background-color: "red";
 }
