@@ -64,6 +64,7 @@ export default function Registration() {
   const [isLoading, setIsloading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
 
+  //TODO city is not getting stored
   const handleCity = (city: SelectChangeEvent<unknown>) => {
     setFormData({ ...formData, city: city.target.value });
   };
