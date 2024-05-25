@@ -13,6 +13,8 @@ export const CustomButton = styled(Button)({
 });
 
 export const CustomMenuItem = styled(MenuItem)({
+    color:"white",
+    fontFamily:"cursive",
     "&:hover": {
         backgroundColor: "#003049",
     },

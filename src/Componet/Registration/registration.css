@@ -44,36 +44,30 @@
     padding: 15px;
     text-align: center;
     font-size: 14px;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'cursive';
     cursor: default;
-    height: 60px;
-}
-
-.calendarIcon {
-    position: absolute;
-    left: 74%;
-    top: 36%;
-    color: grey;
-    cursor: pointer;
+    height: 10%;
 }
 
 .grid1 {
-    margin-top: 0.5%;
     padding: 2%;
     display: grid;
     grid-template-columns: 350px 350px;
     color: white;
+    row-gap: 2%;
+    height: 100%;
 }
 
 .grid {
-    margin-left: 100px;
-    padding: 10px;
-    height: 100%;
+    margin-left: 12%;
+    padding: 1%;
+    height: 85%;
 }
 
 label {
     font-size: 15px;
     color: white;
+    font-family: 'cursive';
 }
 
 input[type="text"] {
@@ -84,6 +78,7 @@ input[type="text"] {
     background-color: rgb(0, 17, 28);
     color: white;
     outline: none;
+    font-family: cursive;
 }
 
 input[type="password"] {
@@ -96,15 +91,12 @@ input[type="password"] {
     outline: none;
 }
 
-.custom-radio-group {
-    display: flex;
-    gap: 10px;
-}
-
 .custom-radio {
     display: flex;
     align-items: center;
     cursor: pointer;
+    background-color: red;
+    width: 70%;
 }
 
 .custom-radio input {
@@ -155,23 +147,4 @@ input[type="password"] {
 .grid-3 {
     margin-left: 22%;
     width: 30%;
-}
-
-select {
-    outline: none;
-    color: white;
-    background-color: rgb(0, 17, 28);
-    border: none;
-    padding: 2%;
-}
-
-#city {
-    width: 75%;
-    border-radius: 5px;
-    font-size: 15px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.submitButton:hover {
-    background-color: "red";
 }

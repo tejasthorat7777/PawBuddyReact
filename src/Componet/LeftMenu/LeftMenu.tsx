@@ -59,7 +59,7 @@ export default function LeftMenu() {
 
   const version = "0.0.1";
 
-  const handlChange = (option) => {
+  const handlChange = (option:string) => {
     setIsExpanded((prevState) => (prevState === option ? "" : option));
   };
 
