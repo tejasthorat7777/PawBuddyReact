@@ -1,10 +1,8 @@
 import {
   Button,
-  CircularProgress,
   InputLabel,
   RadioGroup,
   Select,
-  SelectChangeEvent,
   SelectProps,
   Typography,
   styled,
@@ -18,25 +16,19 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { CustomMenuItem } from "../../commonFiles/common";
-
-
-interface FormData {
-  city: string;
-  gender: string;
-  name: string;
-  age: string;
-  breed: string;
-  birthdate: string;
-  owner: string;
-  identification: string;
-  username: string;
-  password: string;
-}
+import { Waiting } from "../../Lottie/lottieComponent/Waiting";
+import { DoneTick } from "../../Lottie/lottieComponent/DoneTick";
+import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
+  color: "white",
+  fontFamily: "cursive",
   "& .MuiSelect-icon": {
     color: "white",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    border: "none",
   },
 }));
 
@@ -46,8 +38,17 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
   backgroundColor: "#00111C",
 }));
 
+const commonStyleDiv = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  backgroundColor: "#00111C",
+  color: "white",
+};
+
 export default function Registration() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     city: "",
     gender: "",
     name: "",
@@ -63,11 +64,7 @@ export default function Registration() {
   const [onHover, setOnHover] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
-
-  //TODO city is not getting stored
-  const handleCity = (city: SelectChangeEvent<unknown>) => {
-    setFormData({ ...formData, city: city.target.value });
-  };
+  const [formSend, setFormSend] = useState(false);
 
   useEffect(() => {}, [formData]);
 
@@ -75,7 +72,10 @@ export default function Registration() {
     try {
       setIsloading(true);
       await CONNECT.collection("UserData").doc(formData.username).set(formData);
-      setIsloading(false);
+      setTimeout(() => {
+        setIsloading(false);
+      }, 3000);
+      setFormSend(true);
     } catch (error) {
       setIsloading(false);
       setUploadError(true);
@@ -84,9 +84,26 @@ export default function Registration() {
   return (
     <>
       {isLoading ? (
-        <CircularProgress />
+        <div style={commonStyleDiv}>
+          <Waiting />
+          Relax... Saving Your Data
+        </div>
       ) : uploadError ? (
-        <div>Something Went Wrong</div>
+        <div style={commonStyleDiv}>
+          <NotFound />
+          <pre>
+            Something Went Wrong... <br /> please try again
+          </pre>
+        </div>
+      ) : formSend ? (
+        <div style={commonStyleDiv}>
+          <DoneTick />
+          <div>
+            <div style={{ padding: "5%" }}> Registration Successful</div>
+            {/* //TODO Button functionality */}
+            <Button>Want to shop click here</Button>
+          </div>
+        </div>
       ) : (
         <div className="sign-up">
           <div className="out-box">
@@ -102,12 +119,8 @@ export default function Registration() {
               </div>
               <div className="grid">
                 <div className="grid1">
-                  <label htmlFor="name" style={{ fontFamily: "cursive" }}>
-                    Name
-                  </label>
-                  <label htmlFor="age" style={{ fontFamily: "cursive" }}>
-                    Age
-                  </label>
+                  <label style={{ fontFamily: "cursive" }}>Name</label>
+                  <label style={{ fontFamily: "cursive" }}>Age</label>
                   <input
                     type="text"
                     name="name"
@@ -124,12 +137,8 @@ export default function Registration() {
                       setFormData({ ...formData, age: event.target.value });
                     }}
                   />
-                  <label htmlFor="breed" style={{ fontFamily: "cursive" }}>
-                    Breed
-                  </label>
-                  <label htmlFor="birthdate" style={{ fontFamily: "cursive" }}>
-                    Birthdate
-                  </label>
+                  <label style={{ fontFamily: "cursive" }}>Breed</label>
+                  <label style={{ fontFamily: "cursive" }}>Birthdate</label>
                   <input
                     type="text"
                     name="breed"
@@ -149,10 +158,8 @@ export default function Registration() {
                       });
                     }}
                   />
-                  <label htmlFor="Owner" style={{ fontFamily: "cursive" }}>
-                    Owner
-                  </label>
-                  <label htmlFor="identity" style={{ fontFamily: "cursive" }}>
+                  <label style={{ fontFamily: "cursive" }}>Owner</label>
+                  <label style={{ fontFamily: "cursive" }}>
                     Identification
                   </label>
                   <input
@@ -174,12 +181,8 @@ export default function Registration() {
                       });
                     }}
                   />
-                  <label htmlFor="username" style={{ fontFamily: "cursive" }}>
-                    Username
-                  </label>
-                  <label htmlFor="password" style={{ fontFamily: "cursive" }}>
-                    Password
-                  </label>
+                  <label style={{ fontFamily: "cursive" }}>Username</label>
+                  <label style={{ fontFamily: "cursive" }}>Password</label>
                   <input
                     type="text"
                     name="username"
@@ -263,7 +266,9 @@ export default function Registration() {
                     </RadioGroup>
                   </FormControl>
                   <FormControl
-                    sx={{ maxWidth: "50%" }}
+                    sx={{
+                      maxWidth: "50%",
+                    }}
                     size="small"
                     style={{ marginTop: "5%" }}
                   >
@@ -276,11 +281,14 @@ export default function Registration() {
                     <StyledSelect
                       id="city"
                       value={formData.city}
-                      label="Age"
                       onChange={(event) => {
-                        handleCity(event);
+                        setFormData({
+                          ...formData,
+                          city: event.target.value as string,
+                        });
                       }}
                     >
+                      <CustomMenuItem value="select">Select</CustomMenuItem>
                       <CustomMenuItem value="Pune">Pune</CustomMenuItem>
                       <CustomMenuItem value="Nashik">Nashik</CustomMenuItem>
                       <CustomMenuItem value="Nagpur">Nagpur</CustomMenuItem>
