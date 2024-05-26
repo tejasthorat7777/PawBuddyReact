@@ -15,7 +15,7 @@ import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { CustomMenuItem } from "../../commonFiles/common";
+import { CustomMenuItem, commonStyleDiv } from "../../commonFiles/common";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { DoneTick } from "../../Lottie/lottieComponent/DoneTick";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
@@ -37,15 +37,6 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
 ))(() => ({
   backgroundColor: "#00111C",
 }));
-
-const commonStyleDiv = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  backgroundColor: "#00111C",
-  color: "white",
-};
 
 export default function Registration() {
   const [formData, setFormData] = useState({
@@ -125,6 +116,7 @@ export default function Registration() {
                     type="text"
                     name="name"
                     placeholder="Puppy Name"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({ ...formData, name: event.target.value });
                     }}
@@ -133,6 +125,7 @@ export default function Registration() {
                     type="text"
                     name="age"
                     placeholder="Puppy Age"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({ ...formData, age: event.target.value });
                     }}
@@ -143,6 +136,7 @@ export default function Registration() {
                     type="text"
                     name="breed"
                     placeholder="Breed"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({ ...formData, breed: event.target.value });
                     }}
@@ -151,6 +145,7 @@ export default function Registration() {
                     type="text"
                     name="birthdate"
                     placeholder="dd/mm/yy"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({
                         ...formData,
@@ -166,6 +161,7 @@ export default function Registration() {
                     type="text"
                     name="Owner"
                     placeholder="Owner"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({ ...formData, owner: event.target.value });
                     }}
@@ -174,6 +170,7 @@ export default function Registration() {
                     type="text"
                     name="identity"
                     placeholder="Identification"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({
                         ...formData,
@@ -187,6 +184,7 @@ export default function Registration() {
                     type="text"
                     name="username"
                     placeholder="Username"
+                    autoComplete="off"
                     onChange={(event) => {
                       setFormData({
                         ...formData,
