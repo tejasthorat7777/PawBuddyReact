@@ -10,6 +10,9 @@ export const NotFound = () => {
         play
         style={{ width: 300, height: 300 }}
       />
+      <pre>
+            Something Went Wrong... <br /> please try again
+          </pre>
     </div>
   );
 };

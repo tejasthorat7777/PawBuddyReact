@@ -19,6 +19,7 @@ import { CustomMenuItem, commonStyleDiv } from "../../commonFiles/common";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { DoneTick } from "../../Lottie/lottieComponent/DoneTick";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
+import { UserData } from "../../commonFiles/commonTypes";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -39,7 +40,7 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
 }));
 
 export default function Registration() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UserData>({
     city: "",
     gender: "",
     name: "",
@@ -82,9 +83,6 @@ export default function Registration() {
       ) : uploadError ? (
         <div style={commonStyleDiv}>
           <NotFound />
-          <pre>
-            Something Went Wrong... <br /> please try again
-          </pre>
         </div>
       ) : formSend ? (
         <div style={commonStyleDiv}>

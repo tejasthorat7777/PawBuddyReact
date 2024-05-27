@@ -1,7 +1,7 @@
-import { PageType } from "../../commonFiles/commonTypes";
+import { ProfileType } from "../../commonFiles/commonTypes";
 import { Profile } from "../Account/Profile";
 
-const Right = ({ page }: { page: PageType }) => {
+const Right = ({ page }: { page: ProfileType }) => {
   const renderComponent = () => {
     switch (page) {
       case "profile":
@@ -14,7 +14,7 @@ const Right = ({ page }: { page: PageType }) => {
       style={{
         position: "absolute",
         height: "92vh",
-        padding: "1.5rem",
+        padding: ".75rem",
         width: "83vw",
         marginLeft: "17vw",
       }}

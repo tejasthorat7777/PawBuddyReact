@@ -9,7 +9,7 @@ import CallIcon from "@mui/icons-material/Call";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { PageType } from "../../commonFiles/commonTypes";
+import { ProfileType } from "../../commonFiles/commonTypes";
 
 const inputStyle = {
   width: "100%",
@@ -39,7 +39,7 @@ const navLeft = {
 
 interface NavbarProps {
   onImageClick: () => void;
-  onPage: (pageName: PageType) => void;
+  onPage: (pageName: ProfileType) => void;
 }
 
 export default function Navbar({ onImageClick, onPage }: NavbarProps) {

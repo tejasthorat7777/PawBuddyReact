@@ -6,12 +6,12 @@ import Registration from "./Componet/Registration/Registration";
 import { Waiting } from "./Lottie/lottieComponent/Waiting";
 import { commonStyleDiv } from "./commonFiles/common";
 import Right from "./Componet/Right/Right";
-import { PageType } from "./commonFiles/commonTypes";
+import { ProfileType } from "./commonFiles/commonTypes";
 
 function App() {
   const [regi, setRegi] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [page, setPage] = useState<PageType>("dashboard");
+  const [page, setPage] = useState<ProfileType>("");
 
   const handleImageClick = () => {
     setIsVisible(false);
@@ -22,7 +22,7 @@ function App() {
     }, 2000);
   };
 
-  const handlePage = (pageName: PageType) => {
+  const handlePage = (pageName: ProfileType) => {
     setPage(pageName);
   };
 
@@ -35,7 +35,7 @@ function App() {
           <>
             <Navbar
               onImageClick={handleImageClick}
-              onPage={(componentName: PageType) => {
+              onPage={(componentName: ProfileType) => {
                 handlePage(componentName);
               }}
             />
