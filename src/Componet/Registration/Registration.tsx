@@ -69,6 +69,7 @@ export default function Registration() {
       }, 3000);
       setFormSend(true);
     } catch (error) {
+      console.log("error>>>>>",error)
       setIsloading(false);
       setUploadError(true);
     }
@@ -140,7 +141,7 @@ export default function Registration() {
                     }}
                   />
                   <input
-                    type="text"
+                    type="date"
                     name="birthdate"
                     placeholder="dd/mm/yy"
                     autoComplete="off"
