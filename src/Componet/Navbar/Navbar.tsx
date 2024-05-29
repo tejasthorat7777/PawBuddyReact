@@ -46,7 +46,7 @@ export default function Navbar({ onImageClick, onPage }: NavbarProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event: { currentTarget: React.SetStateAction<HTMLElement | null>; }) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -126,7 +126,7 @@ export default function Navbar({ onImageClick, onPage }: NavbarProps) {
               <CustomMenuItem
                 onClick={()=>{
                   handleClose();
-                  onPage("profile");
+                  onPage("/profile");
                 }}
                 style={{ fontSize: "1rem", fontFamily: "cursive" }}
               >

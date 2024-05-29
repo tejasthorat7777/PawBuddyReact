@@ -24,6 +24,7 @@ import {
   CustomAccordionDetails,
   CustomAccordion,
 } from "../../commonFiles/common";
+import { ProfileType } from "../../commonFiles/commonTypes";
 
 const customButtonContainer = {
   width: "100%",
@@ -54,12 +55,16 @@ const greyText = {
   fontSize: "12px",
 };
 
-export default function LeftMenu() {
+interface LeftProps {
+  onPage: (pageName: ProfileType) => void;
+}
+
+export default function LeftMenu({ onPage }: LeftProps) {
   const [isExpanded, setIsExpanded] = useState("");
 
   const version = "0.0.1";
 
-  const handlChange = (option:string) => {
+  const handlChange = (option: string) => {
     setIsExpanded((prevState) => (prevState === option ? "" : option));
   };
 
@@ -86,7 +91,11 @@ export default function LeftMenu() {
             marginTop: "2%",
           }}
         >
-          <CustomButton>
+          <CustomButton
+            onClick={() => {
+              onPage("/");
+            }}
+          >
             <div style={customButtonContainer}>
               <img
                 src={homeIcon}

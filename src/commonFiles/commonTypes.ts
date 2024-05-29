@@ -1,11 +1,11 @@
 export type ProfileType =
-  | ""
-  | "profile"
-  | "WishList"
-  | "Orders"
-  | "Contact"
-  | "Settings"
-  | "Logout";
+  | "/"
+  | "/profile"
+  | "/WishList"
+  | "/orders"
+  | "/contact"
+  | "/settings"
+  | "/logout";
 
 export type UserData = {
   city: string;

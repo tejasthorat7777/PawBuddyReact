@@ -55,3 +55,8 @@ export const commonStyleDiv = {
   backgroundColor: "#00111C",
   color: "white",
 };
+
+export const linkStyle = {
+  textDecoration: "none",
+  color: "white",
+};

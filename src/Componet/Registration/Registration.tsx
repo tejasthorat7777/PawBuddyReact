@@ -182,7 +182,7 @@ export default function Registration() {
                   <input
                     type="text"
                     name="username"
-                    placeholder="Username"
+                    placeholder="Username/Email"
                     autoComplete="off"
                     onChange={(event) => {
                       setFormData({

@@ -11,7 +11,7 @@ import { ProfileType } from "./commonFiles/commonTypes";
 function App() {
   const [regi, setRegi] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [page, setPage] = useState<ProfileType>("");
+  const [page, setPage] = useState<ProfileType>("/");
 
   const handleImageClick = () => {
     setIsVisible(false);
@@ -26,6 +26,7 @@ function App() {
     setPage(pageName);
   };
 
+  console.log("page>>>>", page);
   return (
     <>
       {isVisible ? (
@@ -40,7 +41,11 @@ function App() {
               }}
             />
             <Right page={page} />
-            <LeftMenu />
+            <LeftMenu
+              onPage={(componentName: ProfileType) => {
+                handlePage(componentName);
+              }}
+            />
           </>
         )
       ) : (

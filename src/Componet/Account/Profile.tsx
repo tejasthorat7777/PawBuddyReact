@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { CONNECT } from "../../dataBase/firebase";
 import { UserData } from "../../commonFiles/commonTypes";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
-import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { CircularProgress } from "@mui/material";
 
 const styles = {
