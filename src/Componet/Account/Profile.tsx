@@ -9,7 +9,8 @@ const styles = {
   border: "1px solid black",
   marginTop: "2%",
   boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
-  color: "gray",
+  color: "white",
+  backgroundColor: "#00111c",
 };
 
 const outerDiv = {
@@ -72,7 +73,14 @@ export const Profile = () => {
           <NotFound />
         </div>
       ) : (
-        <div style={{ height: "100%", width: "100%", padding: "3%" }}>
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            padding: "3%",
+            backgroundColor: "#597081",
+          }}
+        >
           *You cannot edit this fields
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>

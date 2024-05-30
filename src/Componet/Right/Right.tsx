@@ -19,7 +19,6 @@ const Right = ({ page }: { page: ProfileType }) => {
       style={{
         position: "absolute",
         height: "92vh",
-        padding: ".75rem",
         width: "83vw",
         marginLeft: "17vw",
       }}
