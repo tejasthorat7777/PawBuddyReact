@@ -15,7 +15,7 @@ import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { CustomMenuItem, commonStyleDiv } from "../../commonFiles/common";
+import { CustomMenuItem, commonStyleDiv } from "../../commonFiles/commonTheme";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { DoneTick } from "../../Lottie/lottieComponent/DoneTick";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";

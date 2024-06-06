@@ -1,14 +1,21 @@
+
 import { useState } from "react";
 import "./App.css";
-import LeftMenu from "./Componet/LeftMenu/LeftMenu";
-import Navbar from "./Componet/Navbar/Navbar";
-import Registration from "./Componet/Registration/Registration";
-import { Waiting } from "./Lottie/lottieComponent/Waiting";
-import { commonStyleDiv } from "./commonFiles/common";
-import Right from "./Componet/Right/Right";
-import { ProfileType } from "./commonFiles/commonTypes";
+import { ProfileType } from "./commonFiles/commonTypes.js";
+import Registration from "./Componet/Registration/Registration.js";
+import Navbar from "./Componet/Navbar/Navbar.js";
+import LeftMenu from "./Componet/LeftMenu/LeftMenu.js";
+import Right from "./Componet/Right/Right.js";
+import { commonStyleDiv } from "./commonFiles/commonTheme.js";
+import { Waiting } from "./Lottie/lottieComponent/Waiting.js";
 
 function App() {
+
+  // return(
+  //   <BrowserRouter>
+  //     <Template/>
+  //   </BrowserRouter>
+  // )
   const [regi, setRegi] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [page, setPage] = useState<ProfileType>("/");

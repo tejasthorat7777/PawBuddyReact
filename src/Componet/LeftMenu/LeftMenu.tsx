@@ -23,7 +23,7 @@ import {
   CustomAccordionSummary,
   CustomAccordionDetails,
   CustomAccordion,
-} from "../../commonFiles/common";
+} from "../../commonFiles/commonTheme";
 import { ProfileType } from "../../commonFiles/commonTypes";
 
 const customButtonContainer = {

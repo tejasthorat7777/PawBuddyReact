@@ -32,7 +32,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -55,7 +55,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -78,7 +78,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -101,7 +101,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -133,7 +133,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -156,7 +156,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -179,7 +179,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />
@@ -202,7 +202,7 @@ export const Home = () => {
         <Card sx={{ maxWidth: 220 }}>
           <CardActionArea>
             <CardMedia
-              sx={{ height: 195 }}
+              sx={{ height: 185 }}
               image={harnessCard}
               title="Harness"
             />

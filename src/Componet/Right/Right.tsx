@@ -29,3 +29,9 @@ const Right = ({ page }: { page: ProfileType }) => {
 };
 
 export default Right;
+
+// {/* <Col id="content" style={{flex: "0.8 2 2"}} className="m-0 p-0 overflowY-auto scrollAnimation">
+//         {/* Main Content -- */}
+//           //<DynamicPage />
+//         {/* End of Main Content -- */}
+//       //</Col> */}
