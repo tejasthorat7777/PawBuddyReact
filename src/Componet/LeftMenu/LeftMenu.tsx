@@ -1,4 +1,3 @@
-import React from "react";
 import { Container } from "@mui/material";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import homeIcon from "../../assets/home.png";
@@ -26,6 +25,7 @@ import {
   CustomAccordion,
 } from "../../commonFiles/commonTheme";
 import { ProfileType } from "../../commonFiles/commonTypes";
+import { borderRadius } from "@mui/system";
 
 const customButtonContainer = {
   width: "100%",
@@ -63,7 +63,7 @@ interface LeftProps {
 interface MenuItem {
   header: string;
   image: string;
-  key: string;
+  name: string;
 }
 
 interface SubMenuItem {
@@ -72,22 +72,22 @@ interface SubMenuItem {
 }
 
 export default function LeftMenu({ onPage }: LeftProps) {
-  const [isExpanded, setIsExpanded] = React.useState(null);
+  const [isExpanded, setIsExpanded] = useState("");
 
   const version = "0.0.1";
 
-  const handleChange = (panel) => {
-    setIsExpanded(isExpanded === panel ? null : panel);
+  const handleChange = (panel:string) => {
+    setIsExpanded(isExpanded === panel ? "" : panel);
   };
 
   const menu: MenuItem[] = [
-    { header: "Dog Food", image: foodIcon, key: "dog_food" },
-    { header: "Accessories", image: accessories, key: "accessories" },
-    { header: "Shampoo", image: shampoo, key: "shampoo" },
-    { header: "Bathroom Basics", image: poop, key: "bathroom_basics" },
+    { header: "Dog Food", image: foodIcon, name: "dog_food" },
+    { header: "Accessories", image: accessories, name: "accessories" },
+    { header: "Shampoo", image: shampoo, name: "shampoo" },
+    { header: "Bathroom Basics", image: poop, name: "bathroom_basics" },
   ];
 
-  const subMenu: { [key: string]: SubMenuItem[] } = {
+  const subMenu: { [name: string]: SubMenuItem[] } = {
     dog_food: [
       { subHeader: "Dry Food", subImage: dryfood },
       { subHeader: "Gravy", subImage: gravyfood },
@@ -153,8 +153,8 @@ export default function LeftMenu({ onPage }: LeftProps) {
         {menu.map((menuItem, index) => (
           <CustomAccordion
             key={index}
-            expanded={isExpanded === menuItem.key}
-            onClick={() => handleChange(menuItem.key)}
+            expanded={isExpanded === menuItem.name}
+            onClick={() => handleChange(menuItem.name)}
           >
             <CustomAccordionSummary
               expandIcon={
@@ -175,8 +175,13 @@ export default function LeftMenu({ onPage }: LeftProps) {
                 {menuItem.header}
               </div>
             </CustomAccordionSummary>
-            {subMenu[menuItem.key].map((subMenuItem, subIndex) => (
-              <CustomAccordionDetails key={subIndex}>
+            {subMenu[menuItem.name].map((subMenuItem, subIndex) => (
+              <CustomAccordionDetails
+                key={subIndex}
+                style={{
+                  borderRadius: subIndex == 2 ? "0px 0px 10px 10px" : "0px",
+                }}
+              >
                 <CustomButton>
                   <div style={customButtonContainer}>
                     <img
