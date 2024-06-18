@@ -5,7 +5,7 @@ import page_routing from "./page_routing"
 const DynamicPage = ({page}) => {
 
   const newPage = [];
-  page_routing.map((ObjectPage, i) => {
+  page_routing.map((ObjectPage) => {
     if (ObjectPage.url === page) {
       newPage.push(ObjectPage);
     }
@@ -14,11 +14,11 @@ const DynamicPage = ({page}) => {
     <div id="dynamic_page" className="container-fluid h-100">
       <Suspense fallback={<div>loading...</div>}>
         <Routes>
-          {newPage.map((objRoute, i) => (
+          {newPage.map((objRoute, index) => (
             <Route
               exact 
               path={objRoute.url}
-              key={i}
+              key={index}
               element={<objRoute.component_name />}
             />
           ))}

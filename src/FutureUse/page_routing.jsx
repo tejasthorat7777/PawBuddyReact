@@ -5,8 +5,8 @@ const Profile = lazy(() => import("../Componet/Account/Profile"));
 
 
 const page_routing = [
-    { url: '/', component_name: Home },
-    { url: '/dogfood/dryfood', component_name: Profile }
+    { url: '/home', component_name: Home },
+    { url: '/account/profile', component_name: Profile }
 ]
 
 export default page_routing;
