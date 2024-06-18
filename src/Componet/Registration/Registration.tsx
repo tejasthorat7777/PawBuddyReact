@@ -60,11 +60,12 @@ export default function Registration() {
 
   useEffect(() => {}, [userData]);
 
-  const sendData = async () => {
+  const sendData =  (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     try {
+      event.preventDefault();
       setIsloading(true);
-      const response = await axios.post("http://localhost:3000/sendUsersInfo", userData);
-      console.log("Server response:", response.data); 
+      axios.post("http://localhost:3000/sendUsersInfo", userData);
+      console.log("UserData", userData);
       setTimeout(() => {
         setIsloading(false);
       }, 3000);
@@ -297,6 +298,7 @@ export default function Registration() {
                 </div>
               </div>
               <Button
+                type="submit"
                 className="submitButton"
                 variant="contained"
                 style={{

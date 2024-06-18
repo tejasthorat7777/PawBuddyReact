@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { CONNECT } from "../../dataBase/unused/firebase";
 import { UserData } from "../../commonFiles/commonTypes";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { CircularProgress } from "@mui/material";
+import axios from "axios";
 
 const styles = {
   padding: "5%",
@@ -28,13 +28,10 @@ export const Profile = () => {
   const fetchData = async () => {
     try {
       setIsloading(true);
-      const getData = await CONNECT.collection("UserData")
-        .doc("priyanka7777")
-        .get();
-      if (getData.exists) {
-        const response = getData.data();
-        setUserData(response as UserData);
-      }
+      //now we are fetching all doc as we do not have anything to find data.
+      //TODO help of redux for username we will fetch userInformaion.
+      const getData = await axios.get("http://localhost:3000/getUsersInfo")
+      setUserData(getData.data[0] as UserData);
       setIsloading(false);
     } catch (error) {
       setIsloading(true);
