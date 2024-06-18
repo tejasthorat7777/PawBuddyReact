@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { UserInfo } from "../modal/userInfo.js";
+import { UserInfo } from "./modal/userInfo.js";
 import cors from "cors";
 import mongoose from "mongoose";
 

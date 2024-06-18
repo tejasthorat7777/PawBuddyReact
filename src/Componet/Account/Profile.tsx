@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CONNECT } from "../../dataBase/firebase";
+import { CONNECT } from "../../dataBase/unused/firebase";
 import { UserData } from "../../commonFiles/commonTypes";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { CircularProgress } from "@mui/material";

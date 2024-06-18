@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/dataBase/unused/server.js", "db.js"],
+  "include": ["src", "src/dataBase/server.js", "db.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
