@@ -1,3 +1,4 @@
+import React from "react";
 import { Container } from "@mui/material";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import homeIcon from "../../assets/home.png";
@@ -59,364 +60,147 @@ interface LeftProps {
   onPage: (pageName: ProfileType) => void;
 }
 
+interface MenuItem {
+  header: string;
+  image: string;
+  key: string;
+}
+
+interface SubMenuItem {
+  subHeader: string;
+  subImage: string;
+}
+
 export default function LeftMenu({ onPage }: LeftProps) {
-  const [isExpanded, setIsExpanded] = useState("");
+  const [isExpanded, setIsExpanded] = React.useState(null);
 
   const version = "0.0.1";
 
-  const handlChange = (option: string) => {
-    setIsExpanded((prevState) => (prevState === option ? "" : option));
+  const handleChange = (panel) => {
+    setIsExpanded(isExpanded === panel ? null : panel);
+  };
+
+  const menu: MenuItem[] = [
+    { header: "Dog Food", image: foodIcon, key: "dog_food" },
+    { header: "Accessories", image: accessories, key: "accessories" },
+    { header: "Shampoo", image: shampoo, key: "shampoo" },
+    { header: "Bathroom Basics", image: poop, key: "bathroom_basics" },
+  ];
+
+  const subMenu: { [key: string]: SubMenuItem[] } = {
+    dog_food: [
+      { subHeader: "Dry Food", subImage: dryfood },
+      { subHeader: "Gravy", subImage: gravyfood },
+      { subHeader: "Treats", subImage: dogtreat },
+    ],
+    accessories: [
+      { subHeader: "Leash", subImage: leash },
+      { subHeader: "Harness", subImage: harness },
+      { subHeader: "Collar", subImage: collar },
+    ],
+    shampoo: [
+      { subHeader: "Shining Shampoo", subImage: shiningShampoo },
+      { subHeader: "Tick and flea Shampoo", subImage: tickAndFleaShampoo },
+      { subHeader: "scented Shampoo", subImage: shampooSented },
+    ],
+    bathroom_basics: [
+      { subHeader: "Toilet Spray", subImage: spray },
+      { subHeader: "Waste Scooper", subImage: scooper },
+      { subHeader: "Fragnance Perfume", subImage: perfume },
+    ],
   };
 
   return (
-    <>
-      <div
+    <div
+      style={{
+        backgroundColor: "#00111c",
+        flex: "1 1 auto",
+        display: "flex",
+        flexDirection: "column",
+        width: "17vw",
+        marginLeft: "0%",
+        height: "92vh",
+        color: "white",
+        padding: "0",
+      }}
+    >
+      <Container
         style={{
-          backgroundColor: "#00111c",
-          flex: "1 1 auto",
-          display: "flex",
-          flexDirection: "column",
-          width: "17vw",
-          marginLeft: "0%",
-          height: "92vh",
-          color: "white",
+          height: "100%",
+          width: "100%",
           padding: "0",
+          marginTop: "2%",
         }}
       >
-        <Container
-          style={{
-            height: "100%",
-            width: "100%",
-            padding: "0",
-            marginTop: "2%",
+        <CustomButton
+          onClick={() => {
+            onPage("/");
           }}
         >
-          <CustomButton
-            onClick={() => {
-              onPage("/");
-            }}
-          >
-            <div style={customButtonContainer}>
-              <img
-                src={homeIcon}
-                alt="Home Icon"
-                style={{
-                  height: "1.6em",
-                  margin: "0% 2% 1% 6%",
-                }}
-              />
-              Home
-            </div>
-          </CustomButton>
-          <CustomAccordion
-            expanded={isExpanded === "option1"}
-            onClick={() => {
-              handlChange("option1");
-            }}
-          >
-            <CustomAccordionSummary
-              expandIcon={
-                <ArrowForwardIosSharpIcon
-                  style={{ fontSize: "1rem", color: "white" }}
-                />
-              }
-            >
-              <div style={customButtonContainer}>
-                <img
-                  src={foodIcon}
-                  alt="Food Icon"
-                  style={{
-                    height: "1.6em",
-                    margin: "0% 3% 1% 1%",
-                  }}
-                />
-                Dog Food
-              </div>
-            </CustomAccordionSummary>
-            <div onClick={(e) => e.stopPropagation()}>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={dryfood}
-                      alt="Food Icon"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Dry Food
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={gravyfood}
-                      alt="gravyfood"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Gravy
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails
-                style={{ borderRadius: "0px 0px 5px 5px" }}
-              >
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={dogtreat}
-                      alt="dogtreat"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Treats
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-            </div>
-          </CustomAccordion>
-          <CustomAccordion
-            expanded={isExpanded === "option2"}
-            onClick={() => {
-              handlChange("option2");
-            }}
-          >
-            <CustomAccordionSummary
-              expandIcon={
-                <ArrowForwardIosSharpIcon
-                  style={{ fontSize: "1rem", color: "white" }}
-                />
-              }
-            >
-              <div style={customButtonContainer}>
-                <img
-                  src={accessories}
-                  alt="Accessories"
-                  style={{
-                    height: "1.6em",
-                    margin: "0% 3% 1% 1%",
-                  }}
-                />
-                Accessories
-              </div>
-            </CustomAccordionSummary>
-            <div onClick={(e) => e.stopPropagation()}>
-              {" "}
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={leash}
-                      alt="leash"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Leash
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={harness}
-                      alt="harness"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Harness
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails
-                style={{ borderRadius: "0px 0px 5px 5px" }}
-              >
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={collar}
-                      alt="Collar"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Collar
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-            </div>
-          </CustomAccordion>
-          <CustomAccordion
-            expanded={isExpanded === "option3"}
-            onClick={() => {
-              handlChange("option3");
-            }}
-          >
-            <CustomAccordionSummary
-              expandIcon={
-                <ArrowForwardIosSharpIcon
-                  style={{ fontSize: "1rem", color: "white" }}
-                />
-              }
-            >
-              <div style={customButtonContainer}>
-                <img
-                  src={shampoo}
-                  alt="Food Icon"
-                  style={{
-                    height: "1.6em",
-                    margin: "0% 3% 1% 1%",
-                  }}
-                />
-                Shampoo
-              </div>
-            </CustomAccordionSummary>
-            <div onClick={(e) => e.stopPropagation()}>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={shiningShampoo}
-                      alt="Food Icon"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Shining Shampoo
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={tickAndFleaShampoo}
-                      alt="gravyfood"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Tick and flea Shampoo
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails
-                style={{ borderRadius: "0px 0px 5px 5px" }}
-              >
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={shampooSented}
-                      alt="dogtreat"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    scented Shampoo
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-            </div>
-          </CustomAccordion>
-          <CustomAccordion
-            expanded={isExpanded === "option4"}
-            onClick={() => {
-              handlChange("option4");
-            }}
-          >
-            <CustomAccordionSummary
-              expandIcon={
-                <ArrowForwardIosSharpIcon
-                  style={{ fontSize: "1rem", color: "white" }}
-                />
-              }
-            >
-              <div style={customButtonContainer}>
-                <img
-                  src={poop}
-                  alt="Food Icon"
-                  style={{
-                    height: "1.6em",
-                    margin: "0% 3% 1% 1%",
-                  }}
-                />
-                Bathroom Basics
-              </div>
-            </CustomAccordionSummary>
-            <div onClick={(e) => e.stopPropagation()}>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={spray}
-                      alt="Food Icon"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Toilet Spray
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails>
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={scooper}
-                      alt="gravyfood"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Waste Scooper
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-              <CustomAccordionDetails
-                style={{ borderRadius: "0px 0px 5px 5px" }}
-              >
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={perfume}
-                      alt="dogtreat"
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    Fragnance Perfume
-                  </div>
-                </CustomButton>
-              </CustomAccordionDetails>
-            </div>
-          </CustomAccordion>
-          <div style={flexCenter}>
-            <div style={greyLine}></div>
+          <div style={customButtonContainer}>
+            <img
+              src={homeIcon}
+              alt="Home Icon"
+              style={{
+                height: "1.6em",
+                margin: "0% 2% 1% 6%",
+              }}
+            />
+            Home
           </div>
-          <div style={Object.assign({}, flexCenter, greyText)}>
-            © PawBuddy Version {version}
-          </div>
-        </Container>
-      </div>
-    </>
+        </CustomButton>
+
+        {menu.map((menuItem, index) => (
+          <CustomAccordion
+            key={index}
+            expanded={isExpanded === menuItem.key}
+            onClick={() => handleChange(menuItem.key)}
+          >
+            <CustomAccordionSummary
+              expandIcon={
+                <ArrowForwardIosSharpIcon
+                  style={{ fontSize: "1rem", color: "white" }}
+                />
+              }
+            >
+              <div style={customButtonContainer}>
+                <img
+                  src={menuItem.image}
+                  alt={`${menuItem.header} Icon`}
+                  style={{
+                    height: "1.6em",
+                    margin: "0% 3% 1% 1%",
+                  }}
+                />
+                {menuItem.header}
+              </div>
+            </CustomAccordionSummary>
+            {subMenu[menuItem.key].map((subMenuItem, subIndex) => (
+              <CustomAccordionDetails key={subIndex}>
+                <CustomButton>
+                  <div style={customButtonContainer}>
+                    <img
+                      src={subMenuItem.subImage}
+                      alt={`${subMenuItem.subHeader} Icon`}
+                      style={{
+                        height: "1.6em",
+                        margin: "0% 3% 1% 5%",
+                      }}
+                    />
+                    {subMenuItem.subHeader}
+                  </div>
+                </CustomButton>
+              </CustomAccordionDetails>
+            ))}
+          </CustomAccordion>
+        ))}
+        <div style={flexCenter}>
+          <div style={greyLine}></div>
+        </div>
+        <div style={Object.assign({}, flexCenter, greyText)}>
+          © PawBuddy Version {version}
+        </div>
+      </Container>
+    </div>
   );
 }
