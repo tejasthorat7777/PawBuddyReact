@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "server": "nodemon server.ts"
+    "server": "nodemon server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -19,10 +19,9 @@
     "@mui/utils": "^5.15.14",
     "@mui/x-date-pickers": "^7.5.0",
     "@studio-freight/react-lenis": "^0.0.47",
-    "@types/axios": "^0.14.0",
     "@types/express": "^4.17.21",
     "@types/react-router-dom": "^5.3.3",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
@@ -42,6 +41,7 @@
     "unirest": "^0.6.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/mongodb": "^4.0.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -51,6 +51,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5",
     "vite": "^5.2.0"
   }

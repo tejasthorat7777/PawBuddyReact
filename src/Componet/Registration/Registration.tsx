@@ -10,7 +10,6 @@ import {
 import registrationImage from "../../assets/form_page.png";
 import "./registration.css";
 import { useEffect, useState } from "react";
-import { CONNECT } from "../../dataBase/firebase";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
@@ -20,6 +19,7 @@ import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { DoneTick } from "../../Lottie/lottieComponent/DoneTick";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
+import axios from "axios";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -40,7 +40,7 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
 }));
 
 export default function Registration() {
-  const [formData, setFormData] = useState<UserData>({
+  const [userData, setUserData] = useState<UserData>({
     city: "",
     gender: "",
     name: "",
@@ -58,18 +58,19 @@ export default function Registration() {
   const [uploadError, setUploadError] = useState(false);
   const [formSend, setFormSend] = useState(false);
 
-  useEffect(() => {}, [formData]);
+  useEffect(() => {}, [userData]);
 
   const sendData = async () => {
     try {
       setIsloading(true);
-      await CONNECT.collection("UserData").doc(formData.username).set(formData);
+      const response = await axios.post("http://localhost:3000/sendUsersInfo", userData);
+      console.log("Server response:", response.data); 
       setTimeout(() => {
         setIsloading(false);
       }, 3000);
       setFormSend(true);
     } catch (error) {
-      console.log("error>>>>>",error)
+      console.log("error>>>>>", error);
       setIsloading(false);
       setUploadError(true);
     }
@@ -117,7 +118,7 @@ export default function Registration() {
                     placeholder="Puppy Name"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({ ...formData, name: event.target.value });
+                      setUserData({ ...userData, name: event.target.value });
                     }}
                   />
                   <input
@@ -126,7 +127,7 @@ export default function Registration() {
                     placeholder="Puppy Age"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({ ...formData, age: event.target.value });
+                      setUserData({ ...userData, age: event.target.value });
                     }}
                   />
                   <label style={{ fontFamily: "cursive" }}>Breed</label>
@@ -137,7 +138,7 @@ export default function Registration() {
                     placeholder="Breed"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({ ...formData, breed: event.target.value });
+                      setUserData({ ...userData, breed: event.target.value });
                     }}
                   />
                   <input
@@ -146,8 +147,8 @@ export default function Registration() {
                     placeholder="dd/mm/yy"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({
-                        ...formData,
+                      setUserData({
+                        ...userData,
                         birthdate: event.target.value,
                       });
                     }}
@@ -162,7 +163,7 @@ export default function Registration() {
                     placeholder="Owner"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({ ...formData, owner: event.target.value });
+                      setUserData({ ...userData, owner: event.target.value });
                     }}
                   />
                   <input
@@ -171,8 +172,8 @@ export default function Registration() {
                     placeholder="Identification"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({
-                        ...formData,
+                      setUserData({
+                        ...userData,
                         identification: event.target.value,
                       });
                     }}
@@ -185,8 +186,8 @@ export default function Registration() {
                     placeholder="Username/Email"
                     autoComplete="off"
                     onChange={(event) => {
-                      setFormData({
-                        ...formData,
+                      setUserData({
+                        ...userData,
                         username: event.target.value,
                       });
                     }}
@@ -196,8 +197,8 @@ export default function Registration() {
                     name="password"
                     placeholder="Password"
                     onChange={(event) => {
-                      setFormData({
-                        ...formData,
+                      setUserData({
+                        ...userData,
                         password: event.target.value,
                       });
                     }}
@@ -277,10 +278,10 @@ export default function Registration() {
                     </InputLabel>
                     <StyledSelect
                       id="city"
-                      value={formData.city}
+                      value={userData.city}
                       onChange={(event) => {
-                        setFormData({
-                          ...formData,
+                        setUserData({
+                          ...userData,
                           city: event.target.value as string,
                         });
                       }}
