@@ -25,7 +25,7 @@ import {
   CustomAccordion,
 } from "../../commonFiles/commonTheme";
 import { ProfileType } from "../../commonFiles/commonTypes";
-import { borderRadius } from "@mui/system";
+import { Link } from "react-router-dom";
 
 const customButtonContainer = {
   width: "100%",
@@ -56,10 +56,6 @@ const greyText = {
   fontSize: "12px",
 };
 
-interface LeftProps {
-  onPage: (pageName: ProfileType) => void;
-}
-
 interface MenuItem {
   header: string;
   image: string;
@@ -69,14 +65,15 @@ interface MenuItem {
 interface SubMenuItem {
   subHeader: string;
   subImage: string;
+  path: string;
 }
 
-export default function LeftMenu({ onPage }: LeftProps) {
+export default function LeftMenu() {
   const [isExpanded, setIsExpanded] = useState("");
 
   const version = "0.0.1";
 
-  const handleChange = (panel:string) => {
+  const handleChange = (panel: string) => {
     setIsExpanded(isExpanded === panel ? "" : panel);
   };
 
@@ -89,24 +86,44 @@ export default function LeftMenu({ onPage }: LeftProps) {
 
   const subMenu: { [name: string]: SubMenuItem[] } = {
     dog_food: [
-      { subHeader: "Dry Food", subImage: dryfood },
-      { subHeader: "Gravy", subImage: gravyfood },
-      { subHeader: "Treats", subImage: dogtreat },
+      { subHeader: "Dry Food", subImage: dryfood, path: "/dogfood/dryfood" },
+      { subHeader: "Gravy", subImage: gravyfood, path: "/dogfood/gravy" },
+      { subHeader: "Treats", subImage: dogtreat, path: "/dogfood/treats" },
     ],
     accessories: [
-      { subHeader: "Leash", subImage: leash },
-      { subHeader: "Harness", subImage: harness },
-      { subHeader: "Collar", subImage: collar },
+      { subHeader: "Leash", subImage: leash, path: "/accessories/leash" },
+      { subHeader: "Harness", subImage: harness, path: "/accessories/harness" },
+      { subHeader: "Collar", subImage: collar, path: "/accessories/collar" },
     ],
     shampoo: [
-      { subHeader: "Shining Shampoo", subImage: shiningShampoo },
-      { subHeader: "Tick and flea Shampoo", subImage: tickAndFleaShampoo },
-      { subHeader: "scented Shampoo", subImage: shampooSented },
+      {
+        subHeader: "Shining Shampoo",
+        subImage: shiningShampoo,
+        path: "/shampoo/shinigshampoo",
+      },
+      {
+        subHeader: "Tick and flea Shampoo",
+        subImage: tickAndFleaShampoo,
+        path: "/shampoo/tickAndFleaShampoo",
+      },
+      {
+        subHeader: "scented Shampoo",
+        subImage: shampooSented,
+        path: "/shampoo/shampooSented",
+      },
     ],
     bathroom_basics: [
-      { subHeader: "Toilet Spray", subImage: spray },
-      { subHeader: "Waste Scooper", subImage: scooper },
-      { subHeader: "Fragnance Perfume", subImage: perfume },
+      { subHeader: "Toilet Spray", subImage: spray, path: "/bathroom/spray" },
+      {
+        subHeader: "Waste Scooper",
+        subImage: scooper,
+        path: "/bathroom/scooper",
+      },
+      {
+        subHeader: "Fragnance Perfume",
+        subImage: perfume,
+        path: "/bathroom/perfume",
+      },
     ],
   };
 
@@ -132,23 +149,25 @@ export default function LeftMenu({ onPage }: LeftProps) {
           marginTop: "2%",
         }}
       >
-        <CustomButton
-          onClick={() => {
-            onPage("/");
-          }}
-        >
-          <div style={customButtonContainer}>
-            <img
-              src={homeIcon}
-              alt="Home Icon"
-              style={{
-                height: "1.6em",
-                margin: "0% 2% 1% 6%",
-              }}
-            />
-            Home
-          </div>
-        </CustomButton>
+        <Link to={"/"}>
+          <CustomButton
+            onClick={() => {
+              onPage("/");
+            }}
+          >
+            <div style={customButtonContainer}>
+              <img
+                src={homeIcon}
+                alt="Home Icon"
+                style={{
+                  height: "1.6em",
+                  margin: "0% 2% 1% 6%",
+                }}
+              />
+              Home
+            </div>
+          </CustomButton>
+        </Link>
 
         {menu.map((menuItem, index) => (
           <CustomAccordion
@@ -182,19 +201,21 @@ export default function LeftMenu({ onPage }: LeftProps) {
                   borderRadius: subIndex == 2 ? "0px 0px 10px 10px" : "0px",
                 }}
               >
-                <CustomButton>
-                  <div style={customButtonContainer}>
-                    <img
-                      src={subMenuItem.subImage}
-                      alt={`${subMenuItem.subHeader} Icon`}
-                      style={{
-                        height: "1.6em",
-                        margin: "0% 3% 1% 5%",
-                      }}
-                    />
-                    {subMenuItem.subHeader}
-                  </div>
-                </CustomButton>
+                <Link to={subMenuItem.path}>
+                  <CustomButton>
+                    <div style={customButtonContainer}>
+                      <img
+                        src={subMenuItem.subImage}
+                        alt={`${subMenuItem.subHeader} Icon`}
+                        style={{
+                          height: "1.6em",
+                          margin: "0% 3% 1% 5%",
+                        }}
+                      />
+                      {subMenuItem.subHeader}
+                    </div>
+                  </CustomButton>
+                </Link>
               </CustomAccordionDetails>
             ))}
           </CustomAccordion>

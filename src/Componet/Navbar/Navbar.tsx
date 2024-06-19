@@ -10,6 +10,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { ProfileType } from "../../commonFiles/commonTypes";
+import { Link } from "react-router-dom";
 
 const inputStyle = {
   width: "100%",
@@ -37,16 +38,13 @@ const navLeft = {
   justifyContent: "flex-end",
 };
 
-interface NavbarProps {
-  onImageClick: () => void;
-  onPage: (pageName: ProfileType) => void;
-}
-
-export default function Navbar({ onImageClick, onPage }: NavbarProps) {
+export default function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: { currentTarget: React.SetStateAction<HTMLElement | null>; }) => {
+  const handleClick = (event: {
+    currentTarget: React.SetStateAction<HTMLElement | null>;
+  }) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -61,6 +59,27 @@ export default function Navbar({ onImageClick, onPage }: NavbarProps) {
     alignItems: "center",
   };
 
+  const handleClickLink = () => {
+    console.log("clicked");
+  };
+
+  const accountMenu = [
+    {
+      text: "Profile",
+      component: <PersonOutlineOutlinedIcon />,
+      path: "/profile",
+    },
+    {
+      text: "WishList",
+      component: <FavoriteBorderOutlinedIcon />,
+      path: "/whishlist",
+    },
+    { text: "Orders", component: <AddShoppingCartIcon />, path: "/orders" },
+    { text: "Contact Us", component: <CallIcon />, path: "/contact" },
+    { text: "Settings", component: <Settings />, path: "/setting" },
+    { text: "Logout", component: <Logout />, path: "/home" },
+  ];
+
   return (
     <div
       style={{
@@ -72,19 +91,22 @@ export default function Navbar({ onImageClick, onPage }: NavbarProps) {
       }}
     >
       <div style={innerNav}>
-        <Tooltip title="click to get Register">
-          <img
-            src={logo}
-            alt="LOGO"
-            style={{
-              height: "100%",
-              scale: "0.8",
-              marginLeft: "10rem",
-              cursor: "pointer",
-            }}
-            onClick={onImageClick}
-          />
-        </Tooltip>
+        <Link to={"/registration"} onClick={handleClickLink}>
+          <Tooltip title="click to get Register">
+            <img
+              src={logo}
+              alt="LOGO"
+              style={{
+                height: "100%",
+                width: "20%",
+                scale: "0.8",
+                marginLeft: "10rem",
+                cursor: "pointer",
+              }}
+            />
+          </Tooltip>
+        </Link>
+
         <div style={navLeft}>
           <div style={{ marginRight: "5%" }}>
             <Box
@@ -123,68 +145,25 @@ export default function Navbar({ onImageClick, onPage }: NavbarProps) {
                 },
               }}
             >
-              <CustomMenuItem
-                onClick={()=>{
-                  handleClose();
-                  onPage("/profile");
-                }}
-                style={{ fontSize: "1rem", fontFamily: "cursive" }}
-              >
-                <ListItemIcon>
-                  <PersonOutlineOutlinedIcon
-                    sx={{ color: "white", fontSize: "1.5rem" }}
-                  />
-                </ListItemIcon>
-                Profile
-              </CustomMenuItem>
-              <CustomMenuItem
-                onClick={handleClose}
-                style={{ fontSize: "1rem", fontFamily: "cursive" }}
-              >
-                <ListItemIcon>
-                  <FavoriteBorderOutlinedIcon sx={{ color: "white" }} />
-                </ListItemIcon>
-                WishList
-              </CustomMenuItem>
-              <CustomMenuItem
-                onClick={handleClose}
-                style={{ fontSize: "1rem", fontFamily: "cursive" }}
-              >
-                <ListItemIcon>
-                  <AddShoppingCartIcon
-                    fontSize="small"
-                    sx={{ color: "white" }}
-                  />
-                </ListItemIcon>
-                Orders
-              </CustomMenuItem>
-              <CustomMenuItem
-                onClick={handleClose}
-                style={{ fontSize: "1rem", fontFamily: "cursive" }}
-              >
-                <ListItemIcon>
-                  <CallIcon fontSize="small" sx={{ color: "white" }} />
-                </ListItemIcon>
-                Contact Us
-              </CustomMenuItem>
-              <CustomMenuItem
-                onClick={handleClose}
-                style={{ fontSize: "1rem", fontFamily: "cursive" }}
-              >
-                <ListItemIcon>
-                  <Settings fontSize="small" sx={{ color: "white" }} />
-                </ListItemIcon>
-                Settings
-              </CustomMenuItem>
-              <CustomMenuItem
-                onClick={handleClose}
-                style={{ fontSize: "1rem", fontFamily: "cursive" }}
-              >
-                <ListItemIcon>
-                  <Logout fontSize="small" sx={{ color: "white" }} />
-                </ListItemIcon>
-                Logout
-              </CustomMenuItem>
+              {accountMenu.map((obj, index) => (
+                <Link
+                  to={obj.path}
+                  key={index}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <CustomMenuItem
+                    onClick={() => {
+                      handleClose();
+                    }}
+                    style={{ fontSize: "1rem", fontFamily: "cursive" }}
+                  >
+                    <ListItemIcon sx={{ color: "white", fontSize: "1.5rem" }}>
+                      {obj.component}
+                    </ListItemIcon>
+                    {obj.text}
+                  </CustomMenuItem>
+                </Link>
+              ))}
             </Menu>
           </div>
           <div

@@ -1,22 +1,16 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import page_routing from "./page_routing"
+import page_routing from "./page_routing";
 
-const DynamicPage = ({page}) => {
+const DynamicPage = () => {
+  console.log("inside Dynamic");
 
-  const newPage = [];
-  page_routing.map((ObjectPage) => {
-    if (ObjectPage.url === page) {
-      newPage.push(ObjectPage);
-    }
-  });
   return (
     <div id="dynamic_page" className="container-fluid h-100">
       <Suspense fallback={<div>loading...</div>}>
         <Routes>
-          {newPage.map((objRoute, index) => (
+          {page_routing.map((objRoute, index) => (
             <Route
-              exact 
               path={objRoute.url}
               key={index}
               element={<objRoute.component_name />}
