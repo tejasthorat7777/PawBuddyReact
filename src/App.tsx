@@ -3,6 +3,8 @@ import "./App.css";
 import Registration from "./Componet/Registration/Registration.js";
 import Template from "./RenderAutomation/Template.js";
 import { useLocation } from "react-router-dom";
+import Login from "./Componet/Login/LoginForm.js"
+import LoginForm from "./Componet/Login/LoginForm.js";
 
 function App() {
   const location = useLocation();
@@ -12,7 +14,7 @@ function App() {
     setRegi(location.pathname.includes("registration"));
   }, [location]);
 
-  return <>{regi ? <Registration /> : <Template />}</>;
+  return <>{regi ? <Registration /> : <LoginForm />}</>;
 }
 
 export default App;

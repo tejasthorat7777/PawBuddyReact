@@ -3,3 +3,6 @@ Navbar - profile icon , logo, search
 profile icon options = profile , setting , contact us, orders , wishList
 profile = DP,first name , last name , DOB , address , phone number, email
 setting = password , default address
+
+
+In login page we will verify credientails with db, after successful we will store userId in redux to use it through out application
