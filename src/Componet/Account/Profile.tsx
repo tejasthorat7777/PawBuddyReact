@@ -20,7 +20,7 @@ const outerDiv = {
   marginBottom: "1%",
 };
 
-export const Profile = () => {
+const Profile = () => {
   const [userData, setUserData] = useState<UserData | undefined>(undefined);
   const [isloading, setIsloading] = useState(false);
   const [fetchingError, setFetchingError] = useState(false);
@@ -134,3 +134,4 @@ export const Profile = () => {
     </>
   );
 };
+export default Profile

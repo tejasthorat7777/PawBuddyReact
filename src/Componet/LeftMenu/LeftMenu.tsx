@@ -24,7 +24,6 @@ import {
   CustomAccordionDetails,
   CustomAccordion,
 } from "../../commonFiles/commonTheme";
-import { ProfileType } from "../../commonFiles/commonTypes";
 import { Link } from "react-router-dom";
 
 const customButtonContainer = {
@@ -151,9 +150,6 @@ export default function LeftMenu() {
       >
         <Link to={"/"}>
           <CustomButton
-            onClick={() => {
-              onPage("/");
-            }}
           >
             <div style={customButtonContainer}>
               <img

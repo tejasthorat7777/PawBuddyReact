@@ -12,7 +12,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import harnessCard from "../../../assets/harness_copy.png";
 
-export const Home = () => {
+const Home = () => {
   return (
     <div
       style={{
@@ -226,3 +226,4 @@ export const Home = () => {
     </div>
   );
 };
+export default Home;
