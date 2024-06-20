@@ -9,7 +9,6 @@ import CallIcon from "@mui/icons-material/Call";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import LoginIcon from '@mui/icons-material/Login';
 import { Link } from "react-router-dom";
 
 const inputStyle = {
@@ -73,7 +72,7 @@ export default function Navbar() {
     { text: "Contact Us", component: <CallIcon />, path: "/contact" },
     { text: "Settings", component: <Settings />, path: "/setting" },
     { text: "Logout", component: <Logout />, path: "/home" },
-    { text: "Log-In", component: <Login />, path: "/home" },
+    { text: "Log-In", component: <Login />, path: "/login" },
   ];
 
   return (
