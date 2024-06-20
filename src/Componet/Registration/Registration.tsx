@@ -65,13 +65,11 @@ export default function Registration() {
       event.preventDefault();
       setIsloading(true);
       axios.post("http://localhost:3000/sendUsersInfo", userData);
-      console.log("UserData", userData);
       setTimeout(() => {
         setIsloading(false);
       }, 3000);
       setFormSend(true);
     } catch (error) {
-      console.log("error>>>>>", error);
       setIsloading(false);
       setUploadError(true);
     }

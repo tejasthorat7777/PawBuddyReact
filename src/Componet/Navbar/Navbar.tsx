@@ -9,7 +9,6 @@ import CallIcon from "@mui/icons-material/Call";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { ProfileType } from "../../commonFiles/commonTypes";
 import { Link } from "react-router-dom";
 
 const inputStyle = {
@@ -59,15 +58,11 @@ export default function Navbar() {
     alignItems: "center",
   };
 
-  const handleClickLink = () => {
-    console.log("clicked");
-  };
-
   const accountMenu = [
     {
       text: "Profile",
       component: <PersonOutlineOutlinedIcon />,
-      path: "/profile",
+      path: "/account/profile",
     },
     {
       text: "WishList",
@@ -91,7 +86,7 @@ export default function Navbar() {
       }}
     >
       <div style={innerNav}>
-        <Link to={"/registration"} onClick={handleClickLink}>
+        <Link to={"/registration"}>
           <Tooltip title="click to get Register">
             <img
               src={logo}

@@ -24,6 +24,7 @@ const Profile = () => {
   const [userData, setUserData] = useState<UserData | undefined>(undefined);
   const [isloading, setIsloading] = useState(false);
   const [fetchingError, setFetchingError] = useState(false);
+  const [fetchComplete,setFetchComplete] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -33,6 +34,7 @@ const Profile = () => {
       const getData = await axios.get("http://localhost:3000/getUsersInfo")
       setUserData(getData.data[0] as UserData);
       setIsloading(false);
+      setFetchComplete(true)
     } catch (error) {
       setIsloading(true);
       setFetchingError(true);
@@ -48,11 +50,11 @@ const Profile = () => {
       {isloading ? (
         <div
           style={{
-            height: "100%",
-            width: "100%",
+            height:"100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            flex:"1"
           }}
         >
           <CircularProgress />
@@ -69,7 +71,7 @@ const Profile = () => {
         >
           <NotFound />
         </div>
-      ) : (
+      ) : fetchComplete ? (
         <div
           style={{
             height: "100%",
@@ -130,7 +132,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      )}
+      ):null}
     </>
   );
 };

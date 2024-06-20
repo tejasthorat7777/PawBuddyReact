@@ -5,7 +5,7 @@ const Profile = lazy(() => import("../Componet/Account/Profile"));
 
 
 const page_routing = [
-    { url: '/home', component_name: Home },
+    { url: '/', component_name: Home },
     { url: '/account/profile', component_name: Profile }
 ]
 
