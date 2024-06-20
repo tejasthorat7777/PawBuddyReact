@@ -34,12 +34,12 @@ const Profile = () => {
       // 1st Approach - sending userId with URL
       // 2nd Approach - check in for loop for userId
       const users = await axios.get("http://localhost:3000/getUsersInfo");
-      for (const user of users.data) {
-        if (user.name === "zsdfgh") {
-          setUserData(user as UserData);
-        }
-      }
-      //setUserData(users.data[0] as UserData);
+      // for (const user of users.data) {
+      //   if (user.name === "zsdfgh") {
+      //     setUserData(user as UserData);
+      //   }
+      // }
+      setUserData(users.data[0] as UserData);
       setIsloading(false);
       setFetchComplete(true);
     } catch (error) {
