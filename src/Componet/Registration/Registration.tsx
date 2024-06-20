@@ -66,10 +66,9 @@ export default function Registration() {
     try {
       event.preventDefault();
       setIsloading(true);
-      if(!userData.userId)
-        {
-          console.log("userDAta>>>>", userData.userId);
-        }
+      if (!userData.userId) {
+        console.log("userDAta>>>>", userData.userId);
+      }
       axios.post("http://localhost:3000/sendUsersInfo", userData);
       setTimeout(() => {
         setIsloading(false);
