@@ -24,17 +24,24 @@ const Profile = () => {
   const [userData, setUserData] = useState<UserData | undefined>(undefined);
   const [isloading, setIsloading] = useState(false);
   const [fetchingError, setFetchingError] = useState(false);
-  const [fetchComplete,setFetchComplete] = useState(false);
+  const [fetchComplete, setFetchComplete] = useState(false);
 
   const fetchData = async () => {
     try {
       setIsloading(true);
       //now we are fetching all doc as we do not have anything to find data.
       //TODO help of redux for username we will fetch userInformaion.
-      const getData = await axios.get("http://localhost:3000/getUsersInfo")
-      setUserData(getData.data[0] as UserData);
+      // 1st Approach - sending userId with URL
+      // 2nd Approach - check in for loop for userId
+      const users = await axios.get("http://localhost:3000/getUsersInfo");
+      for (const user of users.data) {
+        if (user.name === "zsdfgh") {
+          setUserData(user as UserData);
+        }
+      }
+      //setUserData(users.data[0] as UserData);
       setIsloading(false);
-      setFetchComplete(true)
+      setFetchComplete(true);
     } catch (error) {
       setIsloading(true);
       setFetchingError(true);
@@ -50,11 +57,11 @@ const Profile = () => {
       {isloading ? (
         <div
           style={{
-            height:"100%",
+            height: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flex:"1"
+            flex: "1",
           }}
         >
           <CircularProgress />
@@ -132,8 +139,8 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      ):null}
+      ) : null}
     </>
   );
 };
-export default Profile
+export default Profile;

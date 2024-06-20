@@ -20,6 +20,7 @@ import { DoneTick } from "../../Lottie/lottieComponent/DoneTick";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -51,6 +52,7 @@ export default function Registration() {
     identification: "",
     username: "",
     password: "",
+    userId: "",
   });
 
   const [onHover, setOnHover] = useState(false);
@@ -60,10 +62,14 @@ export default function Registration() {
 
   useEffect(() => {}, [userData]);
 
-  const sendData =  (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const sendData = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     try {
       event.preventDefault();
       setIsloading(true);
+      if(!userData.userId)
+        {
+          console.log("userDAta>>>>", userData.userId);
+        }
       axios.post("http://localhost:3000/sendUsersInfo", userData);
       setTimeout(() => {
         setIsloading(false);
@@ -90,8 +96,9 @@ export default function Registration() {
           <DoneTick />
           <div>
             <div style={{ padding: "5%" }}> Registration Successful</div>
-            {/* //TODO Button functionality */}
-            <Button>Want to shop click here</Button>
+            <Link to={"/"}>
+              <Button>Want to shop click here</Button>
+            </Link>
           </div>
         </div>
       ) : (
@@ -220,6 +227,12 @@ export default function Registration() {
                         value="male"
                         control={
                           <Radio
+                            onChange={(event) => {
+                              setUserData({
+                                ...userData,
+                                gender: event.target.value,
+                              });
+                            }}
                             sx={{
                               "& .MuiSvgIcon-root": {
                                 fontSize: 18,
@@ -242,6 +255,12 @@ export default function Registration() {
                         value="female"
                         control={
                           <Radio
+                            onChange={(event) => {
+                              setUserData({
+                                ...userData,
+                                gender: event.target.value,
+                              });
+                            }}
                             sx={{
                               "& .MuiSvgIcon-root": {
                                 fontSize: 18,
@@ -282,6 +301,7 @@ export default function Registration() {
                         setUserData({
                           ...userData,
                           city: event.target.value as string,
+                          userId: `${userData.name}&&${userData.birthdate}`,
                         });
                       }}
                     >

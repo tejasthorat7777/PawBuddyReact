@@ -18,4 +18,5 @@ export type UserData = {
   identification: string;
   username: string;
   password: string;
+  userId: string;
 };

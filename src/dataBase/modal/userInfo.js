@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   identification: String,
   username: String,
   password: String,
+  userId: String,
 });
 
 export const UserInfo = mongoose.model("User", userSchema);
