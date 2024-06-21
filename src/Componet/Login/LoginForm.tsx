@@ -22,7 +22,7 @@ function LoginForm() {
         if (user.username === email) {
           if (user.password === password) {
             setTimeout(() => {
-              window.location.href = "/home";
+              window.location.href = "/";
             }, 5000);
           }
         } else {

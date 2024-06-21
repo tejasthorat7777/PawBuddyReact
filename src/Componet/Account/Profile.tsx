@@ -39,7 +39,7 @@ const Profile = () => {
       //     setUserData(user as UserData);
       //   }
       // }
-      setUserData(users.data[0] as UserData);
+      setUserData(users[0] as UserData);
       setIsloading(false);
       setFetchComplete(true);
     } catch (error) {
