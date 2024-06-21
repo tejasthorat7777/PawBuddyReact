@@ -12,216 +12,91 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import harnessCard from "../../../assets/harness_copy.png";
 
+const outerDiv = {
+  height: "100%",
+  width: "100%",
+  backgroundColor: "#597081",
+  padding: "3%",
+};
+
+const commonDiv = {
+  display: "flex",
+  height: "50%",
+  justifyContent: "space-evenly",
+};
+
 const Home = () => {
+  const firstRowcard = [
+    { cardText: "Harness", cardImage: harnessCard },
+    { cardText: "Harness", cardImage: harnessCard },
+    { cardText: "Harness", cardImage: harnessCard },
+    { cardText: "Harness", cardImage: harnessCard },
+  ];
+  const secondRowcard = [
+    { cardText: "Harness", cardImage: harnessCard },
+    { cardText: "Harness", cardImage: harnessCard },
+    { cardText: "Harness", cardImage: harnessCard },
+    { cardText: "Harness", cardImage: harnessCard },
+  ];
+
+  const buttonIcon = [
+    <ShoppingCartOutlinedIcon />,
+    <FavoriteBorderOutlinedIcon />,
+    <ShareOutlinedIcon />,
+  ];
+
   return (
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-        backgroundColor: "#597081",
-        padding: "3%",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          height: "50%",
-          justifyContent: "space-evenly",
-        }}
-      >
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
+    <div style={outerDiv}>
+      <div style={commonDiv}>
+        {firstRowcard.map((cardObject, index) => (
+          <Card sx={{ maxWidth: 220 }}>
+            <CardActionArea key={index}>
+              <CardMedia
+                sx={{ height: 185 }}
+                image={cardObject.cardImage}
+                title={cardObject.cardText}
+              />
+            </CardActionArea>
+            <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
+              <Typography>{cardObject.cardText}</Typography>
+            </CardContent>
+            <CardActions sx={{ backgroundColor: "#00111c" }}>
+              {buttonIcon.map((iconName, index) => (
+                <Button size="small" key={index} style={{ color: "white" }}>
+                  {iconName}
+                </Button>
+              ))}
+            </CardActions>
+          </Card>
+        ))}
       </div>
       <div
         style={{
-          display: "flex",
-          height: "50%",
-          justifyContent: "space-evenly",
+          ...commonDiv,
           marginTop: "2%",
         }}
       >
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ maxWidth: 220 }}>
-          <CardActionArea>
-            <CardMedia
-              sx={{ height: 185 }}
-              image={harnessCard}
-              title="Harness"
-            />
-          </CardActionArea>
-          <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
-            <Typography>Harness</Typography>
-          </CardContent>
-          <CardActions sx={{ backgroundColor: "#00111c" }}>
-            <Button size="small">
-              <ShoppingCartOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <FavoriteBorderOutlinedIcon style={{ color: "white" }} />
-            </Button>
-            <Button size="small">
-              <ShareOutlinedIcon style={{ color: "white" }} />
-            </Button>
-          </CardActions>
-        </Card>
+        {secondRowcard.map((cardObject, index) => (
+          <Card sx={{ maxWidth: 220 }}>
+            <CardActionArea key={index}>
+              <CardMedia
+                sx={{ height: 185 }}
+                image={cardObject.cardImage}
+                title="Harness"
+              />
+            </CardActionArea>
+            <CardContent sx={{ backgroundColor: "#00111c", color: "white" }}>
+              <Typography>{cardObject.cardText}</Typography>
+            </CardContent>
+            <CardActions sx={{ backgroundColor: "#00111c" }}>
+              {buttonIcon.map((iconName, index) => (
+                <Button size="small" key={index} style={{ color: "white" }}>
+                  {iconName}
+                </Button>
+              ))}
+            </CardActions>
+          </Card>
+        ))}
       </div>
     </div>
   );

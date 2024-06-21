@@ -56,6 +56,12 @@ export const commonStyleDiv = {
   color: "white",
 };
 
+export const flexDiv = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}
+
 export const linkStyle = {
   textDecoration: "none",
   color: "white",

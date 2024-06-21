@@ -33,8 +33,8 @@ const Profile = () => {
       //TODO help of redux for username we will fetch userInformaion.
       // 1st Approach - sending userId with URL
       // 2nd Approach - check in for loop for userId
-      const users = await axios.get("http://localhost:3000/getUsersInfo");
-      // for (const user of users.data) {
+      const users = (await axios.get("http://localhost:3000/getUsersInfo")).data;
+      // for (const user of users) {
       //   if (user.name === "zsdfgh") {
       //     setUserData(user as UserData);
       //   }

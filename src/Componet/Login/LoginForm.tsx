@@ -1,86 +1,49 @@
 import { useState } from "react";
-import { Button } from "@mui/material";
-
-const disFlex = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const outerDiv = {
-  ...disFlex,
-  height: "100vh",
-  width: "100vw",
-  backgroundColor: "#00111c",
-};
-
-const innerDiv = {
-  height: "55%",
-  width: "30%",
-  borderRadius: "20px",
-  padding: "2%",
-  backgroundColor: "#284b63",
-};
-
-const textStyle = {
-  ...disFlex,
-  fontFamily: "cursive",
-  fontSize: "45px",
-  fontWeight: "800",
-  color: "white",
-};
-
-const buttonDiv = {
-  ...disFlex,
-  width: "100%",
-  height: "20%",
-  marginTop: "5%",
-  padding: "2%",
-  borderRadius: "10px",
-};
-
-const inputStyle = {
-  height: "100%",
-  width: "100%",
-  borderRadius: "10px",
-  padding: "5%",
-  fontFamily: "cursive",
-};
-
-const inputDiv = {
-  height: "50%",
-  width: "100%",
-  marginBottom: "5%",
-  borderRadius: "10px",
-};
-
-const inputOuterDiv = {
-  height: "50%",
-  width: "100%",
-  padding: "5%",
-  marginTop: "2%",
-};
+import { Button, CircularProgress } from "@mui/material";
+import { loginCss } from "./logincss";
+import axios from "axios";
+import "./handleInputAuto.css";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [onHover, setOnHover] = useState(false);
+  const [correctUser, setCorrectUser] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handlelogIn = (e: { preventDefault: () => void }) => {
-    // TODO verify email and password with db if correct then store the userId in redux which is present in db,
-    // in navbar on clicking account , if user is logged in then we will show log-out option otherwise there will be log-in option
+  const handlelogIn = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const userData = await (
+        await axios.get("http://localhost:3000/getUsersInfo")
+      ).data;
+      for (const user of userData) {
+        if (user.username === email) {
+          if (user.password === password) {
+            setTimeout(() => {
+              window.location.href = "/home";
+            }, 5000);
+          }
+        } else {
+          setCorrectUser(true);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.log("Found error ", error);
+    }
   };
 
   return (
-    <div style={outerDiv}>
-      <div style={innerDiv}>
+    <div style={loginCss.outerDiv}>
+      <div style={loginCss.innerDiv}>
         <div style={{ height: "100%", width: "100%" }}>
-          <span style={textStyle}>Login Here</span>
-          <div style={inputOuterDiv}>
-            <div style={inputDiv}>
+          <span style={loginCss.textStyle}>Login Here</span>
+          <div style={loginCss.inputOuterDiv}>
+            <div style={loginCss.inputDiv}>
               <input
-                style={inputStyle}
+                style={loginCss.inputStyle}
                 type="text"
                 id="username"
                 placeholder="Enter Email here"
@@ -88,9 +51,9 @@ function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div style={inputDiv}>
+            <div style={loginCss.inputDiv}>
               <input
-                style={inputStyle}
+                style={loginCss.inputStyle}
                 type="password"
                 id="pass"
                 placeholder="Enter password here"
@@ -99,27 +62,43 @@ function LoginForm() {
               />
             </div>
           </div>
-          <div style={buttonDiv}>
-            <Button
-              type="submit"
-              variant="contained"
+          {correctUser && (
+            <span
               style={{
-                backgroundColor: onHover ? "#597081" : "#00111c",
+                color: "red",
+                marginLeft: "5rem",
+                fontWeight: "800",
                 fontFamily: "cursive",
-                height: "100%",
-                width: "95%",
-                borderRadius: "10px",
-              }}
-              onClick={handlelogIn}
-              onMouseEnter={() => {
-                setOnHover(true);
-              }}
-              onMouseLeave={() => {
-                setOnHover(false);
               }}
             >
-              Login
-            </Button>
+              Incorrect email and password
+            </span>
+          )}
+          <div style={loginCss.buttonDiv}>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <Button
+                type="submit"
+                variant="contained"
+                style={{
+                  backgroundColor: onHover ? "#597081" : "#00111c",
+                  fontFamily: "cursive",
+                  height: "100%",
+                  width: "95%",
+                  borderRadius: "10px",
+                }}
+                onClick={handlelogIn}
+                onMouseEnter={() => {
+                  setOnHover(true);
+                }}
+                onMouseLeave={() => {
+                  setOnHover(false);
+                }}
+              >
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </div>
