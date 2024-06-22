@@ -5,6 +5,7 @@ import "./handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { login } from "../../redux/Slice/loginSlice";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -13,7 +14,9 @@ function LoginForm() {
   const [correctUser, setCorrectUser] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handlelogIn = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
@@ -26,7 +29,7 @@ function LoginForm() {
             console.log("userLog", user);
             dispatch(login({ user }));
             setTimeout(() => {
-              window.location.href = "/";
+              navigate("/");
             }, 0);
             return;
           }
