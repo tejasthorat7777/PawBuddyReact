@@ -11,6 +11,8 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import harnessCard from "../../../assets/harness_copy.png";
+import { useSelector } from "react-redux";
+import {RootState} from "../../../redux/store/store";
 
 const outerDiv = {
   height: "100%",
@@ -26,6 +28,11 @@ const commonDiv = {
 };
 
 const Home = () => {
+  const id = useSelector((state: RootState) => {
+    return state.logid;
+  });
+  console.log("id>>>", id);
+
   const firstRowcard = [
     { cardText: "Harness", cardImage: harnessCard },
     { cardText: "Harness", cardImage: harnessCard },
