@@ -1,18 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,current } from "@reduxjs/toolkit";
 
-const initialState: string[] = [];
+const initialState = {
+  status: false,
+  userId: "",
+};
 
-const userSlice = createSlice({
+const loginSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    userId(state, action:{payload:string}) {
-      state.push(action.payload);
-      console.log(action.payload);
-      console.log("state.push(action.payload)",state[0]);
+    login: (state, action) => {
+      state.status = true;
+      state.userId = action.payload.user.userId;
+      console.log("current>>>",current(state))
     },
   },
 });
 
-export default userSlice.reducer;
-export const { userId } = userSlice.actions;
+export default loginSlice.reducer;
+export const { login } = loginSlice.actions;

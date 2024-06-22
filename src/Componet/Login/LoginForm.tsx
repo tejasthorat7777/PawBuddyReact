@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
 import { loginCss } from "./logincss";
 import "./handleInputAuto.css";
-import { useDispatch} from "react-redux";
-import { userId } from "../../redux/Slice/loginSlice";
+import { useDispatch } from "react-redux";
 import axios from "axios";
+import { login } from "../../redux/Slice/loginSlice";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -18,11 +18,13 @@ function LoginForm() {
     e.preventDefault();
     try {
       setLoading(true);
-      const userData = (await axios.get("http://localhost:3000/getUsersInfo")).data;
+      const userData = (await axios.get("http://localhost:3000/getUsersInfo"))
+        .data;
       for (const user of userData) {
         if (user.username === email) {
           if (user.password === password) {
-            dispatch(userId(user.userId));
+            console.log("userLog", user);
+            dispatch(login({ user }));
             setTimeout(() => {
               window.location.href = "/";
             }, 0);
@@ -34,6 +36,7 @@ function LoginForm() {
         }
       }
     } catch (error) {
+      setLoading(false);
       console.log("Found error ", error);
     }
   };

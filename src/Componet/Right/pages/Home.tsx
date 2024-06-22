@@ -12,7 +12,8 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import harnessCard from "../../../assets/harness_copy.png";
 import { useSelector } from "react-redux";
-import {RootState} from "../../../redux/store/store";
+import { RootState } from "../../../redux/store/store";
+import React from "react";
 
 const outerDiv = {
   height: "100%",
@@ -28,10 +29,11 @@ const commonDiv = {
 };
 
 const Home = () => {
-  const id = useSelector((state: RootState) => {
-    return state.logid;
-  });
-  console.log("id>>>", id);
+  const user = useSelector((state:RootState) => state.logid);
+
+  React.useEffect(() => {
+    console.log("User state:", user);
+  }, [user]);
 
   const firstRowcard = [
     { cardText: "Harness", cardImage: harnessCard },
