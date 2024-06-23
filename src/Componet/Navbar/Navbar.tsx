@@ -75,7 +75,7 @@ export default function Navbar() {
     { text: "Contact Us", component: <CallIcon />, path: "/contact" },
     { text: "Settings", component: <Settings />, path: "/setting" },
     user
-      ? { text: "Logout", component: <Logout />, path: "/home" }
+      ? { text: "Logout", component: <Logout />, path: "/login" }
       : { text: "Log-In", component: <Login />, path: "/login" },
   ];
 

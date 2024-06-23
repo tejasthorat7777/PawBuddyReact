@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import { UserData } from "../../commonFiles/commonTypes";
 import { NotFound } from "../../Lottie/lottieComponent/NotFound";
-import { CircularProgress } from "@mui/material";
-import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 
 const styles = {
   padding: "5%",
@@ -21,52 +20,15 @@ const outerDiv = {
 };
 
 const Profile = () => {
-  const [userData, setUserData] = useState<UserData | undefined>(undefined);
-  const [isloading, setIsloading] = useState(false);
-  const [fetchingError, setFetchingError] = useState(false);
-  const [fetchComplete, setFetchComplete] = useState(false);
+  const user: UserData | null = useSelector(
+    (state: RootState) => state.userData.user
+  );
 
-  const fetchData = async () => {
-    try {
-      setIsloading(true);
-      //now we are fetching all doc as we do not have anything to find data.
-      //TODO help of redux for username we will fetch userInformaion.
-      // 1st Approach - sending userId with URL
-      // 2nd Approach - check in for loop for userId
-      const users = (await axios.get("http://localhost:3000/getUsersInfo")).data;
-      // for (const user of users) {
-      //   if (user.name === "zsdfgh") {
-      //     setUserData(user as UserData);
-      //   }
-      // }
-      setUserData(users[0] as UserData);
-      setIsloading(false);
-      setFetchComplete(true);
-    } catch (error) {
-      setIsloading(true);
-      setFetchingError(true);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  console.log("user>>>>", user)
 
   return (
     <>
-      {isloading ? (
-        <div
-          style={{
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flex: "1",
-          }}
-        >
-          <CircularProgress />
-        </div>
-      ) : fetchingError ? (
+      {user === null ? (
         <div
           style={{
             height: "100%",
@@ -78,7 +40,7 @@ const Profile = () => {
         >
           <NotFound />
         </div>
-      ) : fetchComplete ? (
+      ) : (
         <div
           style={{
             height: "100%",
@@ -91,55 +53,55 @@ const Profile = () => {
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Name
-              <div style={styles}>{userData?.name}</div>
+              <div style={styles}>{user.name}</div>
             </div>
             <div style={{ width: "20%" }}>
               Age
-              <div style={styles}>{userData?.age}</div>
+              <div style={styles}>{user.age}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Breed
-              <div style={styles}>{userData?.breed}</div>
+              <div style={styles}>{user.breed}</div>
             </div>
             <div style={{ width: "20%" }}>
               Birthdate
-              <div style={styles}>{userData?.birthdate}</div>
+              <div style={styles}>{user.birthdate}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Identification
-              <div style={styles}>{userData?.identification}</div>
+              <div style={styles}>{user.identification}</div>
             </div>
             <div style={{ width: "20%" }}>
               Owner Name
-              <div style={styles}>{userData?.owner}</div>
+              <div style={styles}>{user.owner}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Username
-              <div style={styles}>{userData?.username}</div>
+              <div style={styles}>{user.username}</div>
             </div>
             <div style={{ width: "20%" }}>
               Password
-              <div style={styles}>{userData?.password}</div>
+              <div style={styles}>{user.password}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Gender
-              <div style={styles}>{userData?.gender}</div>
+              <div style={styles}>{user.gender}</div>
             </div>
             <div style={{ width: "20%" }}>
               City
-              <div style={styles}>{userData?.city}</div>
+              <div style={styles}>{user.city}</div>
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };
