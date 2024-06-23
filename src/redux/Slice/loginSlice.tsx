@@ -1,8 +1,26 @@
-import { createSlice,current } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
+import { UserData } from "../../commonFiles/commonTypes";
 
-const initialState = {
+interface State {
+  status: boolean;
+  user: UserData | null;
+}
+
+const initialState: State = {
   status: false,
-  user : null
+  user: {
+    name: "",
+    age: "",
+    breed: "",
+    birthdate: "",
+    identification: "",
+    owner: "",
+    username: "",
+    userId: "",
+    gender: "",
+    city: "",
+    password: "",
+  },
 };
 
 const userSlice = createSlice({
@@ -12,7 +30,7 @@ const userSlice = createSlice({
     userInfo: (state, action) => {
       state.status = true;
       state.user = action.payload.user;
-      console.log("current>>>",current(state))
+      console.log("current>>>", current(state));
     },
   },
 });
