@@ -4,7 +4,7 @@ import { loginCss } from "./logincss";
 import "./handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { login } from "../../redux/Slice/loginSlice";
+import { userInfo } from "../../redux/Slice/loginSlice";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -27,7 +27,7 @@ function LoginForm() {
         if (user.username === email) {
           if (user.password === password) {
             console.log("userLog", user);
-            dispatch(login({ user }));
+            dispatch(userInfo({ user }));
             setTimeout(() => {
               navigate("/");
             }, 0);
