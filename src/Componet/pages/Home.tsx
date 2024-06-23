@@ -10,7 +10,7 @@ import {
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import harnessCard from "../../../assets/harness_copy.png";
+import harnessCard from "../../assets/harness_copy.png"
 
 const outerDiv = {
   height: "100%",

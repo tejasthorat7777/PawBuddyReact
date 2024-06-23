@@ -1,6 +1,7 @@
-import Right from "../Componet/Right/Right";
-import Left from "../RenderAutomation/Left";
-import Navbar from "../Componet/Navbar/Navbar";
+import Left from "./Left";
+import Navbar from "./Template/Navbar";
+import Right from "./Template/Right";
+
 
 const Template = () => {
   return (

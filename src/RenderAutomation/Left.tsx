@@ -1,5 +1,5 @@
-import React from "react";
-import LeftMenu from "../Componet/LeftMenu/LeftMenu"
+import LeftMenu from "./Template/LeftMenu";
+
 
 const Left = () => {
   return <LeftMenu />;
