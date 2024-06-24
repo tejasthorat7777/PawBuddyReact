@@ -52,6 +52,7 @@ function LoginForm() {
           <div style={loginCss.inputOuterDiv}>
             <div style={loginCss.inputDiv}>
               <input
+               data-testid="username"
                 style={loginCss.inputStyle}
                 type="text"
                 id="username"
@@ -62,6 +63,7 @@ function LoginForm() {
             </div>
             <div style={loginCss.inputDiv}>
               <input
+              data-testid="password"
                 style={loginCss.inputStyle}
                 type="password"
                 id="pass"
@@ -88,6 +90,7 @@ function LoginForm() {
               <CircularProgress />
             ) : (
               <Button
+              data-testid="submitBtn"
                 type="submit"
                 variant="contained"
                 style={{
