@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+
+# Coverage directory
+coverage/
+*.lcov
+
+# Ignore HTML files
+*.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
