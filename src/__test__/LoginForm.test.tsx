@@ -24,7 +24,6 @@ const user = {
 };
 
 describe("Login Page", () => {
-
   it("TC:1 login box should be present", () => {
     render(
       <Wrapper>
@@ -160,12 +159,13 @@ describe("Login Page", () => {
     fireEvent.click(submit);
 
     await waitFor(() => {
-      expect(screen.getByText("something went wrong")).toBeInTheDocument();
+      expect(
+        screen.getByText("Something Went Wrong... Please try again later")
+      ).toBeInTheDocument();
     });
   });
 
   it("TC:6 styling of submit button should change on hover", async () => {
-
     const mouseEnterCSS = {
       "background-color": "rgb(0, 17, 28)",
       "font-family": "cursive",
@@ -187,6 +187,13 @@ describe("Login Page", () => {
       </Wrapper>
     );
 
+    const useremail = screen.getByTestId("username");
+    expect(useremail).toBeInTheDocument();
+    fireEvent.change(useremail, { target: { value: "test1s@example.com" } });
+    const userpass = screen.getByTestId("password");
+    expect(userpass).toBeInTheDocument();
+    fireEvent.change(userpass, { target: { value: "123456" } });
+
     const submit = screen.getByTestId("submitBtn");
     expect(submit).toBeInTheDocument();
 
@@ -199,7 +206,32 @@ describe("Login Page", () => {
       fireEvent.mouseLeave(submit);
       expect(submit.style._values).toEqual(mouseLeaveCSS);
     });
-
   });
 
+  it("TC:7 button should not get clicked when email and password is not provided", async () => {
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+    const text = screen.getByText("Login Here");
+    expect(text).toBeInTheDocument();
+
+    const useremail = screen.getByTestId("username") as HTMLInputElement;
+    expect(useremail).toBeInTheDocument();
+    fireEvent.change(useremail, { target: { value: "" } });
+    expect(useremail.value).toBe("");
+
+    const userpass = screen.getByTestId("password") as HTMLInputElement;
+    expect(userpass).toBeInTheDocument();
+    fireEvent.change(userpass, { target: { value: "" } });
+    expect(userpass.value).toBe("");
+
+    const submit = screen.getByTestId("submitBtn");
+    expect(submit).toBeInTheDocument();
+    fireEvent.click(submit);
+
+    const progressBar = screen.queryByRole("progressbar");
+    expect(progressBar).not.toBeInTheDocument();
+  });
 });

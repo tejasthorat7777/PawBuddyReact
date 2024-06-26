@@ -89,8 +89,15 @@ function LoginForm() {
             {loading ? (
               <CircularProgress />
             ) : fetchError ? (
-              //TODO here implement this message which will adjust with login page css
-              <div>something went wrong</div>
+              <span
+                style={{
+                  color: "white",
+                  fontWeight: "400",
+                  fontFamily: "cursive",
+                }}
+              >
+                Something Went Wrong... Please try again later
+              </span>
             ) : (
               <Button
                 data-testid="submitBtn"
@@ -103,12 +110,18 @@ function LoginForm() {
                   width: "95%",
                   borderRadius: "10px",
                 }}
-                onClick={handlelogIn}
+                onClick={(event) => {
+                  if (!email || !password) {
+                    event.preventDefault();
+                  } else {
+                    handlelogIn(event);
+                  }
+                }}
                 onMouseEnter={() => {
-                  setOnHover(true);
+                  email && password && setOnHover(true);
                 }}
                 onMouseLeave={() => {
-                  setOnHover(false);
+                  email && password && setOnHover(false);
                 }}
               >
                 Login
