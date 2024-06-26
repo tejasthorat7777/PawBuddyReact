@@ -12,6 +12,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [onHover, setOnHover] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -21,12 +22,10 @@ function LoginForm() {
     e.preventDefault();
     try {
       setLoading(true);
-      const userData = (await axios.get("http://localhost:3000/getUsersInfo"))
-        .data;
-      for (const user of userData) {
+      const userData = await axios.get("http://localhost:3000/getUsersInfo");
+      for (const user of userData.data) {
         if (user.username === email) {
           if (user.password === password) {
-            console.log("userLog", user);
             dispatch(userInfo({ user }));
             setTimeout(() => {
               navigate("/");
@@ -40,6 +39,7 @@ function LoginForm() {
       }
     } catch (error) {
       setLoading(false);
+      setFetchError(true);
       console.log("Found error ", error);
     }
   };
@@ -52,7 +52,7 @@ function LoginForm() {
           <div style={loginCss.inputOuterDiv}>
             <div style={loginCss.inputDiv}>
               <input
-               data-testid="username"
+                data-testid="username"
                 style={loginCss.inputStyle}
                 type="text"
                 id="username"
@@ -63,7 +63,7 @@ function LoginForm() {
             </div>
             <div style={loginCss.inputDiv}>
               <input
-              data-testid="password"
+                data-testid="password"
                 style={loginCss.inputStyle}
                 type="password"
                 id="pass"
@@ -82,15 +82,18 @@ function LoginForm() {
                 fontFamily: "cursive",
               }}
             >
-              Incorrect email and password
+              Incorrect email or password
             </span>
           )}
           <div style={loginCss.buttonDiv}>
             {loading ? (
               <CircularProgress />
+            ) : fetchError ? (
+              //TODO here implement this message which will adjust with login page css
+              <div>something went wrong</div>
             ) : (
               <Button
-              data-testid="submitBtn"
+                data-testid="submitBtn"
                 type="submit"
                 variant="contained"
                 style={{
