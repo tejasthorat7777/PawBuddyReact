@@ -21,6 +21,7 @@ import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { SubmitButton } from "../../commonFiles/commonComponents";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -59,6 +60,8 @@ export default function Registration() {
   const [isLoading, setIsloading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
   const [formSend, setFormSend] = useState(false);
+
+  const cities = ["Select", "Pune", "Nashik", "Nagpur", "Mumbai", "Banglore"];
 
   useEffect(() => {}, [userData]);
 
@@ -304,37 +307,14 @@ export default function Registration() {
                         });
                       }}
                     >
-                      <CustomMenuItem value="select">Select</CustomMenuItem>
-                      <CustomMenuItem value="Pune">Pune</CustomMenuItem>
-                      <CustomMenuItem value="Nashik">Nashik</CustomMenuItem>
-                      <CustomMenuItem value="Nagpur">Nagpur</CustomMenuItem>
-                      <CustomMenuItem value="Mumbai">Mumbai</CustomMenuItem>
-                      <CustomMenuItem value="Banglore">Banglore</CustomMenuItem>
+                      {cities.map((city) => (
+                        <CustomMenuItem value={city}>{city}</CustomMenuItem>
+                      ))}
                     </StyledSelect>
                   </FormControl>
                 </div>
               </div>
-              <Button
-                type="submit"
-                className="submitButton"
-                variant="contained"
-                style={{
-                  position: "absolute",
-                  bottom: "2%",
-                  left: "40%",
-                  backgroundColor: onHover ? "#597081" : "#00111c",
-                  fontFamily: "cursive",
-                }}
-                onClick={sendData}
-                onMouseEnter={() => {
-                  setOnHover(true);
-                }}
-                onMouseLeave={() => {
-                  setOnHover(false);
-                }}
-              >
-                Submit
-              </Button>
+              <SubmitButton operationOnData={sendData}/>
             </div>
           </div>
         </div>

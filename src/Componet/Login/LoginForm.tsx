@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { loginCss } from "./logincss";
 import "./handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { userInfo } from "../../redux/Slice/loginSlice";
 import { useNavigate } from "react-router-dom";
+import { SubmitButton } from "../../commonFiles/commonComponents";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [onHover, setOnHover] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -99,33 +99,11 @@ function LoginForm() {
                 Something Went Wrong... Please try again later
               </span>
             ) : (
-              <Button
-                data-testid="submitBtn"
-                type="submit"
-                variant="contained"
-                style={{
-                  backgroundColor: onHover ? "#597081" : "#00111c",
-                  fontFamily: "cursive",
-                  height: "100%",
-                  width: "95%",
-                  borderRadius: "10px",
-                }}
-                onClick={(event) => {
-                  if (!email || !password) {
-                    event.preventDefault();
-                  } else {
-                    handlelogIn(event);
-                  }
-                }}
-                onMouseEnter={() => {
-                  email && password && setOnHover(true);
-                }}
-                onMouseLeave={() => {
-                  email && password && setOnHover(false);
-                }}
-              >
-                Login
-              </Button>
+              <SubmitButton
+                operationOnData={handlelogIn}
+                email={email}
+                password={password}
+              />
             )}
           </div>
         </div>

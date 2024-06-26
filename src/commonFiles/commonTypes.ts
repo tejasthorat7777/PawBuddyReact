@@ -20,3 +20,11 @@ export type UserData = {
   password: string;
   userId: string;
 };
+
+export type SubmitButtonProps = {
+  operationOnData: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  email?: string;
+  password?: string;
+};
