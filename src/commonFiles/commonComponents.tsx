@@ -4,8 +4,6 @@ import { SubmitButtonProps } from "./commonTypes";
 
 export const SendButton: React.FC<SubmitButtonProps> = ({
   operationOnData,
-  email = true,
-  password = true,
   style = {},
   text,
 }) => {
@@ -21,13 +19,7 @@ export const SendButton: React.FC<SubmitButtonProps> = ({
         fontFamily: "cursive",
         ...style,
       }}
-      onClick={(event) => {
-        if (!email || !password) {
-          event.preventDefault();
-        } else {
-          operationOnData(event);
-        }
-      }}
+      onClick={operationOnData}
       onMouseEnter={() => {
         setOnHover(true);
       }}

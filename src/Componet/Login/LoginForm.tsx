@@ -7,6 +7,7 @@ import axios from "axios";
 import { userInfo } from "../../redux/Slice/loginSlice";
 import { useNavigate } from "react-router-dom";
 import { SendButton } from "../../commonFiles/commonComponents";
+import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -14,11 +15,25 @@ function LoginForm() {
   const [correctUser, setCorrectUser] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [lottie, setLottie] = useState(false);
+  const [isRequired, setIsRequired] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const loginSuccess = () => {
+    setLoading(false);
+    setLottie(true);
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+  };
+
   const handlelogIn = async (e: { preventDefault: () => void }) => {
+    if (!email && !password) {
+      setIsRequired(true);
+      return;
+    }
     e.preventDefault();
     try {
       setLoading(true);
@@ -28,13 +43,9 @@ function LoginForm() {
           if (user.password === password) {
             dispatch(userInfo({ user }));
             setTimeout(() => {
-              navigate("/");
-            }, 0);
-            return;
+              loginSuccess();
+            }, 3000);
           }
-        } else {
-          setCorrectUser(true);
-          setLoading(false);
         }
       }
     } catch (error) {
@@ -42,6 +53,22 @@ function LoginForm() {
       setFetchError(true);
       console.log("Found error ", error);
     }
+  };
+
+  const placeholderColor = isRequired ? "red" : "transparent";
+
+  const inputStyle = {
+    height: "100%",
+    width: "100%",
+    borderRadius: "10px",
+    padding: "5%",
+    fontFamily: "cursive",
+  };
+  const inputStyleConditional = {
+    ...inputStyle,
+    "::placeholder": {
+      color: "red",
+    },
   };
 
   return (
@@ -53,23 +80,35 @@ function LoginForm() {
             <div style={loginCss.inputDiv}>
               <input
                 data-testid="username"
-                style={loginCss.inputStyle}
+                style={isRequired ? inputStyleConditional : inputStyle}
                 type="text"
                 id="username"
-                placeholder="Enter Email here"
+                placeholder={
+                  isRequired ? "Username Required" : "Enter Username"
+                }
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setCorrectUser(false);
+                  setIsRequired(false);
+                }}
               />
             </div>
             <div style={loginCss.inputDiv}>
               <input
                 data-testid="password"
-                style={loginCss.inputStyle}
+                style={isRequired ? inputStyleConditional : inputStyle}
                 type="password"
                 id="pass"
-                placeholder="Enter password here"
+                placeholder={
+                  isRequired ? "Password Required" : "Enter Password"
+                }
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setCorrectUser(false);
+                  setIsRequired(false);
+                }}
               />
             </div>
           </div>
@@ -98,11 +137,13 @@ function LoginForm() {
               >
                 Something Went Wrong... Please try again later
               </span>
+            ) : lottie ? (
+              <div style={{ marginTop: "2rem" }}>
+                <LoginDoneTick />
+              </div>
             ) : (
               <SendButton
                 operationOnData={handlelogIn}
-                email={email != "" ? true : false}
-                password={password != "" ? true : false}
                 style={{ height: "8%", width: "25%", borderRadius: "10px" }}
                 text="Login"
               />

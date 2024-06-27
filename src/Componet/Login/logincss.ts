@@ -34,14 +34,6 @@ export const loginCss = {
     borderRadius: "10px",
   },
 
-  inputStyle: {
-    height: "100%",
-    width: "100%",
-    borderRadius: "10px",
-    padding: "5%",
-    fontFamily: "cursive"
-  },
-
   inputDiv: {
     height: "50%",
     width: "100%",

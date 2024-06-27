@@ -2,7 +2,7 @@ import logo from "../../assets/logo.png";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Box, IconButton, ListItemIcon, Menu, Tooltip } from "@mui/material";
 import { CustomMenuItem } from "../../commonFiles/commonTheme";
-import { Login, Logout, Settings } from "@mui/icons-material";
+import { Login, Logout} from "@mui/icons-material";
 import React, { useState } from "react";
 import CallIcon from "@mui/icons-material/Call";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -73,7 +73,6 @@ export default function Navbar() {
     },
     { text: "Orders", component: <AddShoppingCartIcon />, path: "/orders" },
     { text: "Contact Us", component: <CallIcon />, path: "/contact" },
-    { text: "Settings", component: <Settings />, path: "/setting" },
     user != ""
       ? { text: "Logout", component: <Logout />, path: "/login" }
       : { text: "Log-In", component: <Login />, path: "/login" },
