@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { userInfo } from "../../redux/Slice/loginSlice";
 import { useNavigate } from "react-router-dom";
-import { SubmitButton } from "../../commonFiles/commonComponents";
+import { SendButton } from "../../commonFiles/commonComponents";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -99,10 +99,12 @@ function LoginForm() {
                 Something Went Wrong... Please try again later
               </span>
             ) : (
-              <SubmitButton
+              <SendButton
                 operationOnData={handlelogIn}
-                email={email}
-                password={password}
+                email={email != "" ? true : false}
+                password={password != "" ? true : false}
+                style={{ height: "8%", width: "25%", borderRadius: "10px" }}
+                text="Login"
               />
             )}
           </div>

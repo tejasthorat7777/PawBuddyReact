@@ -2,10 +2,12 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import { SubmitButtonProps } from "./commonTypes";
 
-export const SubmitButton: React.FC<SubmitButtonProps> = ({
+export const SendButton: React.FC<SubmitButtonProps> = ({
   operationOnData,
-  email,
-  password,
+  email = true,
+  password = true,
+  style = {},
+  text,
 }) => {
   const [onHover, setOnHover] = useState(false);
   return (
@@ -14,10 +16,9 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
       variant="contained"
       style={{
         position: "absolute",
-        bottom: "2%",
-        left: "40%",
         backgroundColor: onHover ? "#597081" : "#00111c",
         fontFamily: "cursive",
+        ...style,
       }}
       onClick={(event) => {
         if (!email || !password) {
@@ -33,7 +34,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
         setOnHover(false);
       }}
     >
-      Submit
+      {text}
     </Button>
   );
 };

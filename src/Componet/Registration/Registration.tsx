@@ -21,7 +21,7 @@ import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { SubmitButton } from "../../commonFiles/commonComponents";
+import { SendButton } from "../../commonFiles/commonComponents";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -56,7 +56,6 @@ export default function Registration() {
     userId: "",
   });
 
-  const [onHover, setOnHover] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
   const [formSend, setFormSend] = useState(false);
@@ -314,7 +313,11 @@ export default function Registration() {
                   </FormControl>
                 </div>
               </div>
-              <SubmitButton operationOnData={sendData}/>
+              <SendButton
+                operationOnData={sendData}
+                style={{ bottom: "2%", left: "40%" }}
+                text="SUBMIT"
+              />
             </div>
           </div>
         </div>

@@ -38,7 +38,7 @@ const navLeft = {
 };
 
 export default function Navbar() {
-  const user = useSelector((state: RootState) => state.userData.user);
+  const user = useSelector((state: RootState) => state.userData.user?.userId);
 
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -74,7 +74,7 @@ export default function Navbar() {
     { text: "Orders", component: <AddShoppingCartIcon />, path: "/orders" },
     { text: "Contact Us", component: <CallIcon />, path: "/contact" },
     { text: "Settings", component: <Settings />, path: "/setting" },
-    user
+    user != ""
       ? { text: "Logout", component: <Logout />, path: "/login" }
       : { text: "Log-In", component: <Login />, path: "/login" },
   ];

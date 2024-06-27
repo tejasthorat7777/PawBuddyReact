@@ -234,4 +234,31 @@ describe("Login Page", () => {
     const progressBar = screen.queryByRole("progressbar");
     expect(progressBar).not.toBeInTheDocument();
   });
+
+  it("TC:8 should show email required and password required in respective input box if user try to click login button without credentials", async () => {
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+    const text = screen.getByText("Login Here");
+    expect(text).toBeInTheDocument();
+
+    const useremail = screen.getByTestId("username") as HTMLInputElement;
+    expect(useremail).toBeInTheDocument();
+    fireEvent.change(useremail, { target: { value: "" } });
+    expect(useremail.value).toBe("");
+
+    const userpass = screen.getByTestId("password") as HTMLInputElement;
+    expect(userpass).toBeInTheDocument();
+    fireEvent.change(userpass, { target: { value: "" } });
+    expect(userpass.value).toBe("");
+
+    const submit = screen.getByTestId("submitBtn");
+    expect(submit).toBeInTheDocument();
+    fireEvent.click(submit);
+
+    expect(screen.getByText("email required")).toBeInTheDocument();
+    expect(screen.getByText("password required")).toBeInTheDocument();
+  });
 });

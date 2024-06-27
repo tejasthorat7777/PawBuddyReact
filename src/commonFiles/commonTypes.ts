@@ -25,6 +25,8 @@ export type SubmitButtonProps = {
   operationOnData: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
-  email?: string;
-  password?: string;
+  email?: boolean;
+  password?: boolean;
+  style?: React.CSSProperties;
+  text: string;
 };
