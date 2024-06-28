@@ -3,13 +3,11 @@ import loginDoneTick from "../lottieJson/loginDoneTick.json";
 
 export const LoginDoneTick = () => {
   return (
-    <div>
-      <Lottie
-        loop
-        animationData={loginDoneTick}
-        play
-        style={{ width: 300, height: 300 }}
-      />
-    </div>
+    <Lottie
+      loop
+      animationData={loginDoneTick}
+      play
+      style={{ width: 300, height: 300 }}
+    />
   );
 };

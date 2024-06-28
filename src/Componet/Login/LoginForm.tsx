@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { loginCss } from "./logincss";
 import "./handleInputAuto.css";
@@ -8,6 +8,7 @@ import { userInfo } from "../../redux/Slice/loginSlice";
 import { useNavigate } from "react-router-dom";
 import { SendButton } from "../../commonFiles/commonComponents";
 import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
+import { UserData } from "../../commonFiles/commonTypes";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [lottie, setLottie] = useState(false);
   const [isRequired, setIsRequired] = useState(false);
+  const [userDataArray, setUserDataArray] = useState<UserData[]>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,48 +31,46 @@ function LoginForm() {
     }, 3000);
   };
 
-  const handlelogIn = async (e: { preventDefault: () => void }) => {
-    if (!email || !password) {
-      console.log("email>>>", email);
-      console.log("password>>>", password);
-      setIsRequired(true);
-      return;
-    }
-    console.log("email>>>", email);
-    console.log("password>>>", password);
-    e.preventDefault();
+  const fetchData = async () => {
     try {
-      setLoading(true);
-      const userData = await axios.get("http://localhost:3000/getUsersInfo");
-      for (const user of userData.data) {
-        if (user.username === email) {
-          if (user.password === password) {
-            dispatch(userInfo({ user }));
-            setTimeout(() => {
-              loginSuccess();
-            }, 3000);
-          }
-        }
-      }
+      const getData = await axios.get("http://localhost:3000/getUsersInfo");
+      const data = getData.data;
+      setUserDataArray(data);
     } catch (error) {
       setLoading(false);
       setFetchError(true);
-      console.log("Found error ", error);
+      console.log("error ", error);
     }
   };
 
-  const inputStyle = {
-    height: "100%",
-    width: "100%",
-    borderRadius: "10px",
-    padding: "5%",
-    fontFamily: "cursive",
-  };
-  const inputStyleConditional = {
-    ...inputStyle,
-    "::placeholder": {
-      color: "red",
-    },
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handlelogIn = async (e: { preventDefault: () => void }) => {
+    if (!email || !password) {
+      setIsRequired(true);
+      return;
+    }
+    e.preventDefault();
+    setLoading(true);
+    const user = userDataArray.find(
+      (user: UserData) => user.username === email
+    );
+    if (user) {
+      if (user.password === password) {
+        dispatch(userInfo({ user }));
+        setTimeout(() => {
+          loginSuccess();
+        }, 3000);
+      } else {
+        setLoading(false);
+        setCorrectUser(true);
+      }
+    } else {
+      setLoading(false);
+      setCorrectUser(true);
+    }
   };
 
   return (
@@ -83,11 +83,11 @@ function LoginForm() {
               <input
                 data-testid="username"
                 className={isRequired ? "red-placeholder" : ""}
-                style={isRequired ? inputStyleConditional : inputStyle}
+                style={loginCss.inputStyle}
                 type="text"
                 id="username"
                 placeholder={
-                  isRequired ? "Username Required" : "Enter Username"
+                  isRequired ? "* Username Required" : "Enter Username"
                 }
                 value={email}
                 onChange={(e) => {
@@ -101,11 +101,11 @@ function LoginForm() {
               <input
                 data-testid="password"
                 className={isRequired ? "red-placeholder" : ""}
-                style={isRequired ? inputStyleConditional : inputStyle}
+                style={loginCss.inputStyle}
                 type="password"
                 id="pass"
                 placeholder={
-                  isRequired ? "Password Required" : "Enter Password"
+                  isRequired ? "* Password Required" : "Enter Password"
                 }
                 value={password}
                 onChange={(e) => {
@@ -120,7 +120,7 @@ function LoginForm() {
             <span
               style={{
                 color: "red",
-                marginLeft: "5rem",
+                marginLeft: "6rem",
                 fontWeight: "800",
                 fontFamily: "cursive",
               }}
@@ -142,7 +142,7 @@ function LoginForm() {
                 Something Went Wrong... Please try again later
               </span>
             ) : lottie ? (
-              <div style={{ marginTop: "2rem" }}>
+              <div style={{ marginTop: "2rem" }} data-testid="loginDoneTick">
                 <LoginDoneTick />
               </div>
             ) : (
