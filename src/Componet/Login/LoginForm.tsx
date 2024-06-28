@@ -30,10 +30,14 @@ function LoginForm() {
   };
 
   const handlelogIn = async (e: { preventDefault: () => void }) => {
-    if (!email && !password) {
+    if (!email || !password) {
+      console.log("email>>>", email);
+      console.log("password>>>", password);
       setIsRequired(true);
       return;
     }
+    console.log("email>>>", email);
+    console.log("password>>>", password);
     e.preventDefault();
     try {
       setLoading(true);
@@ -54,8 +58,6 @@ function LoginForm() {
       console.log("Found error ", error);
     }
   };
-
-  const placeholderColor = isRequired ? "red" : "transparent";
 
   const inputStyle = {
     height: "100%",
@@ -80,6 +82,7 @@ function LoginForm() {
             <div style={loginCss.inputDiv}>
               <input
                 data-testid="username"
+                className={isRequired ? "red-placeholder" : ""}
                 style={isRequired ? inputStyleConditional : inputStyle}
                 type="text"
                 id="username"
@@ -97,6 +100,7 @@ function LoginForm() {
             <div style={loginCss.inputDiv}>
               <input
                 data-testid="password"
+                className={isRequired ? "red-placeholder" : ""}
                 style={isRequired ? inputStyleConditional : inputStyle}
                 type="password"
                 id="pass"
