@@ -5,10 +5,12 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Container,
+  Pagination,
   Typography,
 } from "@mui/material";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import harnessCard from "../../assets/harness_copy.png";
 import collar from "../../assets/red-dog-collar.jpg";
@@ -18,115 +20,139 @@ import tickShampoo from "../../assets/tickfree_shampoo_200ml_1.jpg";
 import leash from "../../assets/leashHome.jpg";
 import purinaDry from "../../assets/purinaDryFood.jpg";
 import k9Harness from "../../assets/K9Harness.jpg";
-import { flexDiv } from "../../commonFiles/commonTheme";
+import { homeStyle, flexDiv } from "../../commonFiles/commonTheme";
+import DoneIcon from "@mui/icons-material/Done";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "../../commonFiles/toast.module.css";
+import styles from "../../commonFiles/commonCss/toast.module.css";
+import { useState } from "react";
 
-const outerDiv = {
-  height: "100%",
-  width: "100%",
-  backgroundColor: "#597081",
-  padding: "1.5rem",
-};
-
-const commonDiv = {
-  display: "flex",
-  height: "18rem",
-  justifyContent: "space-evenly",
-};
-
-const cardContent = {
-  backgroundColor: "#00111c",
-  color: "white",
-  ...flexDiv,
-  justifyContent: "space-between",
-};
-
-const cardMedia = {
-  height: "100%",
-  objectFit: "cover",
-  ...flexDiv,
-};
 const Home = () => {
-  const handleToaste = () =>
+  const rowCard1 = [
+    {
+      cardText: "Harness",
+      cardImage: harnessCard,
+      cardPrice: "759",
+      selected: false,
+    },
+    {
+      cardText: "Collar",
+      cardImage: collar,
+      cardPrice: "259",
+      selected: false,
+    },
+    {
+      cardText: "Poo Scooper",
+      cardImage: scooper,
+      cardPrice: "389",
+      selected: false,
+    },
+    {
+      cardText: "Pedegree",
+      cardImage: adultPedegree,
+      cardPrice: "699",
+      selected: false,
+    },
+  ];
+
+  const [firstRowcard, setFirstRowcard] = useState(rowCard1);
+
+  const rowCard2 = [
+    {
+      cardText: "Tickfree",
+      cardImage: tickShampoo,
+      cardPrice: "759",
+      selected: false,
+    },
+    {
+      cardText: "purina dry food",
+      cardImage: purinaDry,
+      cardPrice: "389",
+      selected: false,
+    },
+    {
+      cardText: "K9 Harness",
+      cardImage: k9Harness,
+      cardPrice: "699",
+      selected: false,
+    },
+    {
+      cardText: "Red leash",
+      cardImage: leash,
+      cardPrice: "259",
+      selected: false,
+    },
+  ];
+
+  const [secondRowcard, setSecondRowcard] = useState(rowCard2);
+
+  const addTocart = (index: number, isFirstRow: boolean) => {
     toast("Item added to Cart", {
       autoClose: 1000,
     });
+    if (isFirstRow) {
+      setFirstRowcard((prevState) =>
+        prevState.map((item, idx) =>
+          idx === index ? { ...item, selected: !item.selected } : item
+        )
+      );
+    } else {
+      setSecondRowcard((prevState) =>
+        prevState.map((item, idx) =>
+          idx === index ? { ...item, selected: !item.selected } : item
+        )
+      );
+    }
+  };
 
-  const firstRowcard = [
-    { cardText: "Harness", cardImage: harnessCard, cardPrice: "759" },
-    { cardText: "Collar", cardImage: collar, cardPrice: "259" },
-    { cardText: "Poo Scooper", cardImage: scooper, cardPrice: "389" },
-    { cardText: "Pendent", cardImage: adultPedegree, cardPrice: "699" },
-  ];
-  const secondRowcard = [
-    { cardText: "Harness", cardImage: tickShampoo, cardPrice: "759" },
-    { cardText: "Harness", cardImage: purinaDry, cardPrice: "389" },
-    { cardText: "Harness", cardImage: k9Harness, cardPrice: "699" },
-    { cardText: "Harness", cardImage: leash, cardPrice: "259" },
-  ];
-
-  const buttonIcon = [
-    <ShoppingCartOutlinedIcon />,
-    <FavoriteBorderOutlinedIcon />,
-    <AddIcon />,
-  ];
+  const addToWishlist = () =>
+    toast("Item added to Wishlist", {
+      autoClose: 1000,
+    });
 
   return (
-    <div style={outerDiv}>
-      <div style={commonDiv}>
+    <div style={homeStyle.outerDiv}>
+      <div style={homeStyle.commonDiv}>
         {firstRowcard.map((cardObject, index) => (
-          <Card sx={{ maxWidth: "15rem" }}>
-            <CardActionArea
-              key={index}
-              style={{ height: "11.5rem", padding: 10 }}
-            >
-              <CardMedia sx={cardMedia} title={cardObject.cardText}>
+          <Card sx={{ maxWidth: "15rem" }} key={index}>
+            <CardActionArea style={{ height: "12rem", padding: 10 }}>
+              <CardMedia sx={homeStyle.cardMedia} title={cardObject.cardText}>
                 <img
                   src={cardObject.cardImage}
                   style={{ height: "100%", width: "auto" }}
                 />
               </CardMedia>
             </CardActionArea>
-            <CardContent sx={cardContent}>
+            <CardContent sx={homeStyle.cardContent}>
               <Typography>{cardObject.cardText}</Typography>
               <Typography>{`₹ ${cardObject.cardPrice}.00`}</Typography>
             </CardContent>
             <CardActions sx={{ backgroundColor: "#00111c" }}>
-              {buttonIcon.map((iconName, index) => (
-                <Button
-                  size="small"
-                  key={index}
-                  style={{ color: "white" }}
-                  onClick={handleToaste}
-                >
-                  <ToastContainer
-                    position="bottom-left"
-                    toastClassName={styles.toast}
-                    bodyClassName={styles.body}
-                    hideProgressBar={true}
-                    autoClose={1000}
-                  />
-                  {iconName}
-                </Button>
-              ))}
+              <Button style={homeStyle.IconButton}>
+                <ShareOutlinedIcon />
+              </Button>
+              <Button onClick={addToWishlist} style={homeStyle.IconButton}>
+                <FavoriteBorderOutlinedIcon />
+              </Button>
+              <Button
+                onClick={() => addTocart(index, true)}
+                style={homeStyle.IconButton}
+              >
+                {cardObject.selected ? <DoneIcon /> : <AddIcon />}
+              </Button>
             </CardActions>
           </Card>
         ))}
       </div>
       <div
         style={{
-          ...commonDiv,
+          ...homeStyle.commonDiv,
           marginTop: "1rem",
         }}
       >
         {secondRowcard.map((cardObject, index) => (
-          <Card sx={{ maxWidth: 220 }}>
-            <CardActionArea
-              key={index}
-              style={{ height: "11.5rem", padding: 10 }}
-            >
+          <Card sx={{ maxWidth: 220 }} key={index}>
+            <CardActionArea style={{ height: "12rem", padding: 10 }}>
               <CardMedia
                 style={{
                   height: "100%",
@@ -141,20 +167,46 @@ const Home = () => {
                 />
               </CardMedia>
             </CardActionArea>
-            <CardContent sx={cardContent}>
+            <CardContent sx={homeStyle.cardContent}>
               <Typography>{cardObject.cardText}</Typography>
               <Typography>{`₹ ${cardObject.cardPrice}.00`}</Typography>
             </CardContent>
             <CardActions sx={{ backgroundColor: "#00111c" }}>
-              {buttonIcon.map((iconName, index) => (
-                <Button size="small" key={index} style={{ color: "white" }}>
-                  {iconName}
-                </Button>
-              ))}
+              <Button style={homeStyle.IconButton}>
+                <ShareOutlinedIcon />
+              </Button>
+              <Button onClick={addToWishlist} style={homeStyle.IconButton}>
+                <FavoriteBorderOutlinedIcon />
+              </Button>
+              <Button
+                onClick={() => addTocart(index, false)}
+                style={homeStyle.IconButton}
+              >
+                {cardObject.selected ? <DoneIcon /> : <AddIcon />}
+              </Button>
             </CardActions>
           </Card>
         ))}
       </div>
+      <Container style={homeStyle.PaginationDiv}>
+        <Pagination
+          shape="rounded"
+          color="primary"
+          count={10}
+          sx={{
+            "& .MuiPaginationItem-root": {
+              color: "white",
+            },
+          }}
+        />
+      </Container>
+      <ToastContainer
+        position="bottom-left"
+        toastClassName={styles.toast}
+        bodyClassName={styles.body}
+        hideProgressBar={true}
+        autoClose={1000}
+      />
     </div>
   );
 };

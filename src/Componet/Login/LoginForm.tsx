@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { loginCss } from "./logincss";
-import "./handleInputAuto.css";
+import { loginCss } from "../../commonFiles/commonTheme";
+import "../../commonFiles/commonCss/handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { userInfo } from "../../redux/Slice/loginSlice";

@@ -3,10 +3,11 @@
     background: #ffffff;
     color: #000000;
     height: 2rem;
-    width: 15rem
+    width: 15rem;
 }
 
 .body {
-    font-size: 12px;
-    font-weight: 500
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 2rem;
 }
