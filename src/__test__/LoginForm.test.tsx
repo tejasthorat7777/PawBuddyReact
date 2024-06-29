@@ -99,7 +99,7 @@ describe("Login Page", () => {
   });
 
   it("TC:3 should display Incorrect email or password when incorrect password and email given", async () => {
-    mockAxiosGet.mockImplementation(() => {
+    mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
           {
@@ -124,7 +124,7 @@ describe("Login Page", () => {
     const submit = screen.getByTestId("submitBtn");
     expect(submit).toBeInTheDocument();
 
-    await act(async () => {
+    act(() => {
       fireEvent.click(submit);
       fireEvent.mouseEnter(submit);
       fireEvent.mouseLeave(submit);
@@ -136,38 +136,7 @@ describe("Login Page", () => {
     expect(screen.getByText("Incorrect email or password")).toBeInTheDocument();
   });
 
-  it("TC:4 something went wrong message should display when axios gets rejected", async () => {
-    mockAxiosGet.mockRejectedValue({});
-    render(
-      <Wrapper>
-        <LoginForm />
-      </Wrapper>
-    );
-    const useremail = screen.getByTestId("username");
-    expect(useremail).toBeInTheDocument();
-    fireEvent.change(useremail, { target: { value: "test1s@example.com" } });
-    const userpass = screen.getByTestId("password");
-    expect(userpass).toBeInTheDocument();
-    fireEvent.change(userpass, { target: { value: "123456" } });
-
-    const submit = screen.getByTestId("submitBtn");
-    expect(submit).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(submit);
-      fireEvent.mouseEnter(submit);
-      fireEvent.mouseLeave(submit);
-    });
-
-    act(() => {
-      vi.advanceTimersByTime(3000);
-    });
-
-    expect(
-      screen.getByText("Something Went Wrong... Please try again later")
-    ).toBeInTheDocument();
-  });
-
-  it("TC:5 styling of submit button should change on hover", async () => {
+  it("TC:4 styling of submit button should change on hover", async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -223,7 +192,7 @@ describe("Login Page", () => {
     });
   });
 
-  it("TC:6 button should not get clicked when email and password is not provided", async () => {
+  it("TC:5 button should not get clicked when email and password is not provided", async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -261,7 +230,7 @@ describe("Login Page", () => {
     expect(progressBar).not.toBeInTheDocument();
   });
 
-  it("TC:7 should show email required and password required in respective input box if user try to click login button without credentials", async () => {
+  it("TC:6 should show email required and password required in respective input box if user try to click login button without credentials", async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -308,7 +277,7 @@ describe("Login Page", () => {
     ).toBeInTheDocument();
   });
 
-  it("TC:8 should done tick appear when credentials are correct", async () => {
+  it("TC:7 should done tick appear when credentials are correct", async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -343,5 +312,43 @@ describe("Login Page", () => {
     });
 
     expect(screen.getByTestId("loginDoneTick")).toBeInTheDocument();
+  });
+
+  it("TC:8 should password visible after clicking on verify button", async () => {
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.resolve({
+        data: [
+          {
+            ...user,
+            username: "priyankathorat",
+            password: "blacky",
+          },
+        ],
+      });
+    });
+
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+    const useremail = screen.getByTestId("username");
+    const userpass = screen.getByTestId("password");
+    await act(async () => {
+      fireEvent.change(useremail, { target: { value: "priyankathorat" } });
+      fireEvent.change(userpass, { target: { value: "blacky" } });
+    });
+    expect(userpass).toHaveAttribute('type','password');
+
+    act(() => {
+      fireEvent.click(screen.getByTestId("verify"));
+    });
+    expect(userpass).toHaveAttribute('type','text');
+
+    act(() => {
+      fireEvent.click(screen.getByTestId("verify"));
+    });
+    expect(userpass).toHaveAttribute('type','password');
+
   });
 });

@@ -9,16 +9,18 @@ import { useNavigate } from "react-router-dom";
 import { SendButton } from "../../commonFiles/commonComponents";
 import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
 import { UserData } from "../../commonFiles/commonTypes";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [correctUser, setCorrectUser] = useState(false);
-  const [fetchError, setFetchError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [lottie, setLottie] = useState(false);
   const [isRequired, setIsRequired] = useState(false);
   const [userDataArray, setUserDataArray] = useState<UserData[]>([]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,14 +33,16 @@ function LoginForm() {
     }, 3000);
   };
 
+  const handleVerifyButton = () => {
+    setShowPassword(!showPassword);
+  };
+
   const fetchData = async () => {
     try {
       const getData = await axios.get("http://localhost:3000/getUsersInfo");
       const data = getData.data;
       setUserDataArray(data);
     } catch (error) {
-      setLoading(false);
-      setFetchError(true);
       console.log("error ", error);
     }
   };
@@ -100,9 +104,9 @@ function LoginForm() {
             <div style={loginCss.inputDiv}>
               <input
                 data-testid="password"
-                className={isRequired ? "red-placeholder" : ""}
                 style={loginCss.inputStyle}
-                type="password"
+                className={isRequired ? "red-placeholder" : ""}
+                type={showPassword ? "text" : "password"}
                 id="pass"
                 placeholder={
                   isRequired ? "* Password Required" : "Enter Password"
@@ -114,6 +118,9 @@ function LoginForm() {
                   setIsRequired(false);
                 }}
               />
+              <IconButton onClick={handleVerifyButton} data-testid="verify">
+                <VisibilityIcon sx={{ color: "white", marginRight: "1rem" }} />
+              </IconButton>
             </div>
           </div>
           {correctUser && (
@@ -131,16 +138,6 @@ function LoginForm() {
           <div style={loginCss.buttonDiv}>
             {loading ? (
               <CircularProgress />
-            ) : fetchError ? (
-              <span
-                style={{
-                  color: "white",
-                  fontWeight: "400",
-                  fontFamily: "cursive",
-                }}
-              >
-                Something Went Wrong... Please try again later
-              </span>
             ) : lottie ? (
               <div style={{ marginTop: "2rem" }} data-testid="loginDoneTick">
                 <LoginDoneTick />

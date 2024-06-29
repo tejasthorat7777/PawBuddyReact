@@ -38,7 +38,9 @@ export const loginCss = {
     height: "50%",
     width: "100%",
     marginBottom: "5%",
+    display: "flex",
     borderRadius: "10px",
+    backgroundColor: "#00111c"
   },
 
   inputStyle: {
@@ -47,6 +49,7 @@ export const loginCss = {
     borderRadius: "10px",
     padding: "5%",
     fontFamily: "cursive",
+    backgroundColor: "transparent",
   },
 
   inputOuterDiv: {
