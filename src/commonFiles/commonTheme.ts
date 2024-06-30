@@ -7,7 +7,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import loginImage from "../assets/login.jpg";
-import { fontSize, height } from "@mui/system";
 
 export const CustomButton = styled(Button)({
   width: "100%",

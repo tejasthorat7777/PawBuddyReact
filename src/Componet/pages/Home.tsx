@@ -54,9 +54,6 @@ const Home = () => {
       selected: false,
     },
   ];
-
-  const [firstRowcard, setFirstRowcard] = useState(rowCard1);
-
   const rowCard2 = [
     {
       cardText: "Tickfree",
@@ -83,13 +80,10 @@ const Home = () => {
       selected: false,
     },
   ];
-
+  const [firstRowcard, setFirstRowcard] = useState(rowCard1);
   const [secondRowcard, setSecondRowcard] = useState(rowCard2);
 
   const addTocart = (index: number, isFirstRow: boolean) => {
-    toast("Item added to Cart", {
-      autoClose: 1000,
-    });
     if (isFirstRow) {
       setFirstRowcard((prevState) =>
         prevState.map((item, idx) =>
@@ -103,6 +97,11 @@ const Home = () => {
         )
       );
     }
+    toast(
+      `${
+        firstRowcard[index].selected ? "Item Removed from" : "Item added to"
+      } Cart`
+    );
   };
 
   const addToWishlist = () =>
@@ -135,7 +134,9 @@ const Home = () => {
                 <FavoriteBorderOutlinedIcon />
               </Button>
               <Button
-                onClick={() => addTocart(index, true)}
+                onClick={() => {
+                  addTocart(index, true);
+                }}
                 style={homeStyle.IconButton}
               >
                 {cardObject.selected ? <DoneIcon /> : <AddIcon />}
