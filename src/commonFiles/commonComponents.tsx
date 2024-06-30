@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
+import React from "react";
 import { SubmitButtonProps } from "./commonTypes";
 
 export const SendButton: React.FC<SubmitButtonProps> = ({

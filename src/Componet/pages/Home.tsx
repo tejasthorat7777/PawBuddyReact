@@ -80,6 +80,8 @@ const Home = () => {
       selected: false,
     },
   ];
+
+  // this row will be from DB for product details
   const [firstRowcard, setFirstRowcard] = useState(rowCard1);
   const [secondRowcard, setSecondRowcard] = useState(rowCard2);
 
@@ -99,7 +101,13 @@ const Home = () => {
     }
     toast(
       `${
-        firstRowcard[index].selected ? "Item Removed from" : "Item added to"
+        isFirstRow
+          ? firstRowcard[index].selected
+            ? "Item removed from"
+            : "Item added to"
+          : secondRowcard[index].selected
+          ? "Item removed from"
+          : "Item added to"
       } Cart`
     );
   };
@@ -108,6 +116,23 @@ const Home = () => {
     toast("Item added to Wishlist", {
       autoClose: 1000,
     });
+
+  const handleShare = async (title: string, price: string) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: title,
+          text: `Check out this ${title} for just ₹ ${price}.00`,
+          url: window.location.href,
+        });
+        console.log("Share successful");
+      } catch (error) {
+        console.error("Error sharing", error);
+      }
+    } else {
+      console.error("Web Share API not supported in this browser");
+    }
+  };
 
   return (
     <div style={homeStyle.outerDiv}>
@@ -127,7 +152,12 @@ const Home = () => {
               <Typography>{`₹ ${cardObject.cardPrice}.00`}</Typography>
             </CardContent>
             <CardActions sx={{ backgroundColor: "#00111c" }}>
-              <Button style={homeStyle.IconButton}>
+              <Button
+                style={homeStyle.IconButton}
+                onClick={() =>
+                  handleShare(cardObject.cardText, cardObject.cardPrice)
+                }
+              >
                 <ShareOutlinedIcon />
               </Button>
               <Button onClick={addToWishlist} style={homeStyle.IconButton}>

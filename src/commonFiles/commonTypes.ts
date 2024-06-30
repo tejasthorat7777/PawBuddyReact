@@ -5,7 +5,7 @@ export type ProfileType =
   | "/orders"
   | "/contact"
   | "/settings"
-  | "/logout";
+  | "/login";
 
 export type UserData = {
   city: string;
@@ -28,3 +28,4 @@ export type SubmitButtonProps = {
   style?: React.CSSProperties;
   text: string;
 };
+
