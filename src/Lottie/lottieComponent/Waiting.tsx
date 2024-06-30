@@ -4,6 +4,7 @@ import waiting from "../../Lottie/lottieJson/waiting.json";
 export const Waiting = () => {
   return (
     <Lottie
+      data-testid="waiting"
       loop
       animationData={waiting}
       play

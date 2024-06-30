@@ -4,6 +4,7 @@ import doneTick from "../lottieJson/doneTick.json";
 export const DoneTick = () => {
   return (
     <Lottie
+      data-testid="donetick"
       loop
       animationData={doneTick}
       play

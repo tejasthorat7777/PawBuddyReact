@@ -82,7 +82,7 @@ export default function Registration() {
     }
   };
   return (
-    <>
+    <div key={`outerDiv`}>
       {isLoading ? (
         <div style={commonStyleDiv}>
           <Waiting />
@@ -122,6 +122,8 @@ export default function Registration() {
                   <input
                     type="text"
                     name="name"
+                    data-testid="name"
+                    value={userData.name}
                     placeholder="Puppy Name"
                     autoComplete="off"
                     onChange={(event) => {
@@ -130,7 +132,9 @@ export default function Registration() {
                   />
                   <input
                     type="text"
+                    value={userData.age}
                     name="age"
+                    data-testid="age"
                     placeholder="Puppy Age"
                     autoComplete="off"
                     onChange={(event) => {
@@ -142,8 +146,10 @@ export default function Registration() {
                   <input
                     type="text"
                     name="breed"
+                    data-testid="breed"
                     placeholder="Breed"
                     autoComplete="off"
+                    value={userData.breed}
                     onChange={(event) => {
                       setUserData({ ...userData, breed: event.target.value });
                     }}
@@ -151,6 +157,8 @@ export default function Registration() {
                   <input
                     type="date"
                     name="birthdate"
+                    data-testid="birthdate"
+                    value={userData.birthdate}
                     placeholder="dd/mm/yy"
                     autoComplete="off"
                     onChange={(event) => {
@@ -167,8 +175,10 @@ export default function Registration() {
                   <input
                     type="text"
                     name="Owner"
+                    data-testid="owner"
                     placeholder="Owner"
                     autoComplete="off"
+                    value={userData.identification}
                     onChange={(event) => {
                       setUserData({ ...userData, owner: event.target.value });
                     }}
@@ -176,6 +186,7 @@ export default function Registration() {
                   <input
                     type="text"
                     name="identity"
+                    data-testid="identity"
                     placeholder="Identification"
                     autoComplete="off"
                     onChange={(event) => {
@@ -190,6 +201,8 @@ export default function Registration() {
                   <input
                     type="text"
                     name="username"
+                    data-testid="username"
+                    value={userData.username}
                     placeholder="Username/Email"
                     autoComplete="off"
                     onChange={(event) => {
@@ -202,6 +215,8 @@ export default function Registration() {
                   <input
                     type="password"
                     name="password"
+                    data-testid="password"
+                    value={userData.password}
                     placeholder="Password"
                     onChange={(event) => {
                       setUserData({
@@ -228,6 +243,7 @@ export default function Registration() {
                         value="male"
                         control={
                           <Radio
+                            data-testid="male"
                             onChange={(event) => {
                               setUserData({
                                 ...userData,
@@ -256,6 +272,7 @@ export default function Registration() {
                         value="female"
                         control={
                           <Radio
+                            data-testid="female"
                             onChange={(event) => {
                               setUserData({
                                 ...userData,
@@ -290,12 +307,13 @@ export default function Registration() {
                     style={{ marginTop: "5%" }}
                   >
                     <InputLabel
-                      id="select-city"
+                      data-testid="select-city"
                       style={{ color: "white", fontFamily: "cursive" }}
                     >
                       City
                     </InputLabel>
                     <StyledSelect
+                      data-testid="city"
                       id="city"
                       value={userData.city}
                       onChange={(event) => {
@@ -306,8 +324,10 @@ export default function Registration() {
                         });
                       }}
                     >
-                      {cities.map((city) => (
-                        <CustomMenuItem value={city}>{city}</CustomMenuItem>
+                      {cities.map((city, index) => (
+                        <CustomMenuItem value={city} key={index}>
+                          {city}
+                        </CustomMenuItem>
                       ))}
                     </StyledSelect>
                   </FormControl>
@@ -322,6 +342,6 @@ export default function Registration() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
