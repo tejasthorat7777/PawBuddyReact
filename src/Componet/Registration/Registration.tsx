@@ -66,6 +66,7 @@ export default function Registration() {
 
   const sendData = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     try {
+      console.log("userDtaa>>>>>>", userData)
       event.preventDefault();
       setIsloading(true);
       if (!userData.userId) {
@@ -77,6 +78,7 @@ export default function Registration() {
       }, 3000);
       setFormSend(true);
     } catch (error) {
+      console.log("Error>>>>", error)
       setIsloading(false);
       setUploadError(true);
     }
@@ -221,6 +223,7 @@ export default function Registration() {
                     onChange={(event) => {
                       setUserData({
                         ...userData,
+                        userId: `${userData.name}&&${userData.birthdate}`,
                         password: event.target.value,
                       });
                     }}
@@ -300,6 +303,7 @@ export default function Registration() {
                     </RadioGroup>
                   </FormControl>
                   <FormControl
+                  data-testid="selectForm"
                     sx={{
                       maxWidth: "50%",
                     }}
@@ -319,13 +323,16 @@ export default function Registration() {
                       onChange={(event) => {
                         setUserData({
                           ...userData,
-                          city: event.target.value as string,
-                          userId: `${userData.name}&&${userData.birthdate}`,
+                          city: event.target.value as string
                         });
                       }}
                     >
                       {cities.map((city, index) => (
-                        <CustomMenuItem value={city} key={index}>
+                        <CustomMenuItem
+                          value={city}
+                          key={`city_${city}_${index}`}
+                          data-testid={`city_${city}`}
+                        >
                           {city}
                         </CustomMenuItem>
                       ))}
