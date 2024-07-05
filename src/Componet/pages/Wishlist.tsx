@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
 import { wishlistItem } from "../../redux/Slice/Slices";
+import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 
 const Wishlist = () => {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
@@ -24,6 +25,7 @@ const Wishlist = () => {
   const cardData = useSelector(
     (state: RootState) => state.finalState.itemWishlist
   );
+  const user = useSelector((state: RootState) => state.finalState.user);
   console.log("card>>>>>", cardData);
 
   const handleXmark = (productId: string) => {
@@ -38,7 +40,18 @@ const Wishlist = () => {
         overflow: "auto",
       }}
     >
-      {cardData?.length ? (
+      {user?.userId === "" ? (
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            ...flexDiv,
+          }}
+        >
+          Please Login
+          <LoginRequired />
+        </div>
+      ) : cardData?.length ? (
         <Grid container spacing={2} key="gridOuter">
           {cardData?.map((card) => (
             <Grid item xs={2} sm={4}>

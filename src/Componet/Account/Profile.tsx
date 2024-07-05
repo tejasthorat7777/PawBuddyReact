@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
-import { flexDiv } from "../../commonFiles/commonTheme";
+import { flexDiv, homeStyle } from "../../commonFiles/commonTheme";
 
 const styles = {
   padding: "5%",
@@ -25,7 +25,13 @@ const Profile = () => {
   console.log("user>>>>", user);
 
   return (
-    <>
+    <div
+      style={{
+        ...homeStyle.outerDiv,
+        padding: "2%",
+        overflow: "auto",
+      }}
+    >
       {user?.userId === "" ? (
         <div
           style={{
@@ -33,7 +39,8 @@ const Profile = () => {
             width: "100%",
             ...flexDiv,
           }}
-        >Please Login
+        >
+          Please Login
           <LoginRequired />
         </div>
       ) : (
@@ -98,7 +105,7 @@ const Profile = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 export default Profile;
