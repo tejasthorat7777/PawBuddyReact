@@ -1,7 +1,7 @@
 export type ProfileType =
   | "/"
   | "/profile"
-  | "/WishList"
+  | "/wishList"
   | "/orders"
   | "/contact"
   | "/settings"
@@ -29,3 +29,11 @@ export type SubmitButtonProps = {
   text: string;
 };
 
+export type ProductData = {
+  productId: string;
+  prouctName: string;
+  price: string;
+  description: string;
+  imageSource:string;
+  selected:boolean;
+};

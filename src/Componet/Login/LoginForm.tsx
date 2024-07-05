@@ -4,7 +4,7 @@ import { loginCss } from "../../commonFiles/commonTheme";
 import "../../commonFiles/commonCss/handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { userInfo } from "../../redux/Slice/loginSlice";
+import { userInfo } from "../../redux/Slice/Slices";
 import { useNavigate } from "react-router-dom";
 import { SendButton } from "../../commonFiles/commonComponents";
 import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";

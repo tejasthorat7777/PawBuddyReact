@@ -45,7 +45,7 @@ const navLeft = {
 };
 
 export default function Navbar() {
-  const user = useSelector((state: RootState) => state.userData.user?.userId);
+  const user = useSelector((state: RootState) => state.finalState.user?.userId);
 
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

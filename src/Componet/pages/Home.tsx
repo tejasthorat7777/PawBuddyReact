@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import harnessCard from "../../assets/harness_copy.png";
@@ -26,57 +27,77 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { useState } from "react";
+import { ProductData } from "../../commonFiles/commonTypes";
+import { useDispatch } from "react-redux";
+import { wishlistItem } from "../../redux/Slice/Slices";
 
 const Home = () => {
-  const rowCard1 = [
+  const rowCard1: ProductData[] = [
     {
-      cardText: "Harness",
-      cardImage: harnessCard,
-      cardPrice: "759",
+      productId: "1",
+      prouctName: "Harness",
+      imageSource: harnessCard,
+      price: "759",
       selected: false,
+      description: "",
     },
     {
-      cardText: "Collar",
-      cardImage: collar,
-      cardPrice: "259",
+      productId: "2",
+      prouctName: "Collar",
+      imageSource: collar,
+      price: "259",
       selected: false,
+      description:
+        "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
     },
     {
-      cardText: "Poo Scooper",
-      cardImage: scooper,
-      cardPrice: "389",
+      productId: "3",
+      prouctName: "Poo Scooper",
+      imageSource: scooper,
+      price: "389",
       selected: false,
+      description: "",
     },
     {
-      cardText: "Pedegree",
-      cardImage: adultPedegree,
-      cardPrice: "699",
+      productId: "4",
+      prouctName: "Pedegree",
+      imageSource: adultPedegree,
+      price: "699",
       selected: false,
+      description: "",
     },
   ];
-  const rowCard2 = [
+  const rowCard2: ProductData[] = [
     {
-      cardText: "Tickfree",
-      cardImage: tickShampoo,
-      cardPrice: "759",
+      productId: "5",
+      prouctName: "Tickfree",
+      imageSource: tickShampoo,
+      price: "759",
+      selected: false,
+      description: "",
+    },
+    {
+      productId: "6",
+      prouctName: "purina dry food",
+      imageSource: purinaDry,
+      price: "389",
+      selected: false,
+      description: "",
+    },
+    {
+      productId: "7",
+      prouctName: "K9 Harness",
+      description: "",
+      imageSource: k9Harness,
+      price: "699",
       selected: false,
     },
     {
-      cardText: "purina dry food",
-      cardImage: purinaDry,
-      cardPrice: "389",
-      selected: false,
-    },
-    {
-      cardText: "K9 Harness",
-      cardImage: k9Harness,
-      cardPrice: "699",
-      selected: false,
-    },
-    {
-      cardText: "Red leash",
-      cardImage: leash,
-      cardPrice: "259",
+      productId: "8",
+      prouctName: "Red leash",
+      imageSource: leash,
+      price: "259",
+      description: "",
       selected: false,
     },
   ];
@@ -84,8 +105,11 @@ const Home = () => {
   // this row will be from DB for product details
   const [firstRowcard, setFirstRowcard] = useState(rowCard1);
   const [secondRowcard, setSecondRowcard] = useState(rowCard2);
+  const [wishlistItems, setWishlistItems] = useState<string[]>([]);
 
-  const addTocart = (index: number, isFirstRow: boolean) => {
+  const dispatch = useDispatch();
+
+  const addTocart = (index: number, isFirstRow: ProductData[]) => {
     if (isFirstRow) {
       setFirstRowcard((prevState) =>
         prevState.map((item, idx) =>
@@ -112,10 +136,22 @@ const Home = () => {
     );
   };
 
-  const addToWishlist = () =>
-    toast("Item added to Wishlist", {
-      autoClose: 1000,
-    });
+  const addToWishlist = (item: ProductData) => {
+    const itemId = `addedtoWishList${item.productId}`;
+
+    if (!wishlistItems.includes(itemId)) {
+      setWishlistItems([...wishlistItems, itemId]);
+      dispatch(wishlistItem({ item }));
+      toast("Item added to Wishlist", {
+        autoClose: 1000,
+      });
+    } else {
+      setWishlistItems(wishlistItems.filter((id) => id !== itemId));
+      toast("Item removed from Wishlist", {
+        autoClose: 1000,
+      });
+    }
+  };
 
   const handleShare = async (title: string, price: string) => {
     if (navigator.share) {
@@ -140,32 +176,41 @@ const Home = () => {
         {firstRowcard.map((cardObject, index) => (
           <Card sx={{ maxWidth: "15rem" }} key={index}>
             <CardActionArea style={{ height: "12rem", padding: 10 }}>
-              <CardMedia sx={homeStyle.cardMedia} title={cardObject.cardText}>
+              <CardMedia sx={homeStyle.cardMedia} title={cardObject.prouctName}>
                 <img
-                  src={cardObject.cardImage}
+                  src={cardObject.imageSource}
                   style={{ height: "100%", width: "auto" }}
                 />
               </CardMedia>
             </CardActionArea>
             <CardContent sx={homeStyle.cardContent}>
-              <Typography>{cardObject.cardText}</Typography>
-              <Typography>{`₹ ${cardObject.cardPrice}.00`}</Typography>
+              <Typography>{cardObject.prouctName}</Typography>
+              <Typography>{`₹ ${cardObject.price}.00`}</Typography>
             </CardContent>
             <CardActions sx={{ backgroundColor: "#00111c" }}>
               <Button
                 style={homeStyle.IconButton}
                 onClick={() =>
-                  handleShare(cardObject.cardText, cardObject.cardPrice)
+                  handleShare(cardObject.prouctName, cardObject.price)
                 }
               >
                 <ShareOutlinedIcon />
               </Button>
-              <Button onClick={addToWishlist} style={homeStyle.IconButton}>
-                <FavoriteBorderOutlinedIcon />
+              <Button
+                onClick={() => addToWishlist(cardObject)}
+                style={homeStyle.IconButton}
+              >
+                {wishlistItems.includes(
+                  `addedtoWishList${cardObject.productId}`
+                ) ? (
+                  <FavoriteIcon style={{ color: "red" }} />
+                ) : (
+                  <FavoriteBorderOutlinedIcon />
+                )}
               </Button>
               <Button
                 onClick={() => {
-                  addTocart(index, true);
+                  addTocart(index, firstRowcard);
                 }}
                 style={homeStyle.IconButton}
               >
@@ -190,27 +235,36 @@ const Home = () => {
                   objectFit: "cover",
                   ...flexDiv,
                 }}
-                title={cardObject.cardText}
+                title={cardObject.prouctName}
               >
                 <img
-                  src={cardObject.cardImage}
+                  src={cardObject.imageSource}
                   style={{ height: "100%", width: "auto" }}
                 />
               </CardMedia>
             </CardActionArea>
             <CardContent sx={homeStyle.cardContent}>
-              <Typography>{cardObject.cardText}</Typography>
-              <Typography>{`₹ ${cardObject.cardPrice}.00`}</Typography>
+              <Typography>{cardObject.prouctName}</Typography>
+              <Typography>{`₹ ${cardObject.price}.00`}</Typography>
             </CardContent>
             <CardActions sx={{ backgroundColor: "#00111c" }}>
               <Button style={homeStyle.IconButton}>
                 <ShareOutlinedIcon />
               </Button>
-              <Button onClick={addToWishlist} style={homeStyle.IconButton}>
-                <FavoriteBorderOutlinedIcon />
+              <Button
+                onClick={() => addToWishlist(cardObject)}
+                style={homeStyle.IconButton}
+              >
+                {wishlistItems.includes(
+                  `addedtoWishList${cardObject.productId}`
+                ) ? (
+                  <FavoriteIcon style={{ color: "red" }} />
+                ) : (
+                  <FavoriteBorderOutlinedIcon />
+                )}
               </Button>
               <Button
-                onClick={() => addTocart(index, false)}
+                onClick={() => addTocart(index, secondRowcard)}
                 style={homeStyle.IconButton}
               >
                 {cardObject.selected ? <DoneIcon /> : <AddIcon />}

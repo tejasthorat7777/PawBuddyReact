@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { MemoryRouter } from "react-router-dom";
-import userSlice from "../redux/Slice/loginSlice";
+import userSlice from "../redux/Slice/Slices";
 import { Provider } from "react-redux";
 import { ReactNode } from "react";
 
