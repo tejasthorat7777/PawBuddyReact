@@ -1,11 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { ProductData, UserData } from "../../commonFiles/commonTypes";
-
-interface State {
-  status: boolean;
-  user: UserData | null;
-  itemWishlist: ProductData[] | null | undefined;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ProductData, State } from "../../commonFiles/commonTypes";
 
 const initialState: State = {
   status: false,
@@ -29,14 +23,14 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    userInfo: (state, action) => {
+    userInfo: (state, action: PayloadAction<{ user: State["user"] }>) => {
       state.status = true;
       state.user = action.payload.user;
     },
-    wishlistItem: (state, action) => {
+    wishlistItem: (state, action: PayloadAction<{ item: ProductData }>) => {
       const newItem = action.payload.item;
       const existingItem = state.itemWishlist?.find(
-        (item) => item.productId === newItem.productId
+        (item) => item.productId === newItem?.productId
       );
 
       if (!existingItem) {

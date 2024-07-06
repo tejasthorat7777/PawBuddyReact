@@ -1,4 +1,3 @@
-import userEvent from "@testing-library/user-event";
 import Registration from "../Componet/Registration/Registration";
 import { mockAxiosPost } from "../__mocks__/globalMock";
 import Wrapper from "../setupTest/Wrapper";
@@ -7,12 +6,11 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
 } from "@testing-library/react";
 
 vi.mock("react-lottie-player", () => {
   return {
-    default: vi.fn(() => "mocked-lottie-player"),
+    default: vi.fn(() => ""),
   };
 });
 

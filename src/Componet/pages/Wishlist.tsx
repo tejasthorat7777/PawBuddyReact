@@ -29,7 +29,18 @@ const Wishlist = () => {
   console.log("card>>>>>", cardData);
 
   const handleXmark = (productId: string) => {
-    dispatch(wishlistItem({ item: { productId } }));
+    dispatch(
+      wishlistItem({
+        item: {
+          productId,
+          prouctName: "",
+          price: "",
+          description: "",
+          imageSource: "",
+          selected: false,
+        },
+      })
+    );
   };
 
   return (
@@ -53,8 +64,8 @@ const Wishlist = () => {
         </div>
       ) : cardData?.length ? (
         <Grid container spacing={2} key="gridOuter">
-          {cardData?.map((card) => (
-            <Grid item xs={2} sm={4}>
+          {cardData?.map((card,index) => (
+            <Grid item xs={2} sm={4} key={index}>
               <Card
                 sx={{
                   display: "flex",

@@ -34,6 +34,12 @@ export type ProductData = {
   prouctName: string;
   price: string;
   description: string;
-  imageSource:string;
-  selected:boolean;
+  imageSource: string;
+  selected: boolean;
+};
+
+export type State = {
+  status: boolean;
+  user: UserData | null;
+  itemWishlist: ProductData[] | null | undefined;
 };

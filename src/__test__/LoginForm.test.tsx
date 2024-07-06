@@ -6,11 +6,17 @@ import { mockAxiosGet } from "../__mocks__/globalMock";
 vi.useFakeTimers();
 vi.mock("react-lottie-player", () => {
   return {
-    default: vi.fn(() => "mocked-lottie-player"),
+    default: vi.fn(() => ""),
   };
 });
 
-const user = {
+vi.mock("react-lottie-player", () => {
+  return {
+    default: vi.fn(() => ""),
+  };
+});
+
+const mockUser = {
   name: "",
   age: "",
   breed: "",
@@ -24,21 +30,45 @@ const user = {
   password: "",
 };
 
+const mcokItemWishlist = [
+  {
+    productId: "1",
+    prouctName: "Harness",
+    imageSource: "",
+    price: "759",
+    selected: false,
+    description: "",
+  },
+  {
+    productId: "2",
+    prouctName: "Collar",
+    imageSource: "",
+    price: "259",
+    selected: false,
+    description: "",
+  },
+];
+
 describe("Login Page", () => {
   it("TC:1 login box should be present", () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
         ],
       });
     });
+    const mockInitialState = {
+      status: false,
+      user: mockUser,
+      itemWishlist: mcokItemWishlist,
+    };
     render(
-      <Wrapper>
+      <Wrapper initialState={mockInitialState}>
         <LoginForm />
       </Wrapper>
     );
@@ -338,17 +368,16 @@ describe("Login Page", () => {
       fireEvent.change(useremail, { target: { value: "priyankathorat" } });
       fireEvent.change(userpass, { target: { value: "blacky" } });
     });
-    expect(userpass).toHaveAttribute('type','password');
+    expect(userpass).toHaveAttribute("type", "password");
 
     act(() => {
       fireEvent.click(screen.getByTestId("verify"));
     });
-    expect(userpass).toHaveAttribute('type','text');
+    expect(userpass).toHaveAttribute("type", "text");
 
     act(() => {
       fireEvent.click(screen.getByTestId("verify"));
     });
-    expect(userpass).toHaveAttribute('type','password');
-
+    expect(userpass).toHaveAttribute("type", "password");
   });
 });
