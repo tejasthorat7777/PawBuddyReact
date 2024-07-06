@@ -1,7 +1,7 @@
-import { UserData } from "../../commonFiles/commonTypes";
-import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
+import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
+import { flexDiv, homeStyle } from "../../commonFiles/commonTheme";
 
 const styles = {
   padding: "5%",
@@ -20,25 +20,28 @@ const outerDiv = {
 };
 
 const Profile = () => {
-  const user: UserData | null = useSelector(
-    (state: RootState) => state.userData.user
-  );
+  const user = useSelector((state: RootState) => state.finalState.user);
 
-  console.log("user>>>>", user)
+  console.log("user>>>>", user);
 
   return (
-    <>
-      {user === null ? (
+    <div
+      style={{
+        ...homeStyle.outerDiv,
+        padding: "2%",
+        overflow: "auto",
+      }}
+    >
+      {user?.userId === "" ? (
         <div
           style={{
             height: "100%",
             width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            ...flexDiv,
           }}
         >
-          <NotFound />
+          Please Login
+          <LoginRequired />
         </div>
       ) : (
         <div
@@ -53,56 +56,56 @@ const Profile = () => {
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Name
-              <div style={styles}>{user.name}</div>
+              <div style={styles}>{user?.name}</div>
             </div>
             <div style={{ width: "20%" }}>
               Age
-              <div style={styles}>{user.age}</div>
+              <div style={styles}>{user?.age}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Breed
-              <div style={styles}>{user.breed}</div>
+              <div style={styles}>{user?.breed}</div>
             </div>
             <div style={{ width: "20%" }}>
               Birthdate
-              <div style={styles}>{user.birthdate}</div>
+              <div style={styles}>{user?.birthdate}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Identification
-              <div style={styles}>{user.identification}</div>
+              <div style={styles}>{user?.identification}</div>
             </div>
             <div style={{ width: "20%" }}>
               Owner Name
-              <div style={styles}>{user.owner}</div>
+              <div style={styles}>{user?.owner}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Username
-              <div style={styles}>{user.username}</div>
+              <div style={styles}>{user?.username}</div>
             </div>
             <div style={{ width: "20%" }}>
               Password
-              <div style={styles}>{user.password}</div>
+              <div style={styles}>{user?.password}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Gender
-              <div style={styles}>{user.gender}</div>
+              <div style={styles}>{user?.gender}</div>
             </div>
             <div style={{ width: "20%" }}>
               City
-              <div style={styles}>{user.city}</div>
+              <div style={styles}>{user?.city}</div>
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 export default Profile;

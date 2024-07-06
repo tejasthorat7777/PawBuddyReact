@@ -21,6 +21,7 @@ import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { SendButton } from "../../commonFiles/commonComponents";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -55,15 +56,17 @@ export default function Registration() {
     userId: "",
   });
 
-  const [onHover, setOnHover] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
   const [formSend, setFormSend] = useState(false);
+
+  const cities = ["Select", "Pune", "Nashik", "Nagpur", "Mumbai", "Banglore"];
 
   useEffect(() => {}, [userData]);
 
   const sendData = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     try {
+      console.log("userDtaa>>>>>>", userData)
       event.preventDefault();
       setIsloading(true);
       if (!userData.userId) {
@@ -75,12 +78,13 @@ export default function Registration() {
       }, 3000);
       setFormSend(true);
     } catch (error) {
+      console.log("Error>>>>", error)
       setIsloading(false);
       setUploadError(true);
     }
   };
   return (
-    <>
+    <div key={`outerDiv`}>
       {isLoading ? (
         <div style={commonStyleDiv}>
           <Waiting />
@@ -120,6 +124,8 @@ export default function Registration() {
                   <input
                     type="text"
                     name="name"
+                    data-testid="name"
+                    value={userData.name}
                     placeholder="Puppy Name"
                     autoComplete="off"
                     onChange={(event) => {
@@ -128,7 +134,9 @@ export default function Registration() {
                   />
                   <input
                     type="text"
+                    value={userData.age}
                     name="age"
+                    data-testid="age"
                     placeholder="Puppy Age"
                     autoComplete="off"
                     onChange={(event) => {
@@ -140,8 +148,10 @@ export default function Registration() {
                   <input
                     type="text"
                     name="breed"
+                    data-testid="breed"
                     placeholder="Breed"
                     autoComplete="off"
+                    value={userData.breed}
                     onChange={(event) => {
                       setUserData({ ...userData, breed: event.target.value });
                     }}
@@ -149,6 +159,8 @@ export default function Registration() {
                   <input
                     type="date"
                     name="birthdate"
+                    data-testid="birthdate"
+                    value={userData.birthdate}
                     placeholder="dd/mm/yy"
                     autoComplete="off"
                     onChange={(event) => {
@@ -165,8 +177,10 @@ export default function Registration() {
                   <input
                     type="text"
                     name="Owner"
+                    data-testid="owner"
                     placeholder="Owner"
                     autoComplete="off"
+                    value={userData.identification}
                     onChange={(event) => {
                       setUserData({ ...userData, owner: event.target.value });
                     }}
@@ -174,6 +188,7 @@ export default function Registration() {
                   <input
                     type="text"
                     name="identity"
+                    data-testid="identity"
                     placeholder="Identification"
                     autoComplete="off"
                     onChange={(event) => {
@@ -188,6 +203,8 @@ export default function Registration() {
                   <input
                     type="text"
                     name="username"
+                    data-testid="username"
+                    value={userData.username}
                     placeholder="Username/Email"
                     autoComplete="off"
                     onChange={(event) => {
@@ -200,10 +217,13 @@ export default function Registration() {
                   <input
                     type="password"
                     name="password"
+                    data-testid="password"
+                    value={userData.password}
                     placeholder="Password"
                     onChange={(event) => {
                       setUserData({
                         ...userData,
+                        userId: `${userData.name}&&${userData.birthdate}`,
                         password: event.target.value,
                       });
                     }}
@@ -226,6 +246,7 @@ export default function Registration() {
                         value="male"
                         control={
                           <Radio
+                            data-testid="male"
                             onChange={(event) => {
                               setUserData({
                                 ...userData,
@@ -254,6 +275,7 @@ export default function Registration() {
                         value="female"
                         control={
                           <Radio
+                            data-testid="female"
                             onChange={(event) => {
                               setUserData({
                                 ...userData,
@@ -281,6 +303,7 @@ export default function Registration() {
                     </RadioGroup>
                   </FormControl>
                   <FormControl
+                  data-testid="selectForm"
                     sx={{
                       maxWidth: "50%",
                     }}
@@ -288,57 +311,44 @@ export default function Registration() {
                     style={{ marginTop: "5%" }}
                   >
                     <InputLabel
-                      id="select-city"
+                      data-testid="select-city"
                       style={{ color: "white", fontFamily: "cursive" }}
                     >
                       City
                     </InputLabel>
                     <StyledSelect
+                      data-testid="city"
                       id="city"
                       value={userData.city}
                       onChange={(event) => {
                         setUserData({
                           ...userData,
-                          city: event.target.value as string,
-                          userId: `${userData.name}&&${userData.birthdate}`,
+                          city: event.target.value as string
                         });
                       }}
                     >
-                      <CustomMenuItem value="select">Select</CustomMenuItem>
-                      <CustomMenuItem value="Pune">Pune</CustomMenuItem>
-                      <CustomMenuItem value="Nashik">Nashik</CustomMenuItem>
-                      <CustomMenuItem value="Nagpur">Nagpur</CustomMenuItem>
-                      <CustomMenuItem value="Mumbai">Mumbai</CustomMenuItem>
-                      <CustomMenuItem value="Banglore">Banglore</CustomMenuItem>
+                      {cities.map((city, index) => (
+                        <CustomMenuItem
+                          value={city}
+                          key={`city_${city}_${index}`}
+                          data-testid={`city_${city}`}
+                        >
+                          {city}
+                        </CustomMenuItem>
+                      ))}
                     </StyledSelect>
                   </FormControl>
                 </div>
               </div>
-              <Button
-                type="submit"
-                className="submitButton"
-                variant="contained"
-                style={{
-                  position: "absolute",
-                  bottom: "2%",
-                  left: "40%",
-                  backgroundColor: onHover ? "#597081" : "#00111c",
-                  fontFamily: "cursive",
-                }}
-                onClick={sendData}
-                onMouseEnter={() => {
-                  setOnHover(true);
-                }}
-                onMouseLeave={() => {
-                  setOnHover(false);
-                }}
-              >
-                Submit
-              </Button>
+              <SendButton
+                operationOnData={sendData}
+                style={{ bottom: "2%", left: "40%" }}
+                text="SUBMIT"
+              />
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

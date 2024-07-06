@@ -1,46 +1,79 @@
-import { useState } from "react";
-import { Button, CircularProgress } from "@mui/material";
-import { loginCss } from "./logincss";
-import "./handleInputAuto.css";
+import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
+import { loginCss } from "../../commonFiles/commonTheme";
+import "../../commonFiles/commonCss/handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { userInfo } from "../../redux/Slice/loginSlice";
+import { userInfo } from "../../redux/Slice/Slices";
 import { useNavigate } from "react-router-dom";
+import { SendButton } from "../../commonFiles/commonComponents";
+import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
+import { UserData } from "../../commonFiles/commonTypes";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [onHover, setOnHover] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [lottie, setLottie] = useState(false);
+  const [isRequired, setIsRequired] = useState(false);
+  const [userDataArray, setUserDataArray] = useState<UserData[]>([]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handlelogIn = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const loginSuccess = () => {
+    setLoading(false);
+    setLottie(true);
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+  };
+
+  const handleVerifyButton = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const fetchData = async () => {
     try {
-      setLoading(true);
-      const userData = (await axios.get("http://localhost:3000/getUsersInfo"))
-        .data;
-      for (const user of userData) {
-        if (user.username === email) {
-          if (user.password === password) {
-            console.log("userLog", user);
-            dispatch(userInfo({ user }));
-            setTimeout(() => {
-              navigate("/");
-            }, 0);
-            return;
-          }
-        } else {
-          setCorrectUser(true);
-          setLoading(false);
-        }
-      }
+      const getData = await axios.get("http://localhost:3000/getUsersInfo");
+      const data = getData.data;
+      setUserDataArray(data);
     } catch (error) {
+      console.log("error ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handlelogIn = async (e: { preventDefault: () => void }) => {
+    if (!email || !password) {
+      setIsRequired(true);
+      return;
+    }
+    e.preventDefault();
+    setLoading(true);
+    const user = userDataArray.find(
+      (user: UserData) => user.username === email
+    );
+    if (user) {
+      if (user.password === password) {
+        dispatch(userInfo({ user }));
+        setTimeout(() => {
+          loginSuccess();
+        }, 3000);
+      } else {
+        setLoading(false);
+        setCorrectUser(true);
+      }
+    } else {
       setLoading(false);
-      console.log("Found error ", error);
+      setCorrectUser(true);
     }
   };
 
@@ -52,64 +85,69 @@ function LoginForm() {
           <div style={loginCss.inputOuterDiv}>
             <div style={loginCss.inputDiv}>
               <input
-               data-testid="username"
+                data-testid="username"
+                className={isRequired ? "red-placeholder" : ""}
                 style={loginCss.inputStyle}
                 type="text"
                 id="username"
-                placeholder="Enter Email here"
+                placeholder={
+                  isRequired ? "* Username Required" : "Enter Username"
+                }
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setCorrectUser(false);
+                  setIsRequired(false);
+                }}
               />
             </div>
             <div style={loginCss.inputDiv}>
               <input
-              data-testid="password"
+                data-testid="password"
                 style={loginCss.inputStyle}
-                type="password"
+                className={isRequired ? "red-placeholder" : ""}
+                type={showPassword ? "text" : "password"}
                 id="pass"
-                placeholder="Enter password here"
+                placeholder={
+                  isRequired ? "* Password Required" : "Enter Password"
+                }
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setCorrectUser(false);
+                  setIsRequired(false);
+                }}
               />
+              <IconButton onClick={handleVerifyButton} data-testid="verify">
+                <VisibilityIcon sx={{ color: "white", marginRight: "1rem" }} />
+              </IconButton>
             </div>
           </div>
           {correctUser && (
             <span
               style={{
                 color: "red",
-                marginLeft: "5rem",
+                marginLeft: "6rem",
                 fontWeight: "800",
                 fontFamily: "cursive",
               }}
             >
-              Incorrect email and password
+              Incorrect email or password
             </span>
           )}
           <div style={loginCss.buttonDiv}>
             {loading ? (
               <CircularProgress />
+            ) : lottie ? (
+              <div style={{ marginTop: "2rem" }} data-testid="loginDoneTick">
+                <LoginDoneTick />
+              </div>
             ) : (
-              <Button
-              data-testid="submitBtn"
-                type="submit"
-                variant="contained"
-                style={{
-                  backgroundColor: onHover ? "#597081" : "#00111c",
-                  fontFamily: "cursive",
-                  height: "100%",
-                  width: "95%",
-                  borderRadius: "10px",
-                }}
-                onClick={handlelogIn}
-                onMouseEnter={() => {
-                  setOnHover(true);
-                }}
-                onMouseLeave={() => {
-                  setOnHover(false);
-                }}
-              >
-                Login
-              </Button>
+              <SendButton
+                operationOnData={handlelogIn}
+                style={{ height: "8%", width: "25%", borderRadius: "10px" }}
+                text="Login"
+              />
             )}
           </div>
         </div>

@@ -1,12 +1,11 @@
 import Lottie from "react-lottie-player";
-import doneTick from "../lottieJson/doneTick.json";
+import loginDoneTick from "../lottieJson/loginDoneTick.json";
 
-export const DoneTick = () => {
+export const LoginDoneTick = () => {
   return (
     <Lottie
-      data-testid="donetick"
       loop
-      animationData={doneTick}
+      animationData={loginDoneTick}
       play
       style={{ width: 300, height: 300 }}
     />

@@ -1,12 +1,11 @@
 import Lottie from "react-lottie-player";
-import doneTick from "../lottieJson/doneTick.json";
+import emptyCart from "../lottieJson/emptyCart.json"
 
-export const DoneTick = () => {
+export const EmptyCart = () => {
   return (
     <Lottie
-      data-testid="donetick"
       loop
-      animationData={doneTick}
+      animationData={emptyCart}
       play
       style={{ width: 300, height: 300 }}
     />

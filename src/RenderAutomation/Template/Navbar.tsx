@@ -1,8 +1,14 @@
 import logo from "../../assets/logo.png";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Box, IconButton, ListItemIcon, Menu, Tooltip } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  Tooltip,
+} from "@mui/material";
 import { CustomMenuItem } from "../../commonFiles/commonTheme";
-import { Login, Logout, Settings } from "@mui/icons-material";
+import { Login, Logout } from "@mui/icons-material";
 import React, { useState } from "react";
 import CallIcon from "@mui/icons-material/Call";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -10,6 +16,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { RootState } from "../../redux/store/store";
 
 const inputStyle = {
@@ -38,7 +45,7 @@ const navLeft = {
 };
 
 export default function Navbar() {
-  const user = useSelector((state: RootState) => state.userData.user);
+  const user = useSelector((state: RootState) => state.finalState.user?.userId);
 
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -73,8 +80,7 @@ export default function Navbar() {
     },
     { text: "Orders", component: <AddShoppingCartIcon />, path: "/orders" },
     { text: "Contact Us", component: <CallIcon />, path: "/contact" },
-    { text: "Settings", component: <Settings />, path: "/setting" },
-    user
+    user != ""
       ? { text: "Logout", component: <Logout />, path: "/login" }
       : { text: "Log-In", component: <Login />, path: "/login" },
   ];
@@ -100,14 +106,21 @@ export default function Navbar() {
       </div>
 
       <div style={navLeft}>
-        <div style={{ marginRight: "5rem", marginLeft: "20rem" }}>
+        <div style={{ marginRight: "5rem", marginLeft: "15rem" }}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              textAlign: "center",
             }}
           >
+            <Tooltip title="Shopping Cart">
+              <IconButton>
+                <ShoppingCartOutlinedIcon
+                  style={{ color: "white" }}
+                  sx={{ fontSize: 30 }}
+                />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}

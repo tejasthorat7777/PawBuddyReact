@@ -1,11 +1,11 @@
 export type ProfileType =
   | "/"
   | "/profile"
-  | "/WishList"
+  | "/wishList"
   | "/orders"
   | "/contact"
   | "/settings"
-  | "/logout";
+  | "/login";
 
 export type UserData = {
   city: string;
@@ -19,4 +19,27 @@ export type UserData = {
   username: string;
   password: string;
   userId: string;
+};
+
+export type SubmitButtonProps = {
+  operationOnData: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  style?: React.CSSProperties;
+  text: string;
+};
+
+export type ProductData = {
+  productId: string;
+  prouctName: string;
+  price: string;
+  description: string;
+  imageSource: string;
+  selected: boolean;
+};
+
+export type State = {
+  status: boolean;
+  user: UserData | null;
+  itemWishlist: ProductData[] | null | undefined;
 };
