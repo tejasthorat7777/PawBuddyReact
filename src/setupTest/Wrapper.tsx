@@ -11,7 +11,7 @@ interface WrapperProps {
 const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   const store = configureStore({
     reducer: {
-      userData: userSlice,
+      finalState: userSlice,
     },
   });
   return (
