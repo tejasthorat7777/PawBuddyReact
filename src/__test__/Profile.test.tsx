@@ -5,12 +5,16 @@ import {
 } from "@testing-library/react";
 vi.mock("react-lottie-player", () => {
     return {
-        default: vi.fn(() => "mocked-lottie-player"),
+        default: vi.fn(() =>{
+            return(
+                <div data-testid="loginlottie">
+                </div>
+            )
+        }),
     };
 });
 const mockState = {
         user: {
-
             age: "3",
             birthdate: "2022-01-26",
             breed: "Indie",
@@ -22,8 +26,6 @@ const mockState = {
             password: "Pettey@7777",
             userId: "Pettey&&2022-01-26",
             username: "tejasthorat7777",
-            __v: 0,
-            _id: "6673bc9151b532007"
         }
 }
 
@@ -70,6 +72,6 @@ describe("Profile page>>>>>>>>>>>>>>>>>", () => {
         )
         expect(profilePage.getByText("Please Login")).toBeTruthy();
         // a lottie animation is displayed on screen 
-        expect(profilePage.getByText("mocked-lottie-player")).toBeTruthy();
+        expect(profilePage.getByTestId("loginlottie")).toBeTruthy();
     })
 })
