@@ -99,17 +99,22 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
         ],
       });
     });
+    const mockInitialState = {
+      status: false,
+      user: mockUser,
+      itemWishlist: mcokItemWishlist,
+    };
     render(
-      <Wrapper>
+      <Wrapper initialState={mockInitialState}>
         <LoginForm />
-      </Wrapper>
+     </Wrapper>
     );
     const text = screen.getByText("Login Here");
     expect(text).toBeInTheDocument();
@@ -133,7 +138,7 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
@@ -142,7 +147,7 @@ describe("Login Page", () => {
     });
 
     render(
-      <Wrapper>
+      <Wrapper initialState={''}>
         <LoginForm />
       </Wrapper>
     );
@@ -171,7 +176,7 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
@@ -227,7 +232,7 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
@@ -265,7 +270,7 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
@@ -312,7 +317,7 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
@@ -349,7 +354,7 @@ describe("Login Page", () => {
       return Promise.resolve({
         data: [
           {
-            ...user,
+            ...mockUser,
             username: "priyankathorat",
             password: "blacky",
           },
@@ -380,4 +385,69 @@ describe("Login Page", () => {
     });
     expect(userpass).toHaveAttribute("type", "password");
   });
+  it("TC:9 it should show message'Incorrect email or password' when email is correct but password is incorrect ", async () => {
+   vi.clearAllMocks();
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.resolve({
+        data: [
+          {
+            ...mockUser,
+            username: "priyankathorat",
+            password: "blacky",
+          },
+        ],
+      });
+    });
+
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+    const useremail = screen.getByTestId("username");
+    const userpass = screen.getByTestId("password");
+    await act(async () => {
+      fireEvent.change(useremail, { target: { value: "priyankathorat" } });
+      fireEvent.change(userpass, { target: { value: "1234567" } });
+    });
+
+    const submit = screen.getByTestId("submitBtn");
+    await act(async () => {
+      fireEvent.click(submit);
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(screen.getByText("Incorrect email or password")).toBeInTheDocument();
+  });
+  it("TC:10 unable to fetch users information",async()=>{
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.reject({})
+    });
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+    const useremail = screen.getByTestId("username");
+    const userpass = screen.getByTestId("password");
+    await act(async () => {
+      fireEvent.change(useremail, { target: { value: "priyankathorat" } });
+      fireEvent.change(userpass, { target: { value: "blacky" } });
+    });
+    const submit = screen.getByTestId("submitBtn");
+    expect(screen.getByText("Login")).toBeTruthy();
+    await act(async () => {
+      fireEvent.click(submit);
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(screen.getByText("Incorrect email or password")).toBeTruthy();
+  })
+ 
 });

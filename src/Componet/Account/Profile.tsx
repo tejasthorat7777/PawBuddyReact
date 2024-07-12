@@ -40,7 +40,9 @@ const Profile = () => {
             ...flexDiv,
           }}
         >
-          Please Login
+          <div>
+            Please Login
+          </div>
           <LoginRequired />
         </div>
       ) : (
