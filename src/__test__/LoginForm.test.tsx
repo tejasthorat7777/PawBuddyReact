@@ -10,12 +10,6 @@ vi.mock("react-lottie-player", () => {
   };
 });
 
-vi.mock("react-lottie-player", () => {
-  return {
-    default: vi.fn(() => ""),
-  };
-});
-
 const mockUser = {
   name: "",
   age: "",
@@ -114,7 +108,7 @@ describe("Login Page", () => {
     render(
       <Wrapper initialState={mockInitialState}>
         <LoginForm />
-     </Wrapper>
+      </Wrapper>
     );
     const text = screen.getByText("Login Here");
     expect(text).toBeInTheDocument();
@@ -147,7 +141,7 @@ describe("Login Page", () => {
     });
 
     render(
-      <Wrapper initialState={''}>
+      <Wrapper>
         <LoginForm />
       </Wrapper>
     );
@@ -386,7 +380,7 @@ describe("Login Page", () => {
     expect(userpass).toHaveAttribute("type", "password");
   });
   it("TC:9 it should show message'Incorrect email or password' when email is correct but password is incorrect ", async () => {
-   vi.clearAllMocks();
+    vi.clearAllMocks();
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -422,9 +416,9 @@ describe("Login Page", () => {
 
     expect(screen.getByText("Incorrect email or password")).toBeInTheDocument();
   });
-  it("TC:10 unable to fetch users information",async()=>{
+  it("TC:10 unable to fetch users information", async () => {
     mockAxiosGet.mockImplementation(async () => {
-      return Promise.reject({})
+      return Promise.reject({});
     });
     render(
       <Wrapper>
@@ -448,6 +442,5 @@ describe("Login Page", () => {
     });
 
     expect(screen.getByText("Incorrect email or password")).toBeTruthy();
-  })
- 
+  });
 });

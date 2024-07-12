@@ -86,16 +86,16 @@ export default function Registration() {
   return (
     <div key={`outerDiv`}>
       {isLoading ? (
-        <div style={commonStyleDiv}>
+        <div style={commonStyleDiv} data-testid="waiting">
           <Waiting />
           Relax... Saving Your Data
         </div>
       ) : uploadError ? (
-        <div style={commonStyleDiv}>
+        <div style={commonStyleDiv} data-testid="notfound">
           <NotFound />
         </div>
       ) : formSend ? (
-        <div style={commonStyleDiv}>
+        <div style={commonStyleDiv} data-testid="donetick">
           <DoneTick />
           <div>
             <div style={{ padding: "5%" }}> Registration Successful</div>

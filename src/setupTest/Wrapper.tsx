@@ -7,7 +7,7 @@ import { State } from "../commonFiles/commonTypes";
 
 interface WrapperProps {
   children: ReactNode;
-  initialState: State | undefined;
+  initialState?: State | undefined;
 }
 
 const Wrapper: React.FC<WrapperProps> = ({ children, initialState }) => {

@@ -1,12 +1,7 @@
 import Registration from "../Componet/Registration/Registration";
 import { mockAxiosPost } from "../__mocks__/globalMock";
 import Wrapper from "../setupTest/Wrapper";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-} from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 
 vi.mock("react-lottie-player", () => {
   return {
@@ -14,18 +9,34 @@ vi.mock("react-lottie-player", () => {
   };
 });
 
-const user = {
-  name: "",
-  age: "",
-  breed: "",
-  birthdate: "",
-  identification: "",
-  owner: "",
-  username: "",
-  userId: "",
-  gender: "",
-  city: "",
-  password: "",
+vi.useFakeTimers();
+
+const sendData = () => {
+  fireEvent.change(screen.getByTestId("name"), {
+    target: { value: "Pettey" },
+  });
+  fireEvent.change(screen.getByTestId("age"), {
+    target: { value: "3" },
+  });
+  fireEvent.change(screen.getByTestId("breed"), {
+    target: { value: "Indie" },
+  });
+  fireEvent.change(screen.getByTestId("birthdate"), {
+    target: { value: "2024-07-04" },
+  });
+  fireEvent.change(screen.getByTestId("owner"), {
+    target: { value: "Tejas Thorat" },
+  });
+  fireEvent.change(screen.getByTestId("identity"), {
+    target: { value: "white and orange fur" },
+  });
+  fireEvent.change(screen.getByTestId("username"), {
+    target: { value: "tejasthorat7777" },
+  });
+  fireEvent.change(screen.getByTestId("password"), {
+    target: { value: "Pettey@7777" },
+  });
+  fireEvent.click(screen.getByTestId("female"));
 };
 
 describe("Registration", () => {
@@ -74,9 +85,8 @@ describe("Registration", () => {
     expect(screen.getByTestId("age").value).toBe("3");
   });
 
-
   // we need to write for city, for now it is not able to click or change
-  it("click on Submit button filled data should dump in db", async () => {
+  it("TC:3 click on Submit button filled data should dump in db", async () => {
     render(
       <Wrapper>
         <Registration />
@@ -84,33 +94,7 @@ describe("Registration", () => {
     );
 
     await act(async () => {
-      fireEvent.change(screen.getByTestId("name"), {
-        target: { value: "Pettey" },
-      });
-      fireEvent.change(screen.getByTestId("age"), {
-        target: { value: "3" },
-      });
-      fireEvent.change(screen.getByTestId("breed"), {
-        target: { value: "Indie" },
-      });
-      fireEvent.change(screen.getByTestId("birthdate"), {
-        target: { value: "2024-07-04" },
-      });
-      fireEvent.change(screen.getByTestId("owner"), {
-        target: { value: "Tejas Thorat" },
-      });
-      fireEvent.change(screen.getByTestId("identity"), {
-        target: { value: "white and orange fur" },
-      });
-      fireEvent.change(screen.getByTestId("username"), {
-        target: { value: "tejasthorat7777" },
-      });
-      fireEvent.change(screen.getByTestId("password"), {
-        target: { value: "Pettey@7777" },
-      });
-      fireEvent.click(screen.getByTestId("female"));
-      fireEvent.click(screen.getByTestId("city"));
-      fireEvent.change(screen.getByTestId("city"), { target: { value: 'Pune' } });
+      sendData();
     });
 
     fireEvent.click(screen.getByText("SUBMIT"));
@@ -131,5 +115,44 @@ describe("Registration", () => {
         userId: "Pettey&&2024-07-04",
       }
     );
+  });
+
+  it("TC:4 should display loader when click submit button", async () => {
+    render(
+      <Wrapper>
+        <Registration />
+      </Wrapper>
+    );
+
+    await act(async () => {
+      sendData();
+    });
+
+    fireEvent.click(screen.getByText("SUBMIT"));
+
+    expect(screen.getByText("Relax... Saving Your Data")).toBeInTheDocument();
+    expect(screen.getByTestId("waiting")).toBeInTheDocument();
+  });
+
+  it.only("TC:5 should display not found on submitting information is unsuccessfull", async () => {
+    
+    render(
+      <Wrapper>
+        <Registration />
+      </Wrapper>
+    );
+    await act(async () => {
+      sendData();
+      fireEvent.click(screen.getByText("SUBMIT"));
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+   
+    screen.getByTestId("DXFGVHBNM")
   });
 });
