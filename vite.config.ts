@@ -9,9 +9,6 @@ dotenv.config();
 export default defineConfig({
   plugins: [react()],
   test: {
-    coverage:{
-      reporter:["html"]
-    },
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTest/setup.ts",

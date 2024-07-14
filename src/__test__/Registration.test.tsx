@@ -40,6 +40,9 @@ const sendData = () => {
 };
 
 describe("Registration", () => {
+  beforeEach(()=>{
+    vi.clearAllMocks();
+  })
   it("TC:1 Registration form should be visible", async () => {
     render(
       <Wrapper>
@@ -95,9 +98,8 @@ describe("Registration", () => {
 
     await act(async () => {
       sendData();
+      fireEvent.click(screen.getByText("SUBMIT"));
     });
-
-    fireEvent.click(screen.getByText("SUBMIT"));
 
     expect(mockAxiosPost).toHaveBeenCalledWith(
       "http://localhost:3000/sendUsersInfo",
@@ -112,7 +114,7 @@ describe("Registration", () => {
         username: "tejasthorat7777",
         password: "Pettey@7777",
         gender: "female",
-        userId: "Pettey&&2024-07-04",
+        userId: expect.any(String),
       }
     );
   });
@@ -126,16 +128,14 @@ describe("Registration", () => {
 
     await act(async () => {
       sendData();
+      fireEvent.click(screen.getByText("SUBMIT"));
     });
-
-    fireEvent.click(screen.getByText("SUBMIT"));
 
     expect(screen.getByText("Relax... Saving Your Data")).toBeInTheDocument();
     expect(screen.getByTestId("waiting")).toBeInTheDocument();
   });
 
-  it.only("TC:5 should display not found on submitting information is unsuccessfull", async () => {
-    
+  it("TC:5 should display Registration Successful on submitting information to db is successful", async () => {
     render(
       <Wrapper>
         <Registration />
@@ -152,7 +152,30 @@ describe("Registration", () => {
     act(() => {
       vi.advanceTimersByTime(3000);
     });
-   
-    screen.getByTestId("DXFGVHBNM")
+
+    expect(screen.getByText("Registration Successful")).toBeInTheDocument();
   });
+
+  it("TC:6 should display not found on submitting information to db is Unsuccessful", async () => {
+    mockAxiosPost.mockRejectedValue({});
+    render(
+      <Wrapper>
+        <Registration />
+      </Wrapper>
+    );
+    await act(async () => {
+      sendData();
+      fireEvent.click(screen.getByText("SUBMIT"));
+    });
+
+   act(() => {
+     vi.advanceTimersByTime(3000);
+   });
+   act(() => {
+     vi.advanceTimersByTime(3000);
+   });
+
+    expect(screen.getByTestId("notfound")).toBeInTheDocument();
+  });
+
 });

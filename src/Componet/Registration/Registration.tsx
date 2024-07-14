@@ -65,15 +65,11 @@ export default function Registration() {
 
   useEffect(() => {}, [userData]);
 
-  const sendData = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const sendData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     try {
-      console.log("userDtaa>>>>>>", userData)
       event.preventDefault();
       setIsloading(true);
-      if (!userData.userId) {
-        console.log("userDAta>>>>", userData.userId);
-      }
-      axios.post("http://localhost:3000/sendUsersInfo", userData);
+      await axios.post("http://localhost:3000/sendUsersInfo", userData);
       setTimeout(() => {
         setIsloading(false);
       }, 3000);
@@ -100,7 +96,7 @@ export default function Registration() {
         <div style={commonStyleDiv} data-testid="donetick">
           <DoneTick />
           <div>
-            <div style={{ padding: "5%" }}> Registration Successful</div>
+            <div style={{ padding: "5%" }}>Registration Successful</div>
             <Link to={"/"}>
               <Button>Want to shop click here</Button>
             </Link>
