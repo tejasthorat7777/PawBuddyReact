@@ -32,7 +32,7 @@ const Profile = () => {
         overflow: "auto",
       }}
     >
-      {user?.userId === "" ? (
+      {user.userId === "" ? (
         <div
           style={{
             height: "100%",
@@ -58,51 +58,51 @@ const Profile = () => {
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Name
-              <div style={styles}>{user?.name}</div>
+              <div style={styles}>{user.name}</div>
             </div>
             <div style={{ width: "20%" }}>
               Age
-              <div style={styles}>{user?.age}</div>
+              <div style={styles}>{user.age}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Breed
-              <div style={styles}>{user?.breed}</div>
+              <div style={styles}>{user.breed}</div>
             </div>
             <div style={{ width: "20%" }}>
               Birthdate
-              <div style={styles}>{user?.birthdate}</div>
+              <div style={styles}>{user.birthdate}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Identification
-              <div style={styles}>{user?.identification}</div>
+              <div style={styles}>{user.identification}</div>
             </div>
             <div style={{ width: "20%" }}>
               Owner Name
-              <div style={styles}>{user?.owner}</div>
+              <div style={styles}>{user.owner}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Username
-              <div style={styles}>{user?.username}</div>
+              <div style={styles}>{user.username}</div>
             </div>
             <div style={{ width: "20%" }}>
               Password
-              <div style={styles}>{user?.password}</div>
+              <div style={styles}>{user.password}</div>
             </div>
           </div>
           <div style={outerDiv}>
             <div style={{ width: "20%" }}>
               Gender
-              <div style={styles}>{user?.gender}</div>
+              <div style={styles}>{user.gender}</div>
             </div>
             <div style={{ width: "20%" }}>
               City
-              <div style={styles}>{user?.city}</div>
+              <div style={styles}>{user.city}</div>
             </div>
           </div>
         </div>

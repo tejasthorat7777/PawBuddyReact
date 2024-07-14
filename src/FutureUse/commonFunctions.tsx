@@ -5,6 +5,7 @@ type URLMap = {
   [key: string]: URLProperties;
 };
 type GetMenuFunction = (url: string) => URLProperties | undefined;
+
 const getMenu: GetMenuFunction = (url: string) => {
   const URLS: URLMap = {
     "/": {
@@ -28,4 +29,10 @@ const getMenu: GetMenuFunction = (url: string) => {
   }
 };
 
-export { getMenu };
+function generateRandomUserId() {
+  const min = Math.pow(10, 11); 
+  const max = Math.pow(10, 12) - 1; 
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export { getMenu, generateRandomUserId };

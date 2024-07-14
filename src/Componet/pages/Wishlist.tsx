@@ -11,36 +11,51 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
-import { wishlistItem } from "../../redux/Slice/Slices";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
+import axios from "axios";
+import { ProductData } from "../../commonFiles/commonTypes";
 
 const Wishlist = () => {
+  
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
-  const dispatch = useDispatch();
-
-  const cardData = useSelector(
-    (state: RootState) => state.finalState.itemWishlist
-  );
+  const [cardData, setCardData] = useState<ProductData[]>([]);
   const user = useSelector((state: RootState) => state.finalState.user);
-  console.log("card>>>>>", cardData);
+  const customerId = user.userId;
 
-  const handleXmark = (productId: string) => {
-    dispatch(
-      wishlistItem({
-        item: {
-          productId,
-          prouctName: "",
-          price: "",
-          description: "",
-          imageSource: "",
-          selected: false,
-        },
-      })
-    );
+  const getWishList = async (customerId: string) => {
+    console.log("customrer",customerId)
+    try {
+      const getData = await axios.get(
+        `http://localhost:3000/wishlist/get/${customerId}`
+      );
+      setCardData(getData.data.items);
+    } catch (error) {
+      console.log("error>>>", error);
+    }
+  };
+
+
+  useEffect(() => {
+    if (customerId) {
+      getWishList(customerId);
+    }
+  }, [customerId]);
+
+  const handleXmark = async (customerId: string, productId: string) => {
+    const newCardData = cardData.filter((item) => item.productId !== productId);
+    setCardData(newCardData);
+    try {
+      await axios.post("http://localhost:3000/wishlist/remove", {
+        customerId,
+        productId,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -51,7 +66,7 @@ const Wishlist = () => {
         overflow: "auto",
       }}
     >
-      {user?.userId === "" ? (
+      {customerId === "" ? (
         <div
           style={{
             height: "100%",
@@ -64,7 +79,7 @@ const Wishlist = () => {
         </div>
       ) : cardData?.length ? (
         <Grid container spacing={2} key="gridOuter">
-          {cardData?.map((card,index) => (
+          {cardData?.map((card, index) => (
             <Grid item xs={2} sm={4} key={index}>
               <Card
                 sx={{
@@ -81,7 +96,7 @@ const Wishlist = () => {
                     right: -10,
                     color: "white",
                   }}
-                  onClick={() => handleXmark(card.productId)}
+                  onClick={() => handleXmark(customerId, card.productId)}
                 >
                   <CloseIcon />
                 </IconButton>

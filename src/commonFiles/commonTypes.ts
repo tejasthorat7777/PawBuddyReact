@@ -40,6 +40,6 @@ export type ProductData = {
 
 export type State = {
   status: boolean;
-  user: UserData | null;
+  user: UserData;
   itemWishlist: ProductData[] | null | undefined;
 };

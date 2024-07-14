@@ -22,6 +22,7 @@ import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { SendButton } from "../../commonFiles/commonComponents";
+import { generateRandomUserId } from "../../FutureUse/commonFunctions";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -53,7 +54,7 @@ export default function Registration() {
     identification: "",
     username: "",
     password: "",
-    userId: "",
+    userId: generateRandomUserId().toString(),
   });
 
   const [isLoading, setIsloading] = useState(false);
@@ -83,6 +84,7 @@ export default function Registration() {
       setUploadError(true);
     }
   };
+
   return (
     <div key={`outerDiv`}>
       {isLoading ? (
@@ -180,7 +182,7 @@ export default function Registration() {
                     data-testid="owner"
                     placeholder="Owner"
                     autoComplete="off"
-                    value={userData.identification}
+                    value={userData.owner}
                     onChange={(event) => {
                       setUserData({ ...userData, owner: event.target.value });
                     }}
@@ -190,6 +192,7 @@ export default function Registration() {
                     name="identity"
                     data-testid="identity"
                     placeholder="Identification"
+                    value={userData.identification}
                     autoComplete="off"
                     onChange={(event) => {
                       setUserData({
@@ -223,7 +226,6 @@ export default function Registration() {
                     onChange={(event) => {
                       setUserData({
                         ...userData,
-                        userId: `${userData.name}&&${userData.birthdate}`,
                         password: event.target.value,
                       });
                     }}

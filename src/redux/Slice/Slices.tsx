@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ProductData, State } from "../../commonFiles/commonTypes";
+import {State } from "../../commonFiles/commonTypes";
 
 const initialState: State = {
   status: false,
@@ -27,22 +27,8 @@ const userSlice = createSlice({
       state.status = true;
       state.user = action.payload.user;
     },
-    wishlistItem: (state, action: PayloadAction<{ item: ProductData }>) => {
-      const newItem = action.payload.item;
-      const existingItem = state.itemWishlist?.find(
-        (item) => item.productId === newItem?.productId
-      );
-
-      if (!existingItem) {
-        state.itemWishlist?.push(newItem);
-      } else {
-        state.itemWishlist = state.itemWishlist?.filter(
-          (item) => item.productId !== newItem.productId
-        );
-      }
-    },
   },
 });
 
 export default userSlice.reducer;
-export const { userInfo, wishlistItem } = userSlice.actions;
+export const { userInfo } = userSlice.actions;

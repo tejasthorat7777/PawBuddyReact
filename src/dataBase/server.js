@@ -22,7 +22,6 @@ try {
 }
 
 server.post("/sendUsersInfo", async (req, res) => {
-  console.log("Received request body:", req.body);
   const information = req.body;
   try {
     const newUser = new UserInfo(information);
@@ -44,6 +43,23 @@ server.get("/getUsersInfo", async (req, res) => {
   }
 });
 
+server.post("/wishlist/remove", async (req, res) => {
+  try {
+    const { customerId, productId } = req.body;
+
+    const updatedWishlist = await wishlistInfo.findOneAndUpdate(
+      { customerId },
+      { $pull: { items: { productId } } },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Item removed from wishlist successfully!", wishlist: updatedWishlist });
+  } catch (error) {
+    console.error("Error removing item from wishlist:", error);
+    res.status(500).json({ message: "Error removing item" });
+  }
+});
+
 server.post("/wishlist/dumped", async (req, res) => {
   try {
     const { customerId, productId, productName, price, description, imageSource, selected } = req.body;
@@ -56,6 +72,13 @@ server.post("/wishlist/dumped", async (req, res) => {
       imageSource,
       selected,
     };
+
+    const customerWishlist = await wishlistInfo.findOne({ customerId });
+    const productExists = customerWishlist?.items.some(item => item.productId === productId);
+
+    if (productExists) {
+      return res.status(200).json({ message: "Item already in wishlist", wishlist: customerWishlist });
+    }
 
     const updatedWishlist = await wishlistInfo.findOneAndUpdate(
       { customerId },
@@ -85,7 +108,7 @@ server.get("/wishlist/get/:customerId", async (req, res) => {
   }
 });
 
-
 server.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
 });
+

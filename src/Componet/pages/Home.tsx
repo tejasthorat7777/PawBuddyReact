@@ -28,8 +28,7 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { useState } from "react";
 import { ProductData } from "../../commonFiles/commonTypes";
-import { useDispatch, useSelector } from "react-redux";
-import { wishlistItem } from "../../redux/Slice/Slices";
+import {useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
 
@@ -104,16 +103,12 @@ const Home = () => {
     },
   ];
 
-  const userId = useSelector(
-    (state: RootState) => state.finalState.user?.userId
-  );
+  const user = useSelector((state: RootState) => state.finalState.user);
 
   // this row will be from DB for product details
   const [firstRowcard, setFirstRowcard] = useState(rowCard1);
   const [secondRowcard, setSecondRowcard] = useState(rowCard2);
   const [wishlistItems, setWishlistItems] = useState<string[]>([]);
-
-  const dispatch = useDispatch();
 
   const addTocart = (index: number, isFirstRow: ProductData[]) => {
     if (isFirstRow) {
@@ -145,7 +140,7 @@ const Home = () => {
   const addToWishlist = async (item: ProductData) => {
     const dumpedData = {
       ...item,
-      customerId: userId,
+      customerId: user.userId,
     };
     try {
       await axios.post("http://localhost:3000/wishlist/dumped", dumpedData);
@@ -156,7 +151,6 @@ const Home = () => {
 
     if (!wishlistItems.includes(itemId)) {
       setWishlistItems([...wishlistItems, itemId]);
-      dispatch(wishlistItem({ item }));
       toast("Item added to Wishlist", {
         autoClose: 1000,
       });
