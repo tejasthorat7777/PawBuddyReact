@@ -245,10 +245,10 @@ export default function Registration() {
                         control={
                           <Radio
                             data-testid="male"
-                            onChange={(event) => {
+                            onClick={() => {
                               setUserData({
                                 ...userData,
-                                gender: event.target.value,
+                                gender: "male",
                               });
                             }}
                             sx={{
@@ -274,10 +274,10 @@ export default function Registration() {
                         control={
                           <Radio
                             data-testid="female"
-                            onChange={(event) => {
+                            onClick={() => {
                               setUserData({
                                 ...userData,
-                                gender: event.target.value,
+                                gender: "female",
                               });
                             }}
                             sx={{

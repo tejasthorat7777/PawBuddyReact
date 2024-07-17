@@ -11,7 +11,7 @@ vi.mock("react-lottie-player", () => {
 
 vi.useFakeTimers();
 
-const sendData = () => {
+const sendData = (female?: string) => {
   fireEvent.change(screen.getByTestId("name"), {
     target: { value: "Pettey" },
   });
@@ -36,13 +36,15 @@ const sendData = () => {
   fireEvent.change(screen.getByTestId("password"), {
     target: { value: "Pettey@7777" },
   });
-  fireEvent.click(screen.getByTestId("female"));
+  female
+    ? fireEvent.click(screen.getByTestId("female"))
+    : fireEvent.click(screen.getByTestId("male"));
 };
 
 describe("Registration", () => {
-  beforeEach(()=>{
+  beforeEach(() => {
     vi.clearAllMocks();
-  })
+  });
   it("TC:1 Registration form should be visible", async () => {
     render(
       <Wrapper>
@@ -97,7 +99,7 @@ describe("Registration", () => {
     );
 
     await act(async () => {
-      sendData();
+      sendData("female");
       fireEvent.click(screen.getByText("SUBMIT"));
     });
 
@@ -168,14 +170,13 @@ describe("Registration", () => {
       fireEvent.click(screen.getByText("SUBMIT"));
     });
 
-   act(() => {
-     vi.advanceTimersByTime(3000);
-   });
-   act(() => {
-     vi.advanceTimersByTime(3000);
-   });
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
 
     expect(screen.getByTestId("notfound")).toBeInTheDocument();
   });
-
 });
