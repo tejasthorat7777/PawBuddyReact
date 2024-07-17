@@ -3,11 +3,13 @@ import loginRequired from "../lottieJson/LoginRequired.json";
 
 export const LoginRequired = () => {
   return (
-    <Lottie
-      loop
-      animationData={loginRequired}
-      play
-      style={{ width: 300, height: 300 }}
-    />
+    <div data-testid="loginRequired">
+      <Lottie
+        loop
+        animationData={loginRequired}
+        play
+        style={{ width: 300, height: 300 }}
+      />
+    </div>
   );
 };

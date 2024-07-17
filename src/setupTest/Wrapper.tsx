@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ReactNode } from "react";
-import userReducer, { userInfo, wishlistItem } from "../redux/Slice/Slices";
+import userReducer, { userInfo } from "../redux/Slice/Slices";
 import { State } from "../commonFiles/commonTypes";
 
 interface WrapperProps {
@@ -19,11 +19,6 @@ const Wrapper: React.FC<WrapperProps> = ({ children, initialState }) => {
 
   if (initialState?.user) {
     store.dispatch(userInfo({ user: initialState.user }));
-  }
-  if (initialState?.itemWishlist) {
-    initialState.itemWishlist.forEach((item) => {
-      store.dispatch(wishlistItem({ item }));
-    });
   }
 
   return (

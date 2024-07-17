@@ -27,7 +27,6 @@ const Wishlist = () => {
   const customerId = user.userId;
 
   const getWishList = async (customerId: string) => {
-    console.log("customrer",customerId)
     try {
       const getData = await axios.get(
         `http://localhost:3000/wishlist/get/${customerId}`
@@ -77,11 +76,12 @@ const Wishlist = () => {
           Please Login
           <LoginRequired />
         </div>
-      ) : cardData?.length ? (
+      ) : cardData.length ? (
         <Grid container spacing={2} key="gridOuter">
           {cardData?.map((card, index) => (
             <Grid item xs={2} sm={4} key={index}>
               <Card
+              data-testid={`productId_${card.productId}`}
                 sx={{
                   display: "flex",
                   height: "10rem",
