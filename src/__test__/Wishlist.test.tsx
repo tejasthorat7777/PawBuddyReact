@@ -107,7 +107,7 @@ describe("WishList", () => {
 
   });
 
-  it.only("TC:4 should display Sorry We are unable to get your wishlist when DB rejects", async () => {
+  it("TC:4 should display Sorry We are unable to get your wishlist when DB rejects", async () => {
     mockAxiosGet.mockRejectedValue({});
     const mockInitialState = {
       status: true,
@@ -118,7 +118,15 @@ describe("WishList", () => {
         <Wishlist />
       </Wrapper>
     );
-    screen.getByTestId("GHJK");
+    await act(async() => {
+      vi.advanceTimersByTime(3000);
+    });
+    await act(async() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(screen.getByText("Sorry We are unable to get your wishlist")).toBeInTheDocument();
+    expect(screen.getByTestId("fetchErrorEmptyCart")).toBeInTheDocument();
   });
 
 });
