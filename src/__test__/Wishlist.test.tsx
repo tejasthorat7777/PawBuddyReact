@@ -75,6 +75,7 @@ describe("WishList", () => {
       </Wrapper>
     );
     expect(screen.getByText("Your Cart Is Empty")).toBeInTheDocument();
+    expect(screen.getByTestId("emptyCart")).toBeInTheDocument();
   });
 
   it("TC:3 should display Product if present in database", async () => {
@@ -105,4 +106,19 @@ describe("WishList", () => {
     expect(screen.getByTestId(`productId_${mockItemWishlist[1].productId}`)).toBeInTheDocument();
 
   });
+
+  it.only("TC:4 should display Sorry We are unable to get your wishlist when DB rejects", async () => {
+    mockAxiosGet.mockRejectedValue({});
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Wishlist />
+      </Wrapper>
+    );
+    screen.getByTestId("GHJK");
+  });
+
 });

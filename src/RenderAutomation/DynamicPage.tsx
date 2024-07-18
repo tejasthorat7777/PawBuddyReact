@@ -11,6 +11,7 @@ const DynamicPage = () => {
         width: "100%",
       }}
     >
+      {/* instead of loading we need to put some component like MUI backdrop or something */}
       <Suspense fallback={<div>loading...</div>}>
         <Routes>
           {page_routing.map((objRoute, index) => (

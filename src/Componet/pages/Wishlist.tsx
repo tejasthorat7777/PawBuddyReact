@@ -18,11 +18,12 @@ import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import axios from "axios";
 import { ProductData } from "../../commonFiles/commonTypes";
+import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmptyCart";
 
 const Wishlist = () => {
-  
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const [cardData, setCardData] = useState<ProductData[]>([]);
+  const [fetchError, setFetchError] = useState(false);
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
 
@@ -33,10 +34,10 @@ const Wishlist = () => {
       );
       setCardData(getData.data.items);
     } catch (error) {
+      setFetchError(true);
       console.log("error>>>", error);
     }
   };
-
 
   useEffect(() => {
     if (customerId) {
@@ -81,7 +82,7 @@ const Wishlist = () => {
           {cardData?.map((card, index) => (
             <Grid item xs={2} sm={4} key={index}>
               <Card
-              data-testid={`productId_${card.productId}`}
+                data-testid={`productId_${card.productId}`}
                 sx={{
                   display: "flex",
                   height: "10rem",
@@ -182,6 +183,17 @@ const Wishlist = () => {
             </Grid>
           ))}
         </Grid>
+      ) : fetchError ? (
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            ...flexDiv,
+          }}
+        >
+          Sorry We are unable to get your wishlist
+          <FetchErrorEmptyCart />
+        </div>
       ) : (
         <div
           style={{
