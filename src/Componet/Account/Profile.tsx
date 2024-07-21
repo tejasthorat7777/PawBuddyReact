@@ -21,9 +21,6 @@ const outerDiv = {
 
 const Profile = () => {
   const user = useSelector((state: RootState) => state.finalState.user);
-
-  console.log("user>>>>", user);
-
   return (
     <div
       style={{
