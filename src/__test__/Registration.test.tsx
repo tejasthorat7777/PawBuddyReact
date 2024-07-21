@@ -90,7 +90,6 @@ describe("Registration", () => {
     expect(screen.getByTestId("age").value).toBe("3");
   });
 
-  // we need to write for city, for now it is not able to click or change
   it("TC:3 click on Submit button filled data should dump in db", async () => {
     render(
       <Wrapper>
@@ -100,13 +99,22 @@ describe("Registration", () => {
 
     await act(async () => {
       sendData("female");
+    });
+
+    await act(async () => {
+      fireEvent.mouseDown(screen.getByRole("combobox"));
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId("city_Pune"));
+    });
+    await act(async () => {
       fireEvent.click(screen.getByText("SUBMIT"));
     });
 
     expect(mockAxiosPost).toHaveBeenCalledWith(
       "http://localhost:3000/sendUsersInfo",
       {
-        city: "",
+        city: "Pune",
         name: "Pettey",
         age: "3",
         birthdate: "2024-07-04",
