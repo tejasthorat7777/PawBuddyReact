@@ -131,17 +131,16 @@ export const homeStyle = {
   },
 
   PaginationDiv: {
-    width: "22rem",
-    marginTop: "1rem",
-    marginRight: "5rem",
-    padding: "0",
+    width: "22%",
+    marginTop: "1%",
+    marginRight: "5%"
   },
 
   outerDiv: {
     height: "100%",
     width: "100%",
     backgroundColor: "#597081",
-    padding: "1rem",
+    padding: "2%",
   },
 
   commonDiv: {
