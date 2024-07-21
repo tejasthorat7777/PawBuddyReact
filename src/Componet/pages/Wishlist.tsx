@@ -19,6 +19,9 @@ import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import axios from "axios";
 import { ProductData } from "../../commonFiles/commonTypes";
 import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmptyCart";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styles from "../../commonFiles/commonCss/toast.module.css";
 
 const Wishlist = () => {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
@@ -46,14 +49,17 @@ const Wishlist = () => {
   }, [customerId]);
 
   const handleXmark = async (customerId: string, productId: string) => {
-    const newCardData = cardData.filter((item) => item.productId !== productId);
-    setCardData(newCardData);
     try {
       await axios.post("http://localhost:3000/wishlist/remove", {
         customerId,
         productId,
       });
+      const newCardData = cardData.filter(
+        (item) => item.productId !== productId
+      );
+      setCardData(newCardData);
     } catch (error) {
+      toast(`Sorry, Cannot remove Right Now...`);
       console.error("Error:", error);
     }
   };
@@ -82,7 +88,7 @@ const Wishlist = () => {
           {cardData?.map((card, index) => (
             <Grid item xs={2} sm={4} key={index}>
               <Card
-                data-testid={`productId_${card.productId}`}
+                data-testid={`product_${card.productId}`}
                 sx={{
                   display: "flex",
                   height: "10rem",
@@ -91,6 +97,7 @@ const Wishlist = () => {
                 }}
               >
                 <IconButton
+                  data-testid={`Xbutton_${card.productId}`}
                   sx={{
                     position: "absolute",
                     top: -10,
@@ -145,6 +152,7 @@ const Wishlist = () => {
 
                   <CardActions sx={{ padding: "0", marginTop: "0.5rem" }}>
                     <Button
+                      data-testid={`addToCart${card?.productId}`}
                       style={{
                         ...homeStyle.IconButton,
                         fontSize: "12px",
@@ -161,6 +169,7 @@ const Wishlist = () => {
                       Add to Cart
                     </Button>
                     <Button
+                      data-testid={`buyNow${card?.productId}`}
                       style={{
                         ...homeStyle.IconButton,
                         fontSize: "12px",
@@ -206,6 +215,15 @@ const Wishlist = () => {
           <EmptyCart />
         </div>
       )}
+      <div data-testid="toast">
+        <ToastContainer
+          position="bottom-left"
+          toastClassName={styles.toast}
+          bodyClassName={styles.body}
+          hideProgressBar={true}
+          autoClose={1000}
+        />
+      </div>
     </div>
   );
 };
