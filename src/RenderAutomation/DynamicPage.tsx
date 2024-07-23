@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import page_routing from "./page_routing";
+import MuiBackdrop from "../commonFiles/MuiBackdrop";
 
 const DynamicPage = () => {
   return (
@@ -11,8 +12,20 @@ const DynamicPage = () => {
         width: "100%",
       }}
     >
-      {/* instead of loading we need to put some component like MUI backdrop or something */}
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense
+        fallback={
+          <MuiBackdrop
+            isLoading={true}
+            iconStyle={{
+              width: "3%",
+              height: "5%",
+              position: "absolute",
+              top: "46%",
+              left: "48%",
+            }}
+          />
+        }
+      >
         <Routes>
           {page_routing.map((objRoute, index) => (
             <Route
