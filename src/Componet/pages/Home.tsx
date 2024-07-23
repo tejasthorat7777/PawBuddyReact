@@ -200,19 +200,22 @@ const Home = () => {
 
       try {
         await axios.post("http://localhost:3000/wishlist/dumped", dumpedData);
+        const itemId = `addedtoWishList${item.productId}`;
+
+        if (!wishlistItems.includes(itemId)) {
+          setWishlistItems([...wishlistItems, itemId]);
+          toast("Item added to Wishlist", {
+            autoClose: 1000,
+          });
+        } else {
+          setWishlistItems(wishlistItems.filter((id) => id !== itemId));
+          toast("Item removed from Wishlist", {
+            autoClose: 1000,
+          });
+        }
       } catch (error) {
         console.log("error>>>", error);
-      }
-      const itemId = `addedtoWishList${item.productId}`;
-
-      if (!wishlistItems.includes(itemId)) {
-        setWishlistItems([...wishlistItems, itemId]);
-        toast("Item added to Wishlist", {
-          autoClose: 1000,
-        });
-      } else {
-        setWishlistItems(wishlistItems.filter((id) => id !== itemId));
-        toast("Item removed from Wishlist", {
+        toast("Unable to add in Wishlist", {
           autoClose: 1000,
         });
       }
@@ -224,19 +227,18 @@ const Home = () => {
   };
 
   const handleShare = async (title: string, price: string) => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          text: `Check out this ${title} for just ₹ ${price}.00`,
-          url: window.location.href,
-        });
-        console.log("Share successful");
-      } catch (error) {
-        console.error("Error sharing", error);
-      }
-    } else {
-      console.error("Web Share API not supported in this browser");
+    try {
+      await navigator.share({
+        title: title,
+        text: `Check out this ${title} for just ₹ ${price}.00`,
+        url: window.location.href,
+      });
+      console.log("Share successful");
+    } catch (error) {
+      toast("Sorry, Error in sharing", {
+        autoClose: 1000,
+      });
+      console.log("Error sharing", error);
     }
   };
 
@@ -277,6 +279,7 @@ const Home = () => {
               </CardContent>
               <CardActions sx={{ backgroundColor: "#00111c" }}>
                 <Button
+                  data-testid={`share_${card.productId}`}
                   style={homeStyle.IconButton}
                   onClick={() => handleShare(card.prouctName, card.price)}
                 >
@@ -290,9 +293,14 @@ const Home = () => {
                   {wishlistItems.includes(
                     `addedtoWishList${card.productId}`
                   ) ? (
-                    <FavoriteIcon style={{ color: "red" }} />
+                    <FavoriteIcon
+                      style={{ color: "red" }}
+                      data-testid={`FavoriteIcon_${card.productId}`}
+                    />
                   ) : (
-                    <FavoriteBorderOutlinedIcon />
+                    <FavoriteBorderOutlinedIcon
+                      data-testid={`FavoriteBorderOutlinedIcon_${card.productId}`}
+                    />
                   )}
                 </Button>
                 <Button
