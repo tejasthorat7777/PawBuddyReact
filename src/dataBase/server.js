@@ -11,9 +11,7 @@ server.use(cors());
 
 server.use(bodyParser.json());
 
-const dbUrl =
-  "mongodb+srv://tejasthorat7777:sjzvYxs3W2VlyhW6@pawbuddye.6avh4bl.mongodb.net/?retryWrites=true&w=majority&appName=PawBuddyE";
-
+const dbUrl = "mongodb+srv://tejasthorat7777:pettey@pawbuddye.6avh4bl.mongodb.net/?retryWrites=true&w=majority&appName=PawBuddyE"
 try {
   mongoose.connect(dbUrl);
   console.log("Connected to MongoDB");

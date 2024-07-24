@@ -1,4 +1,4 @@
-import Wishlist from "../Componet/pages/Wishlist";
+import Wishlist from "../Componet/Account/Wishlist";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import Wrapper from "../setupTest/Wrapper";
 import { mockAxiosGet, mockAxiosPost } from "../__mocks__/globalMock";

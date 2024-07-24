@@ -32,6 +32,7 @@ import { ProductData } from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
+import MuiBackdrop from "../../commonFiles/MuiBackdrop";
 
 const Home = () => {
   const rowCard1: ProductData[] = [
@@ -220,7 +221,7 @@ const Home = () => {
         });
       }
     } else {
-      toast("Please Login...", {
+      toast("Sorry, Please Login...", {
         autoClose: 1000,
       });
     }

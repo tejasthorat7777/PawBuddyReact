@@ -76,7 +76,7 @@ export default function Navbar() {
     {
       text: "WishList",
       component: <FavoriteBorderOutlinedIcon />,
-      path: "/whishlist",
+      path: "/account/whishlist",
     },
     { text: "Orders", component: <AddShoppingCartIcon />, path: "/orders" },
     { text: "Contact Us", component: <CallIcon />, path: "/contact" },
@@ -114,12 +114,14 @@ export default function Navbar() {
             }}
           >
             <Tooltip title="Shopping Cart">
-              <IconButton>
-                <ShoppingCartOutlinedIcon
-                  style={{ color: "white" }}
-                  sx={{ fontSize: 30 }}
-                />
-              </IconButton>
+              <Link to={"/cart"} key={"Cart"}>
+                <IconButton>
+                  <ShoppingCartOutlinedIcon
+                    style={{ color: "white" }}
+                    sx={{ fontSize: 30 }}
+                  />
+                </IconButton>
+              </Link>
             </Tooltip>
             <Tooltip title="Account settings">
               <IconButton
