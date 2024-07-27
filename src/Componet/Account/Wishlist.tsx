@@ -161,7 +161,7 @@ const Wishlist = () => {
                       data-testid={`addToCart${card?.productId}`}
                       style={{
                         ...homeStyle.IconButton,
-                        fontSize: "75%",
+                        fontSize: "70%",
                         backgroundColor:
                           hoveredButton === `addToCart${card?.productId}`
                             ? "#e85d04"
@@ -178,7 +178,7 @@ const Wishlist = () => {
                       data-testid={`buyNow${card?.productId}`}
                       style={{
                         ...homeStyle.IconButton,
-                        fontSize: "75%",
+                        fontSize: "70%",
                         marginLeft: "20%",
                         backgroundColor:
                           hoveredButton === `buyNow${card?.productId}`

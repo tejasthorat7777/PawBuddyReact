@@ -127,13 +127,13 @@ export const loginCss = {
 
 export const homeStyle = {
   IconButton: {
-    color: "white"
+    color: "white",
   },
 
   PaginationDiv: {
     width: "22%",
     marginTop: "1%",
-    marginRight: "5%"
+    marginRight: "5%",
   },
 
   outerDiv: {
@@ -150,7 +150,7 @@ export const homeStyle = {
   },
 
   cardContent: {
-    height:"5%",
+    height: "5%",
     backgroundColor: "#00111c",
     color: "white",
     ...flexDiv,
@@ -162,4 +162,35 @@ export const homeStyle = {
     objectFit: "cover",
     ...flexDiv,
   },
+};
+
+export const cartStyle = {
+  IconButton: {
+    color: "white",
+    fontSize: "60%",
+    backgroundColor: "grey",
+    fontWeight: "400",
+  },
+  cardStyle: {
+    width: "25%",
+    height: "88%",
+    marginTop: "5%",
+  },
+  priceText: {
+    fontSize: "25px",
+    color: "white",
+    marginTop: "2%",
+  },
+  detailsText: {
+    fontSize: "18px",
+    color: "white",
+  },
+boxStyle:{
+  backgroundColor: "#00111c",
+  padding: "5%",
+},
+cardActionArea:{
+  height:"40%"
+},
+imageStyle:{ height: "100%", width: "auto" }
 };

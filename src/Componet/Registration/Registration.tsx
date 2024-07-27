@@ -21,7 +21,7 @@ import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { SendButton } from "../../commonFiles/commonComponents";
+import { SendButton } from "../../commonFiles/SendButton";
 import { generateRandomUserId } from "../../FutureUse/commonFunctions";
 
 const BaseSelect = styled(Select)(() => ({

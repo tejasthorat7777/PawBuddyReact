@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { userInfo } from "../../redux/Slice/Slices";
 import { useNavigate } from "react-router-dom";
-import { SendButton } from "../../commonFiles/commonComponents";
+import { SendButton } from "../../commonFiles/SendButton";
 import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
 import { UserData } from "../../commonFiles/commonTypes";
 import IconButton from "@mui/material/IconButton";

@@ -5,16 +5,25 @@ import {
   CardActionArea,
   CardActions,
   CardMedia,
-  Grid,
   Typography,
 } from "@mui/material";
-import { flexDiv, homeStyle } from "../../commonFiles/commonTheme";
+import { cartStyle, flexDiv, homeStyle } from "../../commonFiles/commonTheme";
 import coller from "../../assets/red-dog-collar.jpg";
-import adultPedegree from "../../assets/adultPedegree.jpg";
 import StarRating from "../../commonFiles/StartRatins";
-import { width } from "@mui/system";
+import Quantity from "../../commonFiles/Quantity";
+
+const orderButton = {
+  borderRadius: "0",
+  backgroundColor: "#ffbe0b",
+  color: "white",
+  width: "100%",
+  height: "10%",
+};
 
 const Cart = () => {
+  const des =
+    "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training";
+
   return (
     <div
       style={{
@@ -24,51 +33,26 @@ const Cart = () => {
         justifyContent: "space-between",
       }}
     >
-      <Card
-        data-testid={`product_`}
-        style={{
-          width: "25%",
-          height: "80%",
-          marginTop: "5%",
-        }}
-      >
-        <CardActionArea
-          style={{
-            height: "40%",
-          }}
-        >
+      <Card data-testid={`product_`} style={cartStyle.cardStyle}>
+        <CardActionArea style={cartStyle.cardActionArea}>
           <CardMedia sx={homeStyle.cardMedia}>
-            <img src={coller} style={{ height: "100%", width: "auto" }} />
+            <img src={coller} style={cartStyle.imageStyle} />
           </CardMedia>
         </CardActionArea>
-        <Box
-          sx={{
-            backgroundColor: "#00111c",
-            padding: "5%",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "18px",
-              color: "white",
-            }}
-          >
-            {
-              "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training"
-            }
-          </Typography>
+        <Box style={cartStyle.boxStyle}>
+          <Typography style={cartStyle.detailsText}>{des}</Typography>
           <Box style={{ ...flexDiv, justifyContent: "space-between" }}>
-            <Typography
-              style={{
-                fontSize: "25px",
-                color: "white",
-                marginTop: "2%",
-              }}
-            >{`₹ 699.00`}</Typography>
+            <Typography style={cartStyle.priceText}>{`₹ 699.00`}</Typography>
             <StarRating rating={2} />
           </Box>
-          <CardActions sx={{ padding: "0" }}></CardActions>
+          <CardActions sx={{ padding: "0", marginTop: "2%" }}>
+            <Button style={cartStyle.IconButton}>see more like this</Button>
+            <Quantity
+              style={{ width: "50%", marginLeft: "5%", scale: "0.9" }}
+            />
+          </CardActions>
         </Box>
+        <Button style={orderButton}>Place your Order</Button>
       </Card>
     </div>
   );
