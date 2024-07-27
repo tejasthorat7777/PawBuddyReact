@@ -27,6 +27,7 @@ const Wishlist = () => {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const [cardData, setCardData] = useState<ProductData[]>([]);
   const [fetchError, setFetchError] = useState(false);
+  const [emptylist, setEmptylist] = useState(false);
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
 
@@ -35,6 +36,9 @@ const Wishlist = () => {
       const getData = await axios.get(
         `http://localhost:3000/wishlist/get/${customerId}`
       );
+      if (!getData.data.items) {
+        setEmptylist(true);
+      }
       setCardData(getData.data.items);
     } catch (error) {
       setFetchError(true);
@@ -150,12 +154,14 @@ const Wishlist = () => {
                     }}
                   >{`₹ ${card?.price}.00`}</Typography>
 
-                  <CardActions sx={{ padding: "0", marginTop: "0.5rem" }}>
+                  <CardActions
+                    sx={{ padding: "0", marginTop: "5%", width: "100%" }}
+                  >
                     <Button
                       data-testid={`addToCart${card?.productId}`}
                       style={{
                         ...homeStyle.IconButton,
-                        fontSize: "12px",
+                        fontSize: "75%",
                         backgroundColor:
                           hoveredButton === `addToCart${card?.productId}`
                             ? "#e85d04"
@@ -172,8 +178,8 @@ const Wishlist = () => {
                       data-testid={`buyNow${card?.productId}`}
                       style={{
                         ...homeStyle.IconButton,
-                        fontSize: "12px",
-                        marginLeft: "3rem",
+                        fontSize: "75%",
+                        marginLeft: "20%",
                         backgroundColor:
                           hoveredButton === `buyNow${card?.productId}`
                             ? "#e85d04"
@@ -203,7 +209,7 @@ const Wishlist = () => {
           Sorry We are unable to get your wishlist
           <FetchErrorEmptyCart />
         </div>
-      ) : (
+      ) : emptylist ? (
         <div
           style={{
             height: "100%",
@@ -214,7 +220,7 @@ const Wishlist = () => {
           Your Cart Is Empty
           <EmptyCart />
         </div>
-      )}
+      ) : null}
       <div data-testid="toast">
         <ToastContainer
           position="bottom-left"
