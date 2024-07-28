@@ -7,6 +7,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import loginImage from "../assets/login.jpg";
+import { padding } from "@mui/system";
 
 export const CustomButton = styled(Button)({
   width: "100%",
@@ -178,6 +179,7 @@ export const cartStyle = {
     fontSize: "60%",
     backgroundColor: "grey",
     fontWeight: "400",
+    padding:"2%"
   },
   cardStyle: {
     width: "75%",

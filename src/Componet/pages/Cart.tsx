@@ -185,9 +185,9 @@ const Cart = () => {
                   <StarRating rating={card.rating} />
                 </Box>
                 <CardActions sx={{ padding: "0", marginTop: "2%" }}>
-                  <Button style={cartStyle.IconButton}>Remove from Cart</Button>
+                  <Button style={cartStyle.IconButton}>Remove from cart</Button>
                   <Quantity
-                    style={{ width: "50%", marginLeft: "5%", scale: "0.9" }}
+                    style={{ width: "50%", marginLeft: "5%", scale: "0.8" }}
                   />
                 </CardActions>
               </Box>
