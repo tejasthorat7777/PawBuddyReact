@@ -36,6 +36,7 @@ export type ProductData = {
   description: string;
   imageSource: string;
   selected: boolean;
+  rating: number;
 };
 
 export type State = {

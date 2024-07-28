@@ -165,6 +165,14 @@ export const homeStyle = {
 };
 
 export const cartStyle = {
+  cardAction: {
+    height: "15rem",
+    ...flexDiv,
+  },
+  cardMedia: {
+    height: "14rem",
+    objectFit: "cover",
+  },
   IconButton: {
     color: "white",
     fontSize: "60%",
@@ -172,9 +180,8 @@ export const cartStyle = {
     fontWeight: "400",
   },
   cardStyle: {
-    width: "25%",
-    height: "88%",
-    marginTop: "5%",
+    width: "75%",
+    marginTop: "1%",
   },
   priceText: {
     fontSize: "25px",
@@ -182,15 +189,13 @@ export const cartStyle = {
     marginTop: "2%",
   },
   detailsText: {
-    fontSize: "18px",
+    fontSize: "20px",
     color: "white",
   },
-boxStyle:{
-  backgroundColor: "#00111c",
-  padding: "5%",
-},
-cardActionArea:{
-  height:"40%"
-},
-imageStyle:{ height: "100%", width: "auto" }
+  boxStyle: {
+    height: "20rem",
+    backgroundColor: "#00111c",
+    padding: "5%",
+  },
+  imageStyle: { height: "100%", width: "auto" },
 };

@@ -32,7 +32,6 @@ import { ProductData } from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
-import MuiBackdrop from "../../commonFiles/MuiBackdrop";
 
 const Home = () => {
   const rowCard1: ProductData[] = [
@@ -43,6 +42,7 @@ const Home = () => {
       price: "759",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "2",
@@ -50,6 +50,7 @@ const Home = () => {
       imageSource: collar,
       price: "259",
       selected: false,
+      rating: 1,
       description:
         "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
     },
@@ -60,6 +61,7 @@ const Home = () => {
       price: "389",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "4",
@@ -68,6 +70,7 @@ const Home = () => {
       price: "699",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "5",
@@ -76,6 +79,7 @@ const Home = () => {
       price: "759",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "6",
@@ -84,6 +88,7 @@ const Home = () => {
       price: "389",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "7",
@@ -92,6 +97,7 @@ const Home = () => {
       imageSource: k9Harness,
       price: "699",
       selected: false,
+      rating: 1,
     },
     {
       productId: "8",
@@ -100,6 +106,7 @@ const Home = () => {
       price: "259",
       description: "",
       selected: false,
+      rating: 1,
     },
     {
       productId: "9",
@@ -108,6 +115,7 @@ const Home = () => {
       price: "699",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "10",
@@ -116,6 +124,7 @@ const Home = () => {
       price: "759",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "11",
@@ -124,6 +133,7 @@ const Home = () => {
       price: "389",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "12",
@@ -131,6 +141,7 @@ const Home = () => {
       description: "",
       imageSource: k9Harness,
       price: "699",
+      rating: 1,
       selected: false,
     },
     {
@@ -140,6 +151,7 @@ const Home = () => {
       price: "259",
       description: "",
       selected: false,
+      rating: 1,
     },
     {
       productId: "14",
@@ -148,6 +160,7 @@ const Home = () => {
       price: "759",
       selected: false,
       description: "",
+      rating: 1,
     },
     {
       productId: "15",
@@ -155,6 +168,7 @@ const Home = () => {
       imageSource: collar,
       price: "259",
       selected: false,
+      rating: 1,
       description:
         "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
     },
@@ -165,6 +179,7 @@ const Home = () => {
       price: "389",
       selected: false,
       description: "",
+      rating: 1,
     },
   ];
 
