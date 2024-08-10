@@ -167,11 +167,11 @@ export const homeStyle = {
 
 export const cartStyle = {
   cardAction: {
-    height: "15rem",
+    height: "12rem",
     ...flexDiv,
   },
   cardMedia: {
-    height: "14rem",
+    height: "11rem",
     objectFit: "cover",
   },
   IconButton: {
