@@ -20,16 +20,20 @@ import leash from "../../assets/leashHome.jpg";
 import purinaDry from "../../assets/purinaDryFood.jpg";
 import k9Harness from "../../assets/K9Harness.jpg";
 import { ProductData } from "../../commonFiles/commonTypes";
+import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 
 const orderButton = {
   borderRadius: "0",
   backgroundColor: "#ffbe0b",
   color: "white",
   width: "100%",
-  height: "8%",
 };
 
 const Cart = () => {
+  const user = useSelector((state: RootState) => state.finalState.user);
+  const customerId = user.userId;
   const des =
     "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training";
 
@@ -161,41 +165,56 @@ const Cart = () => {
         overflow: "auto",
       }}
     >
-      <Grid container spacing={2}>
-        {rowCard1.map((card, index) => (
-          <Grid item xs={2} sm={4}>
-            <Card
-              data-testid={`product_${card.productId}`}
-              style={cartStyle.cardStyle}
-              key={index}
-            >
-              <CardActionArea sx={cartStyle.cardAction}>
-                <CardMedia sx={cartStyle.cardMedia}>
-                  <img src={card.imageSource} style={cartStyle.imageStyle} />
-                </CardMedia>
-              </CardActionArea>
-              <Box style={cartStyle.boxStyle}>
-                <Typography style={cartStyle.detailsText}>
-                  {card.description}
-                </Typography>
-                <Box style={{ ...flexDiv, justifyContent: "space-between" }}>
-                  <Typography
-                    style={cartStyle.priceText}
-                  >{`₹ ${card.price}.00`}</Typography>
-                  <StarRating rating={card.rating} />
+      {customerId === "" ? (
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            ...flexDiv,
+          }}
+        >
+          Please Login
+          <LoginRequired />
+        </div>
+      ) : (
+        <Grid container spacing={2}>
+          {rowCard1.map((card, index) => (
+            <Grid item xs={2} sm={4}>
+              <Card
+                data-testid={`product_${card.productId}`}
+                style={cartStyle.cardStyle}
+                key={index}
+              >
+                <CardActionArea sx={cartStyle.cardAction}>
+                  <CardMedia sx={cartStyle.cardMedia}>
+                    <img src={card.imageSource} style={cartStyle.imageStyle} />
+                  </CardMedia>
+                </CardActionArea>
+                <Box style={cartStyle.boxStyle}>
+                  <Typography style={cartStyle.detailsText}>
+                    {card.description}
+                  </Typography>
+                  <Box style={{ ...flexDiv, justifyContent: "space-between" }}>
+                    <Typography
+                      style={cartStyle.priceText}
+                    >{`₹ ${card.price}.00`}</Typography>
+                    <StarRating rating={card.rating} />
+                  </Box>
+                  <CardActions sx={{ padding: "0", marginTop: "2%" }}>
+                    <Button style={cartStyle.IconButton}>
+                      Remove from cart
+                    </Button>
+                    <Quantity
+                      style={{ width: "50%", marginLeft: "5%", scale: "0.8" }}
+                    />
+                  </CardActions>
                 </Box>
-                <CardActions sx={{ padding: "0", marginTop: "2%" }}>
-                  <Button style={cartStyle.IconButton}>Remove from cart</Button>
-                  <Quantity
-                    style={{ width: "50%", marginLeft: "5%", scale: "0.8" }}
-                  />
-                </CardActions>
-              </Box>
-              <Button style={orderButton}>Place your Order</Button>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                <Button style={orderButton}>Place your Order</Button>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </div>
   );
 };
