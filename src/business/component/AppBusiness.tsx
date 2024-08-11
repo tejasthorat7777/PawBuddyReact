@@ -11,7 +11,8 @@ import {
 import { cartStyle, flexDiv, homeStyle } from "../../commonFiles/commonTheme";
 import k9 from "../../assets/K9Harness.jpg";
 import pd from "../../assets/adultPedegree.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { SendButton } from "../../commonFiles/SendButton";
 
 const AppBusiness = () => {
   const condition = ["Condition", "New", "Used", "Refurbished"];
@@ -26,6 +27,38 @@ const AppBusiness = () => {
     prodConditon: condition[0],
     prodImg: "",
   });
+
+  const reset = () => {
+    setAddProduct({
+      prodName: "",
+      prodDiscrip: "",
+      prodPrice: 0,
+      pordQuant: 0,
+      prodDiscount: 0,
+      prodBrand: "",
+      prodWeight: 0,
+      prodConditon: condition[0],
+      prodImg: "",
+    });
+  };
+
+  const dumpProduct = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    // try {
+    //   event.preventDefault();
+    //   setIsloading(true);
+    //   await axios.post("http://localhost:3000/sendUsersInfo", userData);
+    //   setTimeout(() => {
+    //     setIsloading(false);
+    //   }, 3000);
+    //   setFormSend(true);
+    // } catch (error) {
+    //   console.log("Error>>>>", error);
+    //   setIsloading(false);
+    //   setUploadError(true);
+    // }
+  };
 
   return (
     <div style={homeStyle.outerDiv}>
@@ -117,6 +150,24 @@ const AppBusiness = () => {
               ))}
             </Select>
           </FormControl>
+          <SendButton
+            operationOnData={reset}
+            text={"Cancel"}
+            style={{
+              top: "70%",
+              left: "10%",
+              backgroundColor: "#597081",
+            }}
+          />
+          <SendButton
+            operationOnData={dumpProduct}
+            text={"Submit"}
+            style={{
+              top: "70%",
+              left: "20%",
+              backgroundColor: "#597081",
+            }}
+          />
         </div>
         <Container
           style={{

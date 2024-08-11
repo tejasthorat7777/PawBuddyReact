@@ -1,4 +1,5 @@
 // import AppBusiness from "../../business/component/AppBusiness";
+import AppBusiness from "../../business/component/AppBusiness";
 import DynamicPage from "../../RenderAutomation/DynamicPage";
 
 const Right = () => {
