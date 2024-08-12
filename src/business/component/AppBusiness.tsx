@@ -1,4 +1,5 @@
 import {
+  ButtonBase,
   Card,
   CardActionArea,
   CardMedia,
@@ -13,6 +14,21 @@ import k9 from "../../assets/K9Harness.jpg";
 import pd from "../../assets/adultPedegree.jpg";
 import { useEffect, useState } from "react";
 import { SendButton } from "../../commonFiles/SendButton";
+import Button from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const AppBusiness = () => {
   const condition = ["Condition", "New", "Used", "Refurbished"];
@@ -60,6 +76,18 @@ const AppBusiness = () => {
     // }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // need to change this logic
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAddProduct({ ...addProduct, prodImg: reader.result as string });
+      };
+      const data = reader.readAsDataURL(file);
+        }
+  };
+
   return (
     <div style={homeStyle.outerDiv}>
       <div
@@ -78,18 +106,48 @@ const AppBusiness = () => {
             width: "40%",
           }}
         >
-          <Card
-            data-testid={`product_`}
+          <div
             style={{
-              border: "2px solid black",
+              height: "65%",
+              width: "100%",
+              backgroundColor: "white",
+              borderRadius: "10px",
             }}
           >
-            <CardActionArea sx={{ height: "17rem", ...flexDiv }}>
-              <CardMedia sx={{ height: "14rem", objectFit: "cover" }}>
-                <img src={k9} style={cartStyle.imageStyle} />
-              </CardMedia>
-            </CardActionArea>
-          </Card>
+            {!addProduct.prodImg ? (
+              <div style={{ ...flexDiv, height: "100%", width: "100%" }}>
+                <Button
+                  style={{
+                    height: "100%",
+                    borderRadius:"10px",
+                    width: "100%",
+                  }}
+                  component="label"
+                  variant="outlined"
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                >
+                  Upload Image
+                  <VisuallyHiddenInput
+                    type="file"
+                    id="prodFile"
+                    onChange={handleImageUpload}
+                  />
+                </Button>
+              </div>
+            ) : (
+              <Card data-testid={`product_`}>
+                <CardActionArea sx={{ height: "17rem", ...flexDiv }}>
+                  <CardMedia sx={{ height: "14rem", objectFit: "cover" }}>
+                    <img
+                      src={addProduct.prodImg}
+                      style={cartStyle.imageStyle}
+                    />
+                  </CardMedia>
+                </CardActionArea>
+              </Card>
+            )}
+          </div>
           <input
             type="text"
             name="Owner"
@@ -104,6 +162,7 @@ const AppBusiness = () => {
               marginTop: "5%",
               color: "black",
               marginRight: "5%",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({ ...addProduct, prodBrand: event.target.value });
@@ -186,6 +245,7 @@ const AppBusiness = () => {
               backgroundColor: "white",
               height: "10%",
               color: "black",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({ ...addProduct, prodName: event.target.value });
@@ -206,6 +266,7 @@ const AppBusiness = () => {
               padding: "2%",
               boxSizing: "border-box",
               fontFamily: "cursive",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({ ...addProduct, prodDiscrip: event.target.value });
@@ -224,6 +285,7 @@ const AppBusiness = () => {
               height: "10%",
               marginTop: "3%",
               color: "black",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({
@@ -245,6 +307,7 @@ const AppBusiness = () => {
               backgroundColor: "white",
               height: "10%",
               color: "black",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({
@@ -266,6 +329,7 @@ const AppBusiness = () => {
               height: "10%",
               marginTop: "3%",
               color: "black",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({
@@ -287,6 +351,7 @@ const AppBusiness = () => {
               backgroundColor: "white",
               height: "10%",
               color: "black",
+              borderRadius: "5px",
             }}
             onChange={(event) => {
               setAddProduct({
