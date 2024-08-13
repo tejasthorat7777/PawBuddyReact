@@ -1,0 +1,2 @@
+After Add Product page ------> product should be visible on home page products will comes from db ------> after this we need to fix things
+form cart , after clicking add button on home page product should be listed in cart component.

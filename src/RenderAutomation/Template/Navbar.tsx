@@ -17,6 +17,7 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import StoreIcon from '@mui/icons-material/Store';
 import { RootState } from "../../redux/store/store";
 
 const inputStyle = {
@@ -70,19 +71,20 @@ export default function Navbar() {
   const accountMenu = [
     {
       text: "Profile",
-      component: <PersonOutlineOutlinedIcon />,
+      icon: <PersonOutlineOutlinedIcon />,
       path: "/account/profile",
     },
     {
       text: "WishList",
-      component: <FavoriteBorderOutlinedIcon />,
+      icon: <FavoriteBorderOutlinedIcon />,
       path: "/account/whishlist",
     },
-    { text: "Orders", component: <AddShoppingCartIcon />, path: "/orders" },
-    { text: "Contact Us", component: <CallIcon />, path: "/contact" },
+    { text: "Orders", icon: <AddShoppingCartIcon />, path: "/orders" },
+    { text: "Contact Us", icon: <CallIcon />, path: "/contact" },
+    { text: "Business Login", icon: <StoreIcon />, path: "/businesslogin" },
     user != ""
-      ? { text: "Logout", component: <Logout />, path: "/login" }
-      : { text: "Log-In", component: <Login />, path: "/login" },
+      ? { text: "Logout", icon: <Logout />, path: "/login" }
+      : { text: "Log-In", icon: <Login />, path: "/login" },
   ];
 
   return (
@@ -165,7 +167,7 @@ export default function Navbar() {
                   style={{ fontSize: "1rem", fontFamily: "cursive" }}
                 >
                   <ListItemIcon sx={{ color: "white", fontSize: "1.5rem" }}>
-                    {obj.component}
+                    {obj.icon}
                   </ListItemIcon>
                   {obj.text}
                 </CustomMenuItem>

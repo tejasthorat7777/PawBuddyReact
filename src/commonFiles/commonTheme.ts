@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
 import {
   Button,
   AccordionSummary,
   AccordionDetails,
   Accordion,
   MenuItem,
+  styled
 } from "@mui/material";
 import loginImage from "../assets/login.jpg";
 
@@ -127,13 +127,13 @@ export const loginCss = {
 
 export const homeStyle = {
   IconButton: {
-    color: "white"
+    color: "white",
   },
 
   PaginationDiv: {
     width: "22%",
     marginTop: "1%",
-    marginRight: "5%"
+    marginRight: "5%",
   },
 
   outerDiv: {
@@ -150,7 +150,7 @@ export const homeStyle = {
   },
 
   cardContent: {
-    height:"5%",
+    height: "5%",
     backgroundColor: "#00111c",
     color: "white",
     ...flexDiv,
@@ -162,4 +162,41 @@ export const homeStyle = {
     objectFit: "cover",
     ...flexDiv,
   },
+};
+
+export const cartStyle = {
+  cardAction: {
+    height: "12rem",
+    ...flexDiv,
+  },
+  cardMedia: {
+    height: "11rem",
+    objectFit: "cover",
+  },
+  IconButton: {
+    color: "white",
+    fontSize: "60%",
+    backgroundColor: "grey",
+    fontWeight: "400",
+    padding: "2%",
+  },
+  cardStyle: {
+    width: "75%",
+    marginTop: "1%",
+  },
+  priceText: {
+    fontSize: "25px",
+    color: "white",
+    marginTop: "2%",
+  },
+  detailsText: {
+    fontSize: "20px",
+    color: "white",
+  },
+  boxStyle: {
+    height: "20rem",
+    backgroundColor: "#00111c",
+    padding: "5%",
+  },
+  imageStyle: { height: "100%", width: "auto" },
 };

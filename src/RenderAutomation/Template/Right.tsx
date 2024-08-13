@@ -1,3 +1,5 @@
+// import AppBusiness from "../../business/component/AppBusiness";
+import AppBusiness from "../../business/component/AppBusiness";
 import DynamicPage from "../../RenderAutomation/DynamicPage";
 
 const Right = () => {
@@ -11,6 +13,7 @@ const Right = () => {
         marginLeft: "17vw",
       }}
     >
+      {/* <AppBusiness/> */}
       <DynamicPage />
     </div>
   );

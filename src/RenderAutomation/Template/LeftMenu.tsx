@@ -17,6 +17,7 @@ import perfume from "../../assets/perfume.png";
 import poop from "../../assets/poop.png";
 import scooper from "../../assets/poop-scooper.png";
 import spray from "../../assets/spray.png";
+import addProduct from "../../assets/add-product.png";
 import { useState } from "react";
 import {
   CustomButton,
@@ -69,6 +70,9 @@ interface SubMenuItem {
 
 export default function LeftMenu() {
   const [isExpanded, setIsExpanded] = useState("");
+
+  // Todo create a field in redux which state user using business account or not
+  const business = true;
 
   const version = "0.0.1";
 
@@ -126,45 +130,18 @@ export default function LeftMenu() {
     ],
   };
 
-  return (
-    <div
-      style={{
-        backgroundColor: "#00111c",
-        flex: "1 1 auto",
-        display: "flex",
-        flexDirection: "column",
-        width: "17vw",
-        marginLeft: "0%",
-        height: "92vh",
-        color: "white",
-        padding: "0",
-      }}
-    >
-      <Container
-        style={{
-          height: "100%",
-          width: "100%",
-          padding: "0",
-          marginTop: "2%",
-        }}
-      >
-        <Link to={"/"}>
-          <CustomButton
-          >
-            <div style={customButtonContainer}>
-              <img
-                src={homeIcon}
-                alt="Home Icon"
-                style={{
-                  height: "1.6em",
-                  margin: "0% 2% 1% 6%",
-                }}
-              />
-              Home
-            </div>
-          </CustomButton>
-        </Link>
+  const businessMenu = [
+    {
+      header: "Add Product",
+      image: addProduct,
+      name: "add_product",
+      path: "/business/add_product",
+    },
+  ];
 
+  const render = () => {
+    return (
+      <>
         {menu.map((menuItem, index) => (
           <CustomAccordion
             key={index}
@@ -194,7 +171,7 @@ export default function LeftMenu() {
               <CustomAccordionDetails
                 key={subIndex}
                 style={{
-                  borderRadius: subIndex == 2 ? "0px 0px 10px 10px" : "0px",
+                  borderRadius: subIndex === 2 ? "0px 0px 10px 10px" : "0px",
                 }}
               >
                 <Link to={subMenuItem.path}>
@@ -216,6 +193,72 @@ export default function LeftMenu() {
             ))}
           </CustomAccordion>
         ))}
+      </>
+    );
+  };
+
+  const renderBusiness = () => {
+    return (
+      <>
+        {businessMenu.map((obj, index) => (
+          <Link to={obj.path} key={index}>
+            <CustomButton>
+              <div style={customButtonContainer}>
+                <img
+                  src={obj.image}
+                  alt={`${obj.header} Icon`}
+                  style={{
+                    height: "1.6em",
+                    margin: "0% 3% 1% 5%",
+                  }}
+                />
+                {obj.header}
+              </div>
+            </CustomButton>
+          </Link>
+        ))}
+      </>
+    );
+  };
+
+  return (
+    <div
+      style={{
+        backgroundColor: "#00111c",
+        flex: "1 1 auto",
+        display: "flex",
+        flexDirection: "column",
+        width: "17vw",
+        marginLeft: "0%",
+        height: "92vh",
+        color: "white",
+        padding: "0",
+      }}
+    >
+      <Container
+        style={{
+          height: "100%",
+          width: "100%",
+          padding: "0",
+          marginTop: "2%",
+        }}
+      >
+        <Link to={"/"}>
+          <CustomButton>
+            <div style={customButtonContainer}>
+              <img
+                src={homeIcon}
+                alt="Home Icon"
+                style={{
+                  height: "1.6em",
+                  margin: "0% 2% 1% 6%",
+                }}
+              />
+              Home
+            </div>
+          </CustomButton>
+        </Link>
+        {!business ? renderBusiness() : render()}
         <div style={flexCenter}>
           <div style={greyLine}></div>
         </div>

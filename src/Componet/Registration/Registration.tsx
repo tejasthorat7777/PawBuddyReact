@@ -21,7 +21,7 @@ import { NotFound } from "../../Lottie/lottieComponent/NotFound";
 import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { SendButton } from "../../commonFiles/commonComponents";
+import { SendButton } from "../../commonFiles/SendButton";
 import { generateRandomUserId } from "../../FutureUse/commonFunctions";
 
 const BaseSelect = styled(Select)(() => ({
@@ -65,7 +65,9 @@ export default function Registration() {
 
   useEffect(() => {}, [userData]);
 
-  const sendData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const sendData = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     try {
       event.preventDefault();
       setIsloading(true);
@@ -75,7 +77,7 @@ export default function Registration() {
       }, 3000);
       setFormSend(true);
     } catch (error) {
-      console.log("Error>>>>", error)
+      console.log("Error>>>>", error);
       setIsloading(false);
       setUploadError(true);
     }
@@ -301,7 +303,7 @@ export default function Registration() {
                     </RadioGroup>
                   </FormControl>
                   <FormControl
-                  data-testid="selectForm"
+                    data-testid="selectForm"
                     sx={{
                       maxWidth: "50%",
                     }}
@@ -321,7 +323,7 @@ export default function Registration() {
                       onChange={(event) => {
                         setUserData({
                           ...userData,
-                          city: event.target.value as string
+                          city: event.target.value as string,
                         });
                       }}
                     >
