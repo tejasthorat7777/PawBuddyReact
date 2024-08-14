@@ -27,13 +27,30 @@ import DoneIcon from "@mui/icons-material/Done";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductData } from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
 
 const Home = () => {
+
+  const [data,setData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const getData = await axios.get("http://localhost:3000/getProducts");
+      const data = getData.data;
+      setData(data);
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
+
+  console.log("data>>>",data)
+
+  const imgData = data?[0];
+
   const rowCard1: ProductData[] = [
     {
       productId: "1",
@@ -182,6 +199,10 @@ const Home = () => {
       rating: 1,
     },
   ];
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;

@@ -17,6 +17,8 @@ import { SendButton } from "../../commonFiles/SendButton";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
+import Buffer from "buffer"
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -61,19 +63,13 @@ const AppBusiness = () => {
   const dumpProduct = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    // try {
-    //   event.preventDefault();
-    //   setIsloading(true);
-    //   await axios.post("http://localhost:3000/sendUsersInfo", userData);
-    //   setTimeout(() => {
-    //     setIsloading(false);
-    //   }, 3000);
-    //   setFormSend(true);
-    // } catch (error) {
-    //   console.log("Error>>>>", error);
-    //   setIsloading(false);
-    //   setUploadError(true);
-    // }
+    try {
+      console.log("addProduct????",addProduct)
+      event.preventDefault();
+      await axios.post("http://localhost:3000/addProduct", addProduct);
+    } catch (error) {
+      console.log("Error>>>>", error);
+    }
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

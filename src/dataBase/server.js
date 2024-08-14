@@ -4,12 +4,14 @@ import { UserInfo } from "./modal/userInfo.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import { wishlistInfo } from "./modal/wishlist.js";
+import { AddProduct } from "./modal/addProduct.js";
 
 const server = express();
 const PORT = 3000;
 server.use(cors());
 
-server.use(bodyParser.json());
+server.use(bodyParser.json({ limit: '50mb' }));
+server.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 const dbUrl = "mongodb+srv://tejasthorat7777:pettey@pawbuddye.6avh4bl.mongodb.net/?retryWrites=true&w=majority&appName=PawBuddyE"
 try {
@@ -99,6 +101,28 @@ server.get("/wishlist/get/:customerId", async (req, res) => {
     if (!wishlist) {
       return res.status(404).json({ message: "Wishlist not found" });
     }
+    res.status(200).json(wishlist);
+  } catch (error) {
+    console.error("Error retrieving wishlist:", error);
+    res.status(500).json({ message: "Error retrieving wishlist" });
+  }
+});
+
+server.post("/addProduct", async (req, res) => {
+  const prodDetails = req.body;
+  try {
+    const newProduct = new AddProduct(prodDetails);
+    await newProduct.save();
+    res.status(200).json({ message: "Product created successfully!" });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Error submitting Product data" });
+  }
+});
+
+server.get("/getProducts", async (req, res) => {
+  try {
+    const wishlist = await AddProduct.find();
     res.status(200).json(wishlist);
   } catch (error) {
     console.error("Error retrieving wishlist:", error);
