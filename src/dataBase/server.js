@@ -4,22 +4,30 @@ import { UserInfo } from "./modal/userInfo.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import { wishlistInfo } from "./modal/wishlist.js";
-import { AddProduct } from "./modal/addProduct.js";
+import { Products } from "./modal/product.js";
 
 const server = express();
 const PORT = 3000;
 server.use(cors());
 
-server.use(bodyParser.json({ limit: '50mb' }));
-server.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+server.use(bodyParser.json({ limit: "50mb" }));
+server.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+server.use(express.json());
 
-const dbUrl = "mongodb+srv://tejasthorat7777:pettey@pawbuddye.6avh4bl.mongodb.net/?retryWrites=true&w=majority&appName=PawBuddyE"
+const dbUrl =
+  "mongodb+srv://tejasthorat7777:pettey@pawbuddye.6avh4bl.mongodb.net/?retryWrites=true&w=majority&appName=PawBuddyE";
 try {
   mongoose.connect(dbUrl);
   console.log("Connected to MongoDB");
 } catch (error) {
-  console.error("Error connecting to MongoDB:", error); 
+  console.error("Error connecting to MongoDB:", error);
 }
+
+server.listen(PORT, () => {
+  console.log(`Server is running on localhost:${PORT}`);
+});
+
+// ######################################### POST METHODS #####################################################
 
 server.post("/sendUsersInfo", async (req, res) => {
   const information = req.body;
@@ -33,27 +41,20 @@ server.post("/sendUsersInfo", async (req, res) => {
   }
 });
 
-server.get("/getUsersInfo", async (req, res) => {
-  try {
-    const users = await UserInfo.find();
-    res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ message: "Error retrieving user data" });
-  }
-});
-
 server.post("/wishlist/remove", async (req, res) => {
   try {
-    const { customerId, productId } = req.body;
+    const { customerId, prodId } = req.body;
 
     const updatedWishlist = await wishlistInfo.findOneAndUpdate(
       { customerId },
-      { $pull: { items: { productId } } },
+      { $pull: { items: { prodId } } },
       { new: true }
     );
 
-    res.status(200).json({ message: "Item removed from wishlist successfully!", wishlist: updatedWishlist });
+    res.status(200).json({
+      message: "Item removed from wishlist successfully!",
+      wishlist: updatedWishlist,
+    });
   } catch (error) {
     console.error("Error removing item from wishlist:", error);
     res.status(500).json({ message: "Error removing item" });
@@ -62,22 +63,35 @@ server.post("/wishlist/remove", async (req, res) => {
 
 server.post("/wishlist/dumped", async (req, res) => {
   try {
-    const { customerId, productId, productName, price, description, imageSource, selected } = req.body;
+    const {
+      customerId,
+      prodId,
+      prodName,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      selected,
+    } = req.body;
 
     const newItem = {
-      productId,
-      productName,
-      price,
-      description,
-      imageSource,
+      prodId,
+      prodName,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
       selected,
     };
 
     const customerWishlist = await wishlistInfo.findOne({ customerId });
-    const productExists = customerWishlist?.items.some(item => item.productId === productId);
+    const productExists = customerWishlist?.items.some(
+      (item) => item.prodId === prodId
+    );
 
     if (productExists) {
-      return res.status(200).json({ message: "Item already in wishlist", wishlist: customerWishlist });
+      return res.status(200).json({
+        message: "Item already in wishlist",
+        wishlist: customerWishlist,
+      });
     }
 
     const updatedWishlist = await wishlistInfo.findOneAndUpdate(
@@ -86,10 +100,40 @@ server.post("/wishlist/dumped", async (req, res) => {
       { upsert: true, new: true }
     );
 
-    res.status(200).json({ message: "Item added to wishlist successfully!", wishlist: updatedWishlist });
+    res.status(200).json({
+      message: "Item added to wishlist successfully!",
+      wishlist: updatedWishlist,
+    });
   } catch (error) {
     console.error("Error updating wishlist:", error);
     res.status(500).json({ message: "Error submitting item" });
+  }
+});
+
+server.post("/addProduct", async (req, res) => {
+  try {
+    const prodDetails = req.body;
+    console.log("prod>>>>",prodDetails)
+
+    const product = new Products(prodDetails);
+    await product.save();
+
+    res.status(200).json({ message: "Product added successfully!" });
+  } catch (error) {
+    console.error("Error uploading product:", error);
+    res.status(500).json({ message: "Failed to upload product" });
+  }
+});
+
+// ######################################### GET METHODS #####################################################
+
+server.get("/getUsersInfo", async (req, res) => {
+  try {
+    const users = await UserInfo.find();
+    res.json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Error retrieving user data" });
   }
 });
 
@@ -108,29 +152,12 @@ server.get("/wishlist/get/:customerId", async (req, res) => {
   }
 });
 
-server.post("/addProduct", async (req, res) => {
-  const prodDetails = req.body;
-  try {
-    const newProduct = new AddProduct(prodDetails);
-    await newProduct.save();
-    res.status(200).json({ message: "Product created successfully!" });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Error submitting Product data" });
-  }
-});
-
 server.get("/getProducts", async (req, res) => {
   try {
-    const wishlist = await AddProduct.find();
-    res.status(200).json(wishlist);
+    const getProduct = await Products.find();
+    res.status(200).json(getProduct);
   } catch (error) {
     console.error("Error retrieving wishlist:", error);
     res.status(500).json({ message: "Error retrieving wishlist" });
   }
 });
-
-server.listen(PORT, () => {
-  console.log(`Server is running on localhost:${PORT}`);
-});
-

@@ -14,14 +14,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import AddIcon from "@mui/icons-material/Add";
-import harnessCard from "../../assets/harness_copy.png";
-import collar from "../../assets/red-dog-collar.jpg";
-import scooper from "../../assets/poop-scooper2.png";
-import adultPedegree from "../../assets/adultPedegree.jpg";
-import tickShampoo from "../../assets/tickfree_shampoo_200ml_1.jpg";
-import leash from "../../assets/leashHome.jpg";
-import purinaDry from "../../assets/purinaDryFood.jpg";
-import k9Harness from "../../assets/K9Harness.jpg";
 import { homeStyle } from "../../commonFiles/commonTheme";
 import DoneIcon from "@mui/icons-material/Done";
 import { ToastContainer, toast } from "react-toastify";
@@ -34,188 +26,31 @@ import { RootState } from "../../redux/store/store";
 import axios from "axios";
 
 const Home = () => {
+  const user = useSelector((state: RootState) => state.finalState.user);
+  const customerId = user.userId;
 
-  const [data,setData] = useState(null);
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<string[]>([]);
+  const productsPerPage = 8;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = async () => {
     try {
       const getData = await axios.get("http://localhost:3000/getProducts");
       const data = getData.data;
-      setData(data);
+      setProducts(data);
     } catch (error) {
       console.log("error ", error);
     }
   };
 
-  console.log("data>>>",data)
-
-  const imgData = data?[0];
-
-  const rowCard1: ProductData[] = [
-    {
-      productId: "1",
-      prouctName: "Harness",
-      imageSource: harnessCard,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "2",
-      prouctName: "Collar",
-      imageSource: collar,
-      price: "259",
-      selected: false,
-      rating: 1,
-      description:
-        "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
-    },
-    {
-      productId: "3",
-      prouctName: "Poo Scooper",
-      imageSource: scooper,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "4",
-      prouctName: "Pedegree",
-      imageSource: adultPedegree,
-      price: "699",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "5",
-      prouctName: "Tickfree",
-      imageSource: tickShampoo,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "6",
-      prouctName: "purina dry food",
-      imageSource: purinaDry,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "7",
-      prouctName: "K9 Harness",
-      description: "",
-      imageSource: k9Harness,
-      price: "699",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "8",
-      prouctName: "Red leash",
-      imageSource: leash,
-      price: "259",
-      description: "",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "9",
-      prouctName: "Pedegree",
-      imageSource: adultPedegree,
-      price: "699",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "10",
-      prouctName: "Tickfree",
-      imageSource: tickShampoo,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "11",
-      prouctName: "purina dry food",
-      imageSource: purinaDry,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "12",
-      prouctName: "K9 Harness",
-      description: "",
-      imageSource: k9Harness,
-      price: "699",
-      rating: 1,
-      selected: false,
-    },
-    {
-      productId: "13",
-      prouctName: "Red leash",
-      imageSource: leash,
-      price: "259",
-      description: "",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "14",
-      prouctName: "Harness",
-      imageSource: harnessCard,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "15",
-      prouctName: "Collar",
-      imageSource: collar,
-      price: "259",
-      selected: false,
-      rating: 1,
-      description:
-        "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
-    },
-    {
-      productId: "16",
-      prouctName: "Poo Scooper",
-      imageSource: scooper,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-  ];
-
   useEffect(() => {
     fetchData();
   }, []);
 
-  const user = useSelector((state: RootState) => state.finalState.user);
-  const customerId = user.userId;
-
-  // this row will be from DB for product details
-  const [firstRowcard, setFirstRowcard] = useState(rowCard1);
-  const [wishlistItems, setWishlistItems] = useState<string[]>([]);
-  const productsPerPage = 8;
-  const [currentPage, setCurrentPage] = useState(1);
-
   const addTocart = (index: number, isFirstRow: ProductData[]) => {
     if (isFirstRow) {
-      setFirstRowcard((prevState) =>
+      setProducts((prevState) =>
         prevState.map((item, idx) =>
           idx === index ? { ...item, selected: !item.selected } : item
         )
@@ -223,7 +58,7 @@ const Home = () => {
     }
     toast(
       `${
-        firstRowcard[index].selected ? "Item removed from" : "Item added to"
+        products[index].selected ? "Item removed from" : "Item added to"
       } Cart`
     );
   };
@@ -237,7 +72,7 @@ const Home = () => {
 
       try {
         await axios.post("http://localhost:3000/wishlist/dumped", dumpedData);
-        const itemId = `addedtoWishList${item.productId}`;
+        const itemId = `addedtoWishList${item.prodId}`;
 
         if (!wishlistItems.includes(itemId)) {
           setWishlistItems([...wishlistItems, itemId]);
@@ -289,8 +124,8 @@ const Home = () => {
   const currentProducts = useMemo(() => {
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    return firstRowcard.slice(indexOfFirstProduct, indexOfLastProduct);
-  }, [firstRowcard, currentPage]);
+    return products.slice(indexOfFirstProduct, indexOfLastProduct);
+  }, [products, currentPage]);
 
   return (
     <div style={{ ...homeStyle.outerDiv, paddingLeft: "5%" }}>
@@ -300,49 +135,47 @@ const Home = () => {
             <Card
               sx={{ maxWidth: "75%", maxHeight: "100%" }}
               key={index}
-              data-testid={`product_${card.productId}`}
+              data-testid={`product_${card.prodId}`}
             >
               <CardActionArea style={{ height: "10rem", padding: 10 }}>
-                <CardMedia sx={homeStyle.cardMedia} title={card.prouctName}>
+                <CardMedia sx={homeStyle.cardMedia} title={card.prodName}>
                   <img
-                    src={card.imageSource}
+                    src={card.prodImg}
                     style={{ height: "100%", width: "auto" }}
                   />
                 </CardMedia>
               </CardActionArea>
               <CardContent sx={homeStyle.cardContent}>
-                <Typography>{card.prouctName}</Typography>
-                <Typography>{`₹ ${card.price}.00`}</Typography>
+                <Typography>{card.prodName}</Typography>
+                <Typography>{`₹ ${card.prodPrice}.00`}</Typography>
               </CardContent>
               <CardActions sx={{ backgroundColor: "#00111c" }}>
                 <Button
-                  data-testid={`share_${card.productId}`}
+                  data-testid={`share_${card.prodId}`}
                   style={homeStyle.IconButton}
-                  onClick={() => handleShare(card.prouctName, card.price)}
+                  onClick={() => handleShare(card.prodName, card.prodPrice)}
                 >
                   <ShareOutlinedIcon />
                 </Button>
                 <Button
-                  data-testid={`wishlist_${card.productId}`}
+                  data-testid={`wishlist_${card.prodId}`}
                   onClick={() => addToWishlist(card)}
                   style={homeStyle.IconButton}
                 >
-                  {wishlistItems.includes(
-                    `addedtoWishList${card.productId}`
-                  ) ? (
+                  {wishlistItems.includes(`addedtoWishList${card.prodId}`) ? (
                     <FavoriteIcon
                       style={{ color: "red" }}
-                      data-testid={`FavoriteIcon_${card.productId}`}
+                      data-testid={`FavoriteIcon_${card.prodId}`}
                     />
                   ) : (
                     <FavoriteBorderOutlinedIcon
-                      data-testid={`FavoriteBorderOutlinedIcon_${card.productId}`}
+                      data-testid={`FavoriteBorderOutlinedIcon_${card.prodId}`}
                     />
                   )}
                 </Button>
                 <Button
                   onClick={() => {
-                    addTocart(index, firstRowcard);
+                    addTocart(index, products);
                   }}
                   style={homeStyle.IconButton}
                 >
@@ -357,7 +190,7 @@ const Home = () => {
         <Pagination
           shape="rounded"
           color="primary"
-          count={Math.ceil(firstRowcard.length / productsPerPage)}
+          count={Math.ceil(products.length / productsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
           sx={{

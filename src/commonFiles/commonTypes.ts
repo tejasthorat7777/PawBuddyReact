@@ -29,17 +29,23 @@ export type SubmitButtonProps = {
   text: string;
 };
 
-export type ProductData = {
-  productId: string;
-  prouctName: string;
-  price: string;
-  description: string;
-  imageSource: string;
-  selected: boolean;
-  rating: number;
-};
 
 export type State = {
   status: boolean;
   user: UserData;
+};
+
+export type ProductData = {
+  prodId: string;
+  prodName: string;
+  prodDiscrip: string;
+  prodPrice: string;
+  pordQuant: string;
+  prodDiscount: string;
+  prodBrand: string;
+  prodWeight: string;
+  prodConditon: string;
+  prodImg: string;
+  selected: boolean;
+  rating: number;
 };

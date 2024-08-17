@@ -8,11 +8,11 @@ const wishlistSchema = new mongoose.Schema({
   },
   items: [
     {
-      productId: String,
-      prouctName: String,
-      price: String,
-      description: String,
-      imageSource: String,
+      prodId: String,
+      prodName: String,
+      prodDiscrip: String,
+      prodImg: String,
+      prodPrice: String,
       selected: Boolean,
     },
   ],

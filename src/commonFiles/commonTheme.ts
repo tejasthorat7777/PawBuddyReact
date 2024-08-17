@@ -4,9 +4,11 @@ import {
   AccordionDetails,
   Accordion,
   MenuItem,
-  styled
+  styled,
 } from "@mui/material";
 import loginImage from "../assets/login.jpg";
+
+export const h100w100 = { height: "100%", width: "100%" };
 
 export const CustomButton = styled(Button)({
   width: "100%",
@@ -199,4 +201,63 @@ export const cartStyle = {
     padding: "5%",
   },
   imageStyle: { height: "100%", width: "auto" },
+};
+
+export const businessAddproduct = {
+  outerDiv: {
+    backgroundColor: "#00111c",
+    height: "80%",
+    padding: "2%",
+    marginTop: "2%",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  imgOuter: {
+    height: "65%",
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: "10px",
+  },
+  h100w100: { height: "100%", width: "100%" },
+  uploadBtnDiv: {
+    ...flexDiv,
+    ...h100w100,
+  },
+  uploadBtn:{
+    borderRadius: "10px",
+    ...h100w100
+  },
+  productBrand:{
+    width: "45%",
+    backgroundColor: "white",
+    height: "10%",
+    marginTop: "5%",
+    color: "black",
+    marginRight: "5%",
+    borderRadius: "5px",
+  },
+  prodName:{
+    width: "100%",
+    backgroundColor: "white",
+    height: "10%",
+    color: "black",
+    borderRadius: "5px",
+  },
+  prodDiscrip:{
+    marginTop: "3%",
+    height: "40%",
+    width: "100%",
+    backgroundColor: "white",
+    padding: "2%",
+    fontFamily: "cursive",
+    borderRadius: "5px",
+  },
+  prodPriceQuantWeight:{
+    width: "45%",
+    backgroundColor: "white",
+    height: "10%",
+    marginTop: "3%",
+    color: "black",
+    borderRadius: "5px",
+  }
 };

@@ -36,10 +36,11 @@ const Wishlist = () => {
       const getData = await axios.get(
         `http://localhost:3000/wishlist/get/${customerId}`
       );
-      if (!getData.data.items) {
+      if (getData.data.items.length > 0) {
+        setCardData(getData.data.items);
+      } else {
         setEmptylist(true);
       }
-      setCardData(getData.data.items);
     } catch (error) {
       setFetchError(true);
       console.log("error>>>", error);
@@ -52,15 +53,13 @@ const Wishlist = () => {
     }
   }, [customerId]);
 
-  const handleXmark = async (customerId: string, productId: string) => {
+  const handleXmark = async (customerId: string, prodId: string) => {
     try {
       await axios.post("http://localhost:3000/wishlist/remove", {
         customerId,
-        productId,
+        prodId,
       });
-      const newCardData = cardData.filter(
-        (item) => item.productId !== productId
-      );
+      const newCardData = cardData.filter((item) => item.prodId !== prodId);
       setCardData(newCardData);
     } catch (error) {
       toast(`Sorry, Cannot remove Right Now...`);
@@ -92,7 +91,7 @@ const Wishlist = () => {
           {cardData?.map((card, index) => (
             <Grid item xs={2} sm={4} key={index}>
               <Card
-                data-testid={`product_${card.productId}`}
+                data-testid={`product_${card.prodId}`}
                 sx={{
                   display: "flex",
                   height: "10rem",
@@ -101,14 +100,14 @@ const Wishlist = () => {
                 }}
               >
                 <IconButton
-                  data-testid={`Xbutton_${card.productId}`}
+                  data-testid={`Xbutton_${card.prodId}`}
                   sx={{
                     position: "absolute",
                     top: -10,
                     right: -10,
                     color: "white",
                   }}
-                  onClick={() => handleXmark(customerId, card.productId)}
+                  onClick={() => handleXmark(customerId, card.prodId)}
                 >
                   <CloseIcon />
                 </IconButton>
@@ -120,8 +119,8 @@ const Wishlist = () => {
                 >
                   <CardMedia sx={{ ...homeStyle.cardMedia, padding: "1%" }}>
                     <img
-                      src={card?.imageSource}
-                      style={{ height: "80%", width: "80%" }}
+                      src={card?.prodImg}
+                      style={{ height: "90%", width: "80%" }}
                     />
                   </CardMedia>
                 </CardActionArea>
@@ -137,56 +136,57 @@ const Wishlist = () => {
                   }}
                 >
                   <Typography
-                    sx={{
+                    style={{
                       fontSize: "14px",
                       overflow: "hidden",
                       display: "-webkit-box",
                       WebkitLineClamp: 3,
                       WebkitBoxOrient: "vertical",
                       maxWidth: "100%",
+                      textOverflow: "ellipsis",
                     }}
                   >
-                    {card?.description}
+                    {card?.prodDiscrip}
                   </Typography>
                   <Typography
                     style={{
                       fontSize: "18px",
                     }}
-                  >{`₹ ${card?.price}.00`}</Typography>
+                  >{`₹ ${card?.prodPrice}.00`}</Typography>
 
                   <CardActions
                     sx={{ padding: "0", marginTop: "5%", width: "100%" }}
                   >
                     <Button
-                      data-testid={`addToCart${card?.productId}`}
+                      data-testid={`addToCart${card?.prodId}`}
                       style={{
                         ...homeStyle.IconButton,
                         fontSize: "70%",
                         backgroundColor:
-                          hoveredButton === `addToCart${card?.productId}`
+                          hoveredButton === `addToCart${card?.prodId}`
                             ? "#e85d04"
                             : "#ffbe0b",
                       }}
                       onMouseEnter={() =>
-                        setHoveredButton(`addToCart${card?.productId}`)
+                        setHoveredButton(`addToCart${card?.prodId}`)
                       }
                       onMouseLeave={() => setHoveredButton(null)}
                     >
                       Add to Cart
                     </Button>
                     <Button
-                      data-testid={`buyNow${card?.productId}`}
+                      data-testid={`buyNow${card?.prodId}`}
                       style={{
                         ...homeStyle.IconButton,
                         fontSize: "70%",
                         marginLeft: "20%",
                         backgroundColor:
-                          hoveredButton === `buyNow${card?.productId}`
+                          hoveredButton === `buyNow${card?.prodId}`
                             ? "#e85d04"
                             : "#ffbe0b",
                       }}
                       onMouseEnter={() =>
-                        setHoveredButton(`buyNow${card?.productId}`)
+                        setHoveredButton(`buyNow${card?.prodId}`)
                       }
                       onMouseLeave={() => setHoveredButton(null)}
                     >
