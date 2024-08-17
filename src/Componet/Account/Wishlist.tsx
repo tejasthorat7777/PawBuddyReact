@@ -62,7 +62,9 @@ const Wishlist = () => {
       const newCardData = cardData.filter((item) => item.prodId !== prodId);
       setCardData(newCardData);
     } catch (error) {
-      toast(`Sorry, Cannot remove Right Now...`);
+      toast("Error updating wishlist. Please try again later.", {
+        autoClose: 1000,
+      });
       console.error("Error:", error);
     }
   };

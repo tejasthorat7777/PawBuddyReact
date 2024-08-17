@@ -29,7 +29,6 @@ export type SubmitButtonProps = {
   text: string;
 };
 
-
 export type State = {
   status: boolean;
   user: UserData;
@@ -48,4 +47,13 @@ export type ProductData = {
   prodImg: string;
   selected: boolean;
   rating: number;
+};
+
+export type WishListData = {
+  prodId: string;
+  prodName: string;
+  prodDiscrip: string;
+  prodImg: string;
+  prodPrice: string;
+  selected: boolean;
 };

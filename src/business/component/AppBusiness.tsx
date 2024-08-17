@@ -79,7 +79,7 @@ const AddProduct = () => {
       event.preventDefault();
       await axios.post("http://localhost:3000/addProduct", addProduct);
     } catch (error) {
-      // TODO handle error shoe lottie saying error while uploading data or somehing went wrong
+      // TODO handle error show lottie saying error while uploading data or somehing went wrong
       console.log("Error>>>>", error);
     } finally {
       setIsLoading(false);
