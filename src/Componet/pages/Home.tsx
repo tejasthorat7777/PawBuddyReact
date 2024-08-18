@@ -21,10 +21,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { useEffect, useMemo, useState } from "react";
-import { ProductData, WishListData } from "../../commonFiles/commonTypes";
+import {
+  CartListData,
+  ProductData,
+  WishListData,
+} from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
+import { isItemExists } from "../../FutureUse/commonFunctions";
 
 const Home = () => {
   const user = useSelector((state: RootState) => state.finalState.user);
@@ -32,6 +37,7 @@ const Home = () => {
 
   const [products, setProducts] = useState<ProductData[]>([]);
   const [wishlistItems, setWishlistItems] = useState<WishListData[]>([]);
+  const [cartList, setCartList] = useState<CartListData[]>([]);
   const productsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +66,19 @@ const Home = () => {
     }
   };
 
+  const getCartList = async (customerId: string) => {
+    try {
+      const getData = await axios.get(
+        `http://localhost:3000/cart/get/${customerId}`
+      );
+      if (getData.data.items.length > 0) {
+        setCartList(getData.data.items);
+      }
+    } catch (error) {
+      console.log("error>>>", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -67,6 +86,7 @@ const Home = () => {
         await getProducts();
         if (customerId) {
           await getWishList(customerId);
+          await getCartList(customerId);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -83,27 +103,42 @@ const Home = () => {
     return () => {
       setProducts([]);
       setWishlistItems([]);
+      setCartList([]);
     };
   }, [customerId]);
 
-  const isExistitemWishlist = (id: string) => {
-    const itemExists = wishlistItems.some(
-      (wishlistItem) => wishlistItem.prodId === id
-    );
-    return itemExists;
-  };
-
-  const addTocart = (index: number, isFirstRow: ProductData[]) => {
-    if (isFirstRow) {
-      setProducts((prevState) =>
-        prevState.map((item, idx) =>
-          idx === index ? { ...item, selected: !item.selected } : item
-        )
-      );
+  const addTocart = async (item: ProductData) => {
+    if (!customerId) {
+      toast("Please log in to add items to your Cart.", {
+        autoClose: 1000,
+      });
+      return;
     }
-    toast(
-      `${products[index].selected ? "Item removed from" : "Item added to"} Cart`
-    );
+
+    const exists = isItemExists(cartList, item.prodId);
+
+    try {
+      if (!exists) {
+        const dumpedData = { ...item, customerId };
+        await axios.post("http://localhost:3000/cart/dumped", dumpedData);
+        setCartList((prevCartList) => [...prevCartList, item]);
+        toast("Item added to Cart", { autoClose: 1000 });
+      } else {
+        await axios.post("http://localhost:3000/cart/remove", {
+          customerId,
+          prodId: item.prodId,
+        });
+        setCartList((prevCartList) =>
+          prevCartList.filter((cartList) => cartList.prodId !== item.prodId)
+        );
+        toast("Item removed from Cart", { autoClose: 1000 });
+      }
+    } catch (error) {
+      toast("Error updating Cart. Please try again later.", {
+        autoClose: 1000,
+      });
+      console.error("Error:", error);
+    }
   };
 
   const addToWishlist = async (item: ProductData) => {
@@ -114,7 +149,7 @@ const Home = () => {
       return;
     }
 
-    const exists = isExistitemWishlist(item.prodId);
+    const exists = isItemExists(wishlistItems, item.prodId);
 
     try {
       if (!exists) {
@@ -212,7 +247,7 @@ const Home = () => {
                       onClick={() => addToWishlist(card)}
                       style={homeStyle.IconButton}
                     >
-                      {isExistitemWishlist(card.prodId) ? (
+                      {isItemExists(wishlistItems, card.prodId) ? (
                         <FavoriteIcon
                           style={{ color: "red" }}
                           data-testid={`FavoriteIcon_${card.prodId}`}
@@ -225,11 +260,15 @@ const Home = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        addTocart(index, products);
+                        addTocart(card);
                       }}
                       style={homeStyle.IconButton}
                     >
-                      {card.selected ? <DoneIcon /> : <AddIcon />}
+                      {isItemExists(cartList, card.prodId) ? (
+                        <DoneIcon />
+                      ) : (
+                        <AddIcon />
+                      )}
                     </Button>
                   </CardActions>
                 </Card>

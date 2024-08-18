@@ -8,7 +8,7 @@ const StarRating = ({ rating = 0, style = {} }) => {
   });
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex",scale:"0.9" }}>
       {Array.from({ length: 5 }, (_, index) => (
         <span key={index} style={starStyle(index < rating)}>
           &#9733;

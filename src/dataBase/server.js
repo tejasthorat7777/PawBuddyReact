@@ -5,6 +5,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { wishlistInfo } from "./modal/wishlist.js";
 import { Products } from "./modal/product.js";
+import { cartList } from "./modal/cart.js";
 
 const server = express();
 const PORT = 3000;
@@ -113,7 +114,6 @@ server.post("/wishlist/dumped", async (req, res) => {
 server.post("/addProduct", async (req, res) => {
   try {
     const prodDetails = req.body;
-    console.log("prod>>>>",prodDetails)
 
     const product = new Products(prodDetails);
     await product.save();
@@ -122,6 +122,68 @@ server.post("/addProduct", async (req, res) => {
   } catch (error) {
     console.error("Error uploading product:", error);
     res.status(500).json({ message: "Failed to upload product" });
+  }
+});
+
+server.post("/cart/dumped", async (req, res) => {
+  try {
+    const { customerId, prodId, prodPrice, prodDiscrip, prodImg, rating } =
+      req.body;
+
+    const newItem = {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      rating,
+    };
+
+    const customerCartList = await cartList.findOne({ customerId });
+    const productExists = customerCartList?.items.some(
+      (item) => item.prodId === prodId
+    );
+
+    if (productExists) {
+      return res.status(200).json({
+        message: "Item already in wishlist",
+        cartList: customerCartList,
+      });
+    }
+
+    const updatedCartlist = await cartList.findOneAndUpdate(
+      { customerId },
+      { $push: { items: newItem } },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      message: "Item added to wishlist successfully!",
+      cartList: updatedCartlist,
+    });
+  } catch (error) {
+    console.error("Error updating wishlist:", error);
+    res.status(500).json({ message: "Error submitting item" });
+  }
+});
+
+server.post("/cart/remove", async (req, res) => {
+  try {
+    const { customerId, prodId } = req.body;
+
+    const updateCartlist = await cartList.findOneAndUpdate(
+      { customerId },
+      { $pull: { items: { prodId } } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Item removed from wishlist successfully!",
+      cartlist: updateCartlist,
+    });
+  } catch (error) {
+    console.error("Error removing item from wishlist:", error);
+    res.status(500).json({ message: "Error removing item" });
   }
 });
 
@@ -156,6 +218,21 @@ server.get("/getProducts", async (req, res) => {
   try {
     const getProduct = await Products.find();
     res.status(200).json(getProduct);
+  } catch (error) {
+    console.error("Error retrieving wishlist:", error);
+    res.status(500).json({ message: "Error retrieving wishlist" });
+  }
+});
+
+server.get("/cart/get/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const cartListItems = await cartList.findOne({ customerId });
+    if (!cartListItems) {
+      return res.status(404).json({ message: "Wishlist not found" });
+    }
+    res.status(200).json(cartListItems);
   } catch (error) {
     console.error("Error retrieving wishlist:", error);
     res.status(500).json({ message: "Error retrieving wishlist" });

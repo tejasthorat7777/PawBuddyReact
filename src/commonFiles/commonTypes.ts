@@ -57,3 +57,11 @@ export type WishListData = {
   prodPrice: string;
   selected: boolean;
 };
+
+export type CartListData = {
+  prodId: string;
+  prodDiscrip: string;
+  prodImg: string;
+  prodPrice: string;
+  rating: number;
+};

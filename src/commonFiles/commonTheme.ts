@@ -191,15 +191,6 @@ export const cartStyle = {
     color: "white",
     marginTop: "2%",
   },
-  detailsText: {
-    fontSize: "20px",
-    color: "white",
-  },
-  boxStyle: {
-    height: "20rem",
-    backgroundColor: "#00111c",
-    padding: "5%",
-  },
   imageStyle: { height: "100%", width: "auto" },
 };
 
