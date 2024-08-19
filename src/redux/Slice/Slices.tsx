@@ -13,10 +13,9 @@ const initialState: State = {
     username: "",
     userId: "",
     gender: "",
-    city: "",
-    password: "",
-  },
-  itemWishlist: [],
+    acc_type: "",
+    password: ""
+  }
 };
 
 const userSlice = createSlice({

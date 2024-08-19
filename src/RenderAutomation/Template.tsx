@@ -1,7 +1,6 @@
 import Left from "./Left";
-import Navbar from "./Template/Navbar";
+import NavBar from "./NavBar";
 import Right from "./Template/Right";
-
 
 const Template = () => {
   return (
@@ -14,7 +13,7 @@ const Template = () => {
         flexDirection: "column",
       }}
     >
-      <Navbar />
+      <NavBar />
       <Left />
       <Right />
     </main>

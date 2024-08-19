@@ -8,7 +8,7 @@ export type ProfileType =
   | "/login";
 
 export type UserData = {
-  city: string;
+  acc_type: string;
   gender: string;
   name: string;
   age: string;

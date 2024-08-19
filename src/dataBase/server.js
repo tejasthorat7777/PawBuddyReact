@@ -32,6 +32,7 @@ server.listen(PORT, () => {
 
 server.post("/sendUsersInfo", async (req, res) => {
   const information = req.body;
+  console.log("Information>>>>",information)
   try {
     const newUser = new UserInfo(information);
     await newUser.save();

@@ -113,7 +113,7 @@ const Cart = () => {
                 ...flexDiv,
               }}
             >
-              Sorry We are unable to get your wishlist
+              Sorry We are unable to get your Items
               <FetchErrorEmptyCart />
             </div>
           ) : cartList.length ? (
