@@ -46,7 +46,7 @@ const Wishlist = () => {
       console.log("error>>>", error);
     } finally {
       setIsLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {

@@ -20,7 +20,7 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
-import { generateProductId } from "../../FutureUse/commonFunctions";
+import { generateProductId } from "../../commonFiles/commonFunctions";
 import { ProductData } from "../../commonFiles/commonTypes";
 
 const VisuallyHiddenInput = styled("input")({

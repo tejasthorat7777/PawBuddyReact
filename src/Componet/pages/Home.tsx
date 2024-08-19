@@ -29,7 +29,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
-import { isItemExists } from "../../FutureUse/commonFunctions";
+import { isItemExists } from "../../commonFiles/commonFunctions";
 
 const Home = () => {
   const user = useSelector((state: RootState) => state.finalState.user);
