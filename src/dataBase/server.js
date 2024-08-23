@@ -32,7 +32,7 @@ server.listen(PORT, () => {
 
 server.post("/sendUsersInfo", async (req, res) => {
   const information = req.body;
-  console.log("Information>>>>",information)
+  console.log("Information>>>>", information);
   try {
     const newUser = new UserInfo(information);
     await newUser.save();
@@ -114,10 +114,10 @@ server.post("/wishlist/dumped", async (req, res) => {
 
 server.post("/addProduct", async (req, res) => {
   try {
-    const prodDetails = req.body;
+    const { customerId, products } = req.body;
 
-    const product = new Products(prodDetails);
-    await product.save();
+    const newProduct = new Products({ customerId, products });
+    await newProduct.save();
 
     res.status(200).json({ message: "Product added successfully!" });
   } catch (error) {
