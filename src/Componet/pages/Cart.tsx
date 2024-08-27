@@ -5,24 +5,29 @@ import {
   CardActionArea,
   CardActions,
   CardMedia,
+  CircularProgress,
   Grid,
   Typography,
 } from "@mui/material";
-import { cartStyle, flexDiv, homeStyle } from "../../commonFiles/commonTheme";
+import {
+  cartStyle,
+  flexDiv,
+  h100w100,
+  homeStyle,
+} from "../../commonFiles/commonTheme";
 import StarRating from "../../commonFiles/StartRatins";
 import Quantity from "../../commonFiles/Quantity";
-import harnessCard from "../../assets/harness_copy.png";
-import collar from "../../assets/red-dog-collar.jpg";
-import scooper from "../../assets/poop-scooper2.png";
-import adultPedegree from "../../assets/adultPedegree.jpg";
-import tickShampoo from "../../assets/tickfree_shampoo_200ml_1.jpg";
-import leash from "../../assets/leashHome.jpg";
-import purinaDry from "../../assets/purinaDryFood.jpg";
-import k9Harness from "../../assets/K9Harness.jpg";
-import { ProductData } from "../../commonFiles/commonTypes";
+import { CartListData } from "../../commonFiles/commonTypes";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styles from "../../commonFiles/commonCss/toast.module.css";
+import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmptyCart";
+import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
 
 const orderButton = {
   borderRadius: "0",
@@ -34,188 +39,184 @@ const orderButton = {
 const Cart = () => {
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
-  const des =
-    "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training";
+  const [cartList, setCartList] = useState<CartListData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
 
-  const rowCard1: ProductData[] = [
-    {
-      productId: "2",
-      prouctName: "Collar",
-      imageSource: collar,
-      price: "259",
-      selected: false,
-      rating: 1,
-      description:
-        "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
-    },
-    {
-      productId: "3",
-      prouctName: "Poo Scooper",
-      imageSource: scooper,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "4",
-      prouctName: "Pedegree",
-      imageSource: adultPedegree,
-      price: "699",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "5",
-      prouctName: "Tickfree",
-      imageSource: tickShampoo,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "6",
-      prouctName: "purina dry food",
-      imageSource: purinaDry,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "7",
-      prouctName: "K9 Harness",
-      description: "",
-      imageSource: k9Harness,
-      price: "699",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "8",
-      prouctName: "Red leash",
-      imageSource: leash,
-      price: "259",
-      description: "",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "9",
-      prouctName: "Pedegree",
-      imageSource: adultPedegree,
-      price: "699",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "10",
-      prouctName: "Tickfree",
-      imageSource: tickShampoo,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "11",
-      prouctName: "purina dry food",
-      imageSource: purinaDry,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "12",
-      prouctName: "K9 Harness",
-      description: "",
-      imageSource: k9Harness,
-      price: "699",
-      rating: 1,
-      selected: false,
-    },
-    {
-      productId: "13",
-      prouctName: "Red leash",
-      imageSource: leash,
-      price: "259",
-      description: "",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "14",
-      prouctName: "Harness",
-      imageSource: harnessCard,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-  ];
+  const getCartList = async (customerId: string) => {
+    try {
+      setIsLoading(true);
+      const getData = await axios.get(
+        `http://localhost:3000/cart/get/${customerId}`
+      );
+      if (getData.data.items.length > 0) {
+        setCartList(getData.data.items);
+      }
+    } catch (error) {
+      setFetchError(true);
+      console.log("error>>>", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    if (customerId) {
+      getCartList(customerId);
+    }
+  }, [customerId]);
+
+  const handleRemove = async (customerId: string, prodId: string) => {
+    try {
+      await axios.post("http://localhost:3000/cart/remove", {
+        customerId,
+        prodId,
+      });
+      const newCartList = cartList.filter((item) => item.prodId !== prodId);
+      setCartList(newCartList);
+    } catch (error) {
+      toast("Error updating wishlist. Please try again later.", {
+        autoClose: 1000,
+      });
+      console.error("Error:", error);
+    }
+  };
   return (
-    <div
-      style={{
-        ...homeStyle.outerDiv,
-        overflow: "auto",
-      }}
-    >
-      {customerId === "" ? (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            ...flexDiv,
-          }}
-        >
-          Please Login
-          <LoginRequired />
+    <>
+      {isLoading ? (
+        <div style={{ ...h100w100, ...flexDiv }}>
+          <CircularProgress />
         </div>
       ) : (
-        <Grid container spacing={2}>
-          {rowCard1.map((card, index) => (
-            <Grid item xs={2} sm={4}>
-              <Card
-                data-testid={`product_${card.productId}`}
-                style={cartStyle.cardStyle}
-                key={index}
-              >
-                <CardActionArea sx={cartStyle.cardAction}>
-                  <CardMedia sx={cartStyle.cardMedia}>
-                    <img src={card.imageSource} style={cartStyle.imageStyle} />
-                  </CardMedia>
-                </CardActionArea>
-                <Box style={cartStyle.boxStyle}>
-                  <Typography style={cartStyle.detailsText}>
-                    {card.description}
-                  </Typography>
-                  <Box style={{ ...flexDiv, justifyContent: "space-between" }}>
-                    <Typography
-                      style={cartStyle.priceText}
-                    >{`₹ ${card.price}.00`}</Typography>
-                    <StarRating rating={card.rating} />
-                  </Box>
-                  <CardActions sx={{ padding: "0", marginTop: "2%" }}>
-                    <Button style={cartStyle.IconButton}>
-                      Remove from cart
-                    </Button>
-                    <Quantity
-                      style={{ width: "50%", marginLeft: "5%", scale: "0.8" }}
-                    />
-                  </CardActions>
-                </Box>
-                <Button style={orderButton}>Place your Order</Button>
-              </Card>
+        <div
+          style={{
+            ...homeStyle.outerDiv,
+            overflow: "auto",
+          }}
+        >
+          {customerId === "" ? (
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                ...flexDiv,
+              }}
+            >
+              Please Login
+              <LoginRequired />
+            </div>
+          ) : fetchError ? (
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                ...flexDiv,
+              }}
+            >
+              Sorry We are unable to get your Items
+              <FetchErrorEmptyCart />
+            </div>
+          ) : cartList.length ? (
+            <Grid container spacing={2}>
+              {cartList.map((card, index) => (
+                <Grid item xs={2} sm={4}>
+                  <Card
+                    data-testid={`product_${card.prodId}`}
+                    style={cartStyle.cardStyle}
+                    key={index}
+                  >
+                    <CardActionArea sx={cartStyle.cardAction}>
+                      <CardMedia sx={cartStyle.cardMedia}>
+                        <img src={card.prodImg} style={cartStyle.imageStyle} />
+                      </CardMedia>
+                    </CardActionArea>
+                    <Box
+                      style={{
+                        height: "20rem",
+                        backgroundColor: "#00111c",
+                        padding: "5%",
+                        position: "relative",
+                      }}
+                    >
+                      <Typography
+                        style={{
+                          fontSize: "20px",
+                          color: "white",
+                          overflow: "hidden",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 6,
+                          WebkitBoxOrient: "vertical",
+                          maxWidth: "100%",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {card.prodDiscrip}
+                      </Typography>
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "5%",
+                        }}
+                      >
+                        <Box
+                          style={{
+                            ...flexDiv,
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography
+                            style={cartStyle.priceText}
+                          >{`₹ ${card.prodPrice}.00`}</Typography>
+                          <StarRating rating={card.rating} />
+                        </Box>
+                        <CardActions sx={{ padding: "0", marginTop: "2%" }}>
+                          <Button
+                            style={cartStyle.IconButton}
+                            onClick={() => {
+                              handleRemove(customerId, card.prodId);
+                            }}
+                          >
+                            Remove from cart
+                          </Button>
+                          <Quantity
+                            style={{
+                              width: "50%",
+                              marginLeft: "10%",
+                              scale: "0.8",
+                            }}
+                          />
+                        </CardActions>
+                      </div>
+                    </Box>
+                    <Button style={orderButton}>Place your Order</Button>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
+          ) : (
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                ...flexDiv,
+              }}
+            >
+              Your Cart is Empty
+              <EmptyCart />
+            </div>
+          )}
+          <div data-testid="toast">
+            <ToastContainer
+              position="bottom-left"
+              toastClassName={styles.toast}
+              bodyClassName={styles.body}
+              hideProgressBar={true}
+              autoClose={1000}
+            />
+          </div>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 export default Cart;

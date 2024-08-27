@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const wishlistSchema = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
   customerId: {
     type: String,
     required: true,
@@ -9,13 +9,12 @@ const wishlistSchema = new mongoose.Schema({
   items: [
     {
       prodId: String,
-      prodName: String,
       prodDiscrip: String,
       prodImg: String,
       prodPrice: String,
-      selected: Boolean,
+      rating: Number,
     },
   ],
 });
 
-export const wishlistInfo = mongoose.model("Wishlist", wishlistSchema);
+export const cartList = mongoose.model("cartList", cartSchema);

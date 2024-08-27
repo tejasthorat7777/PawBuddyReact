@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  CircularProgress,
   Container,
   Grid,
   Pagination,
@@ -14,231 +15,165 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import AddIcon from "@mui/icons-material/Add";
-import harnessCard from "../../assets/harness_copy.png";
-import collar from "../../assets/red-dog-collar.jpg";
-import scooper from "../../assets/poop-scooper2.png";
-import adultPedegree from "../../assets/adultPedegree.jpg";
-import tickShampoo from "../../assets/tickfree_shampoo_200ml_1.jpg";
-import leash from "../../assets/leashHome.jpg";
-import purinaDry from "../../assets/purinaDryFood.jpg";
-import k9Harness from "../../assets/K9Harness.jpg";
-import { homeStyle } from "../../commonFiles/commonTheme";
+import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
 import DoneIcon from "@mui/icons-material/Done";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
-import { useMemo, useState } from "react";
-import { ProductData } from "../../commonFiles/commonTypes";
+import { useEffect, useMemo, useState } from "react";
+import {
+  CartListData,
+  ProductData,
+  WishListData,
+} from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
+import { isItemExists } from "../../commonFiles/commonFunctions";
 
 const Home = () => {
-  const rowCard1: ProductData[] = [
-    {
-      productId: "1",
-      prouctName: "Harness",
-      imageSource: harnessCard,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "2",
-      prouctName: "Collar",
-      imageSource: collar,
-      price: "259",
-      selected: false,
-      rating: 1,
-      description:
-        "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
-    },
-    {
-      productId: "3",
-      prouctName: "Poo Scooper",
-      imageSource: scooper,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "4",
-      prouctName: "Pedegree",
-      imageSource: adultPedegree,
-      price: "699",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "5",
-      prouctName: "Tickfree",
-      imageSource: tickShampoo,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "6",
-      prouctName: "purina dry food",
-      imageSource: purinaDry,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "7",
-      prouctName: "K9 Harness",
-      description: "",
-      imageSource: k9Harness,
-      price: "699",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "8",
-      prouctName: "Red leash",
-      imageSource: leash,
-      price: "259",
-      description: "",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "9",
-      prouctName: "Pedegree",
-      imageSource: adultPedegree,
-      price: "699",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "10",
-      prouctName: "Tickfree",
-      imageSource: tickShampoo,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "11",
-      prouctName: "purina dry food",
-      imageSource: purinaDry,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "12",
-      prouctName: "K9 Harness",
-      description: "",
-      imageSource: k9Harness,
-      price: "699",
-      rating: 1,
-      selected: false,
-    },
-    {
-      productId: "13",
-      prouctName: "Red leash",
-      imageSource: leash,
-      price: "259",
-      description: "",
-      selected: false,
-      rating: 1,
-    },
-    {
-      productId: "14",
-      prouctName: "Harness",
-      imageSource: harnessCard,
-      price: "759",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-    {
-      productId: "15",
-      prouctName: "Collar",
-      imageSource: collar,
-      price: "259",
-      selected: false,
-      rating: 1,
-      description:
-        "Foodie Puppies Adjustable Nylon Tactical Dog Collar - (Green, Xtra-Large) for Large & Giant Dogs | Metal D-Ring with Strap Handle | Durable & Adjustable Collar for Dog Military Training",
-    },
-    {
-      productId: "16",
-      prouctName: "Poo Scooper",
-      imageSource: scooper,
-      price: "389",
-      selected: false,
-      description: "",
-      rating: 1,
-    },
-  ];
-
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
 
-  // this row will be from DB for product details
-  const [firstRowcard, setFirstRowcard] = useState(rowCard1);
-  const [wishlistItems, setWishlistItems] = useState<string[]>([]);
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<WishListData[]>([]);
+  const [cartList, setCartList] = useState<CartListData[]>([]);
   const productsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const addTocart = (index: number, isFirstRow: ProductData[]) => {
-    if (isFirstRow) {
-      setFirstRowcard((prevState) =>
-        prevState.map((item, idx) =>
-          idx === index ? { ...item, selected: !item.selected } : item
-        )
-      );
+  const getProducts = async () => {
+    try {
+      const getData = await axios.get("http://localhost:3000/getProducts");
+      const data = getData.data;
+      setProducts(data);
+    } catch (error) {
+      // TODO handle error
+      console.log("error ", error);
     }
-    toast(
-      `${
-        firstRowcard[index].selected ? "Item removed from" : "Item added to"
-      } Cart`
-    );
+  };
+
+  const getWishList = async (customerId: string) => {
+    try {
+      const getData = await axios.get(
+        `http://localhost:3000/wishlist/get/${customerId}`
+      );
+      if (getData.data.items.length > 0) {
+        setWishlistItems(getData.data.items);
+      }
+    } catch (error) {
+      console.log("error>>>", error);
+    }
+  };
+
+  const getCartList = async (customerId: string) => {
+    try {
+      const getData = await axios.get(
+        `http://localhost:3000/cart/get/${customerId}`
+      );
+      if (getData.data.items.length > 0) {
+        setCartList(getData.data.items);
+      }
+    } catch (error) {
+      console.log("error>>>", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        await getProducts();
+        if (customerId) {
+          await getWishList(customerId);
+          await getCartList(customerId);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        toast("Unable to load data. Please try again later.", {
+          autoClose: 2000,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      setProducts([]);
+      setWishlistItems([]);
+      setCartList([]);
+    };
+  }, [customerId]);
+
+  const addTocart = async (item: ProductData) => {
+    if (!customerId) {
+      toast("Please log in to add items to your Cart.", {
+        autoClose: 1000,
+      });
+      return;
+    }
+
+    const exists = isItemExists(cartList, item.prodId);
+
+    try {
+      if (!exists) {
+        const dumpedData = { ...item, customerId };
+        await axios.post("http://localhost:3000/cart/dumped", dumpedData);
+        setCartList((prevCartList) => [...prevCartList, item]);
+        toast("Item added to Cart", { autoClose: 1000 });
+      } else {
+        await axios.post("http://localhost:3000/cart/remove", {
+          customerId,
+          prodId: item.prodId,
+        });
+        setCartList((prevCartList) =>
+          prevCartList.filter((cartList) => cartList.prodId !== item.prodId)
+        );
+        toast("Item removed from Cart", { autoClose: 1000 });
+      }
+    } catch (error) {
+      toast("Error updating Cart. Please try again later.", {
+        autoClose: 1000,
+      });
+      console.error("Error:", error);
+    }
   };
 
   const addToWishlist = async (item: ProductData) => {
-    if (customerId) {
-      const dumpedData = {
-        ...item,
-        customerId: customerId,
-      };
-
-      try {
-        await axios.post("http://localhost:3000/wishlist/dumped", dumpedData);
-        const itemId = `addedtoWishList${item.productId}`;
-
-        if (!wishlistItems.includes(itemId)) {
-          setWishlistItems([...wishlistItems, itemId]);
-          toast("Item added to Wishlist", {
-            autoClose: 1000,
-          });
-        } else {
-          setWishlistItems(wishlistItems.filter((id) => id !== itemId));
-          toast("Item removed from Wishlist", {
-            autoClose: 1000,
-          });
-        }
-      } catch (error) {
-        console.log("error>>>", error);
-        toast("Unable to add in Wishlist", {
-          autoClose: 1000,
-        });
-      }
-    } else {
-      toast("Sorry, Please Login...", {
+    if (!customerId) {
+      toast("Please log in to add items to your wishlist.", {
         autoClose: 1000,
       });
+      return;
+    }
+
+    const exists = isItemExists(wishlistItems, item.prodId);
+
+    try {
+      if (!exists) {
+        const dumpedData = { ...item, customerId };
+        await axios.post("http://localhost:3000/wishlist/dumped", dumpedData);
+        setWishlistItems((prevWishlistItems) => [...prevWishlistItems, item]);
+        toast("Item added to Wishlist", { autoClose: 1000 });
+      } else {
+        await axios.post("http://localhost:3000/wishlist/remove", {
+          customerId,
+          prodId: item.prodId,
+        });
+        setWishlistItems((prevWishlistItems) =>
+          prevWishlistItems.filter(
+            (wishlistItem) => wishlistItem.prodId !== item.prodId
+          )
+        );
+        toast("Item removed from Wishlist", { autoClose: 1000 });
+      }
+    } catch (error) {
+      toast("Error updating wishlist. Please try again later.", {
+        autoClose: 1000,
+      });
+      console.error("Error:", error);
     }
   };
 
@@ -268,92 +203,102 @@ const Home = () => {
   const currentProducts = useMemo(() => {
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    return firstRowcard.slice(indexOfFirstProduct, indexOfLastProduct);
-  }, [firstRowcard, currentPage]);
+    return products.slice(indexOfFirstProduct, indexOfLastProduct);
+  }, [products, currentPage]);
 
   return (
-    <div style={{ ...homeStyle.outerDiv, paddingLeft: "5%" }}>
-      <Grid container spacing={3} key="gridOuter">
-        {currentProducts?.map((card, index) => (
-          <Grid item md={3} key={index}>
-            <Card
-              sx={{ maxWidth: "75%", maxHeight: "100%" }}
-              key={index}
-              data-testid={`product_${card.productId}`}
-            >
-              <CardActionArea style={{ height: "10rem", padding: 10 }}>
-                <CardMedia sx={homeStyle.cardMedia} title={card.prouctName}>
-                  <img
-                    src={card.imageSource}
-                    style={{ height: "100%", width: "auto" }}
-                  />
-                </CardMedia>
-              </CardActionArea>
-              <CardContent sx={homeStyle.cardContent}>
-                <Typography>{card.prouctName}</Typography>
-                <Typography>{`₹ ${card.price}.00`}</Typography>
-              </CardContent>
-              <CardActions sx={{ backgroundColor: "#00111c" }}>
-                <Button
-                  data-testid={`share_${card.productId}`}
-                  style={homeStyle.IconButton}
-                  onClick={() => handleShare(card.prouctName, card.price)}
+    <>
+      {isLoading ? (
+        <div style={{ ...h100w100, ...flexDiv }}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div style={{ ...homeStyle.outerDiv, paddingLeft: "5%" }}>
+          <Grid container spacing={3} key="gridOuter">
+            {currentProducts?.map((card, index) => (
+              <Grid item md={3} key={index}>
+                <Card
+                  sx={{ maxWidth: "75%", maxHeight: "100%" }}
+                  key={index}
+                  data-testid={`product_${card.prodId}`}
                 >
-                  <ShareOutlinedIcon />
-                </Button>
-                <Button
-                  data-testid={`wishlist_${card.productId}`}
-                  onClick={() => addToWishlist(card)}
-                  style={homeStyle.IconButton}
-                >
-                  {wishlistItems.includes(
-                    `addedtoWishList${card.productId}`
-                  ) ? (
-                    <FavoriteIcon
-                      style={{ color: "red" }}
-                      data-testid={`FavoriteIcon_${card.productId}`}
-                    />
-                  ) : (
-                    <FavoriteBorderOutlinedIcon
-                      data-testid={`FavoriteBorderOutlinedIcon_${card.productId}`}
-                    />
-                  )}
-                </Button>
-                <Button
-                  onClick={() => {
-                    addTocart(index, firstRowcard);
-                  }}
-                  style={homeStyle.IconButton}
-                >
-                  {card.selected ? <DoneIcon /> : <AddIcon />}
-                </Button>
-              </CardActions>
-            </Card>
+                  <CardActionArea style={{ height: "10rem", padding: 10 }}>
+                    <CardMedia sx={homeStyle.cardMedia} title={card.prodName}>
+                      <img
+                        src={card.prodImg}
+                        style={{ height: "100%", width: "auto" }}
+                      />
+                    </CardMedia>
+                  </CardActionArea>
+                  <CardContent sx={homeStyle.cardContent}>
+                    <Typography>{card.prodName}</Typography>
+                    <Typography>{`₹ ${card.prodPrice}.00`}</Typography>
+                  </CardContent>
+                  <CardActions sx={{ backgroundColor: "#00111c" }}>
+                    <Button
+                      data-testid={`share_${card.prodId}`}
+                      style={homeStyle.IconButton}
+                      onClick={() => handleShare(card.prodName, card.prodPrice)}
+                    >
+                      <ShareOutlinedIcon />
+                    </Button>
+                    <Button
+                      data-testid={`wishlist_${card.prodId}`}
+                      onClick={() => addToWishlist(card)}
+                      style={homeStyle.IconButton}
+                    >
+                      {isItemExists(wishlistItems, card.prodId) ? (
+                        <FavoriteIcon
+                          style={{ color: "red" }}
+                          data-testid={`FavoriteIcon_${card.prodId}`}
+                        />
+                      ) : (
+                        <FavoriteBorderOutlinedIcon
+                          data-testid={`FavoriteBorderOutlinedIcon_${card.prodId}`}
+                        />
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        addTocart(card);
+                      }}
+                      style={homeStyle.IconButton}
+                    >
+                      {isItemExists(cartList, card.prodId) ? (
+                        <DoneIcon />
+                      ) : (
+                        <AddIcon />
+                      )}
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      <Container style={homeStyle.PaginationDiv}>
-        <Pagination
-          shape="rounded"
-          color="primary"
-          count={Math.ceil(firstRowcard.length / productsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-          sx={{
-            "& .MuiPaginationItem-root": {
-              color: "white",
-            },
-          }}
-        />
-      </Container>
-      <ToastContainer
-        position="bottom-left"
-        toastClassName={styles.toast}
-        bodyClassName={styles.body}
-        hideProgressBar={true}
-        autoClose={1000}
-      />
-    </div>
+          <Container style={homeStyle.PaginationDiv}>
+            <Pagination
+              shape="rounded"
+              color="primary"
+              count={Math.ceil(products.length / productsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  color: "white",
+                },
+              }}
+            />
+          </Container>
+          <ToastContainer
+            position="bottom-left"
+            toastClassName={styles.toast}
+            bodyClassName={styles.body}
+            hideProgressBar={true}
+            autoClose={1000}
+          />
+        </div>
+      )}
+    </>
   );
 };
 export default Home;

@@ -45,7 +45,7 @@ const navLeft = {
   width: "100%",
 };
 
-export default function Navbar() {
+export default function NavbarCust() {
   const user = useSelector((state: RootState) => state.finalState.user.userId);
 
   const [isHovered, setIsHovered] = useState(false);

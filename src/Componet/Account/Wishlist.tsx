@@ -1,4 +1,4 @@
-import { flexDiv, homeStyle } from "../../commonFiles/commonTheme";
+import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
 import {
   Box,
   Button,
@@ -6,6 +6,7 @@ import {
   CardActionArea,
   CardActions,
   CardMedia,
+  CircularProgress,
   Grid,
   IconButton,
   Typography,
@@ -27,23 +28,25 @@ const Wishlist = () => {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const [cardData, setCardData] = useState<ProductData[]>([]);
   const [fetchError, setFetchError] = useState(false);
-  const [emptylist, setEmptylist] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
 
   const getWishList = async (customerId: string) => {
     try {
+      setIsLoading(true);
       const getData = await axios.get(
         `http://localhost:3000/wishlist/get/${customerId}`
       );
-      if (!getData.data.items) {
-        setEmptylist(true);
+      if (getData.data.items.length > 0) {
+        setCardData(getData.data.items);
       }
-      setCardData(getData.data.items);
     } catch (error) {
       setFetchError(true);
       console.log("error>>>", error);
-    }
+    } finally {
+      setIsLoading(false);
+    } 
   };
 
   useEffect(() => {
@@ -52,185 +55,194 @@ const Wishlist = () => {
     }
   }, [customerId]);
 
-  const handleXmark = async (customerId: string, productId: string) => {
+  const handleXmark = async (customerId: string, prodId: string) => {
     try {
       await axios.post("http://localhost:3000/wishlist/remove", {
         customerId,
-        productId,
+        prodId,
       });
-      const newCardData = cardData.filter(
-        (item) => item.productId !== productId
-      );
+      const newCardData = cardData.filter((item) => item.prodId !== prodId);
       setCardData(newCardData);
     } catch (error) {
-      toast(`Sorry, Cannot remove Right Now...`);
+      toast("Error updating wishlist. Please try again later.", {
+        autoClose: 1000,
+      });
       console.error("Error:", error);
     }
   };
 
   return (
-    <div
-      style={{
-        ...homeStyle.outerDiv,
-        padding: "2%",
-        overflow: "auto",
-      }}
-    >
-      {customerId === "" ? (
+    <>
+      {isLoading ? (
+        <div style={{ ...h100w100, ...flexDiv }}>
+          <CircularProgress />
+        </div>
+      ) : (
         <div
           style={{
-            height: "100%",
-            width: "100%",
-            ...flexDiv,
+            ...homeStyle.outerDiv,
+            padding: "2%",
+            overflow: "auto",
           }}
         >
-          Please Login
-          <LoginRequired />
-        </div>
-      ) : cardData.length ? (
-        <Grid container spacing={2} key="gridOuter">
-          {cardData?.map((card, index) => (
-            <Grid item xs={2} sm={4} key={index}>
-              <Card
-                data-testid={`product_${card.productId}`}
-                sx={{
-                  display: "flex",
-                  height: "10rem",
-                  width: "25rem",
-                  position: "relative",
-                }}
-              >
-                <IconButton
-                  data-testid={`Xbutton_${card.productId}`}
-                  sx={{
-                    position: "absolute",
-                    top: -10,
-                    right: -10,
-                    color: "white",
-                  }}
-                  onClick={() => handleXmark(customerId, card.productId)}
-                >
-                  <CloseIcon />
-                </IconButton>
-                <CardActionArea
-                  style={{
-                    height: "100%",
-                    width: "10rem",
-                  }}
-                >
-                  <CardMedia sx={{ ...homeStyle.cardMedia, padding: "1%" }}>
-                    <img
-                      src={card?.imageSource}
-                      style={{ height: "80%", width: "80%" }}
-                    />
-                  </CardMedia>
-                </CardActionArea>
-                <Box
-                  sx={{
-                    ...flexDiv,
-                    flexDirection: "column",
-                    width: "15rem",
-                    padding: "3%",
-                    backgroundColor: "#00111c",
-                    alignItems: "flex-start",
-                    color: "white",
-                  }}
-                >
-                  <Typography
+          {customerId === "" ? (
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                ...flexDiv,
+              }}
+            >
+              Please Login
+              <LoginRequired />
+            </div>
+          ) : fetchError ? (
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                ...flexDiv,
+              }}
+            >
+              Sorry We are unable to get your wishlist
+              <FetchErrorEmptyCart />
+            </div>
+          ) : cardData.length ? (
+            <Grid container spacing={2} key="gridOuter">
+              {cardData?.map((card, index) => (
+                <Grid item xs={2} sm={4} key={index}>
+                  <Card
+                    data-testid={`product_${card.prodId}`}
                     sx={{
-                      fontSize: "14px",
-                      overflow: "hidden",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
-                      maxWidth: "100%",
+                      display: "flex",
+                      height: "10rem",
+                      width: "25rem",
+                      position: "relative",
                     }}
                   >
-                    {card?.description}
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontSize: "18px",
-                    }}
-                  >{`₹ ${card?.price}.00`}</Typography>
+                    <IconButton
+                      data-testid={`Xbutton_${card.prodId}`}
+                      sx={{
+                        position: "absolute",
+                        top: -10,
+                        right: -10,
+                        color: "white",
+                      }}
+                      onClick={() => handleXmark(customerId, card.prodId)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                    <CardActionArea
+                      style={{
+                        height: "100%",
+                        width: "10rem",
+                      }}
+                    >
+                      <CardMedia sx={{ ...homeStyle.cardMedia, padding: "1%" }}>
+                        <img
+                          src={card?.prodImg}
+                          style={{ height: "90%", width: "80%" }}
+                        />
+                      </CardMedia>
+                    </CardActionArea>
+                    <Box
+                      sx={{
+                        ...flexDiv,
+                        flexDirection: "column",
+                        width: "15rem",
+                        padding: "3%",
+                        backgroundColor: "#00111c",
+                        alignItems: "flex-start",
+                        color: "white",
+                      }}
+                    >
+                      <Typography
+                        style={{
+                          fontSize: "14px",
+                          overflow: "hidden",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                          maxWidth: "100%",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {card?.prodDiscrip}
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "18px",
+                        }}
+                      >{`₹ ${card?.prodPrice}.00`}</Typography>
 
-                  <CardActions
-                    sx={{ padding: "0", marginTop: "5%", width: "100%" }}
-                  >
-                    <Button
-                      data-testid={`addToCart${card?.productId}`}
-                      style={{
-                        ...homeStyle.IconButton,
-                        fontSize: "70%",
-                        backgroundColor:
-                          hoveredButton === `addToCart${card?.productId}`
-                            ? "#e85d04"
-                            : "#ffbe0b",
-                      }}
-                      onMouseEnter={() =>
-                        setHoveredButton(`addToCart${card?.productId}`)
-                      }
-                      onMouseLeave={() => setHoveredButton(null)}
-                    >
-                      Add to Cart
-                    </Button>
-                    <Button
-                      data-testid={`buyNow${card?.productId}`}
-                      style={{
-                        ...homeStyle.IconButton,
-                        fontSize: "70%",
-                        marginLeft: "20%",
-                        backgroundColor:
-                          hoveredButton === `buyNow${card?.productId}`
-                            ? "#e85d04"
-                            : "#ffbe0b",
-                      }}
-                      onMouseEnter={() =>
-                        setHoveredButton(`buyNow${card?.productId}`)
-                      }
-                      onMouseLeave={() => setHoveredButton(null)}
-                    >
-                      Buy Now
-                    </Button>
-                  </CardActions>
-                </Box>
-              </Card>
+                      <CardActions
+                        sx={{ padding: "0", marginTop: "5%", width: "100%" }}
+                      >
+                        <Button
+                          data-testid={`addToCart${card?.prodId}`}
+                          style={{
+                            ...homeStyle.IconButton,
+                            fontSize: "70%",
+                            backgroundColor:
+                              hoveredButton === `addToCart${card?.prodId}`
+                                ? "#e85d04"
+                                : "#ffbe0b",
+                          }}
+                          onMouseEnter={() =>
+                            setHoveredButton(`addToCart${card?.prodId}`)
+                          }
+                          onMouseLeave={() => setHoveredButton(null)}
+                        >
+                          Add to Cart
+                        </Button>
+                        <Button
+                          data-testid={`buyNow${card?.prodId}`}
+                          style={{
+                            ...homeStyle.IconButton,
+                            fontSize: "70%",
+                            marginLeft: "20%",
+                            backgroundColor:
+                              hoveredButton === `buyNow${card?.prodId}`
+                                ? "#e85d04"
+                                : "#ffbe0b",
+                          }}
+                          onMouseEnter={() =>
+                            setHoveredButton(`buyNow${card?.prodId}`)
+                          }
+                          onMouseLeave={() => setHoveredButton(null)}
+                        >
+                          Buy Now
+                        </Button>
+                      </CardActions>
+                    </Box>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-      ) : fetchError ? (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            ...flexDiv,
-          }}
-        >
-          Sorry We are unable to get your wishlist
-          <FetchErrorEmptyCart />
+          ) : (
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                ...flexDiv,
+              }}
+            >
+              You Don't have any favourite item
+              <EmptyCart />
+            </div>
+          )}
+          <div data-testid="toast">
+            <ToastContainer
+              position="bottom-left"
+              toastClassName={styles.toast}
+              bodyClassName={styles.body}
+              hideProgressBar={true}
+              autoClose={1000}
+            />
+          </div>
         </div>
-      ) : emptylist ? (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            ...flexDiv,
-          }}
-        >
-          Your Cart Is Empty
-          <EmptyCart />
-        </div>
-      ) : null}
-      <div data-testid="toast">
-        <ToastContainer
-          position="bottom-left"
-          toastClassName={styles.toast}
-          bodyClassName={styles.body}
-          hideProgressBar={true}
-          autoClose={1000}
-        />
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

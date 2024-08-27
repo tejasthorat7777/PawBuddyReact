@@ -1,7 +1,13 @@
 import Wishlist from "../Componet/Account/Wishlist";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import Wrapper from "../setupTest/Wrapper";
 import { mockAxiosGet, mockAxiosPost } from "../__mocks__/globalMock";
+import { State, UserData } from "../commonFiles/commonTypes";
 
 vi.mock("react-lottie-player", () => {
   return {
@@ -11,7 +17,7 @@ vi.mock("react-lottie-player", () => {
 
 vi.useFakeTimers();
 
-const mockUser = {
+const mockUser: UserData = {
   name: "",
   age: "",
   breed: "",
@@ -21,32 +27,35 @@ const mockUser = {
   username: "",
   userId: "",
   gender: "",
-  city: "",
+  acc_type: "",
   password: "",
 };
 
 const mockItemWishlist = [
   {
-    productId: "1",
-    prouctName: "Harness",
-    imageSource: "",
-    price: "759",
+    prodId: "1",
+    prodName: "Harness",
+    prodImg: "",
+    prodPrice: "759",
     selected: false,
-    description: "",
+    prodDescip: "",
   },
   {
-    productId: "2",
-    prouctName: "Collar",
-    imageSource: "",
-    price: "259",
+    prodId: "2",
+    prodName: "Collar",
+    prodImg: "",
+    prodPrice: "259",
     selected: false,
-    description: "",
+    prodDescip: "",
   },
 ];
 
 describe("WishList", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   it("TC:1 should display Please Login when user is not logged in", async () => {
-    const mockInitialState = {
+    const mockInitialState: State = {
       status: false,
       user: mockUser,
     };
@@ -59,10 +68,12 @@ describe("WishList", () => {
     expect(screen.getByTestId("loginRequired")).toBeInTheDocument();
   });
 
-  it("TC:2 should display Your Cart Is Empty, when no product is added to wishlist", async () => {
+  it("TC:2 should display You Don't have any favourite item, when no product is added to wishlist", async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
-        data: [],
+        data: {
+          items: [],
+        },
       });
     });
     const mockInitialState = {
@@ -74,7 +85,15 @@ describe("WishList", () => {
         <Wishlist />
       </Wrapper>
     );
-    expect(screen.getByText("Your Cart Is Empty")).toBeInTheDocument();
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    expect(
+      screen.getByText("You Don't have any favourite item")
+    ).toBeInTheDocument();
     expect(screen.getByTestId("emptyCart")).toBeInTheDocument();
   });
 
@@ -103,10 +122,10 @@ describe("WishList", () => {
     });
 
     expect(
-      screen.getByTestId(`product_${mockItemWishlist[0].productId}`)
+      screen.getByTestId(`product_${mockItemWishlist[0].prodId}`)
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId(`product_${mockItemWishlist[1].productId}`)
+      screen.getByTestId(`product_${mockItemWishlist[1].prodId}`)
     ).toBeInTheDocument();
   });
 
@@ -150,25 +169,25 @@ describe("WishList", () => {
     const mouseEnterCSSAddtoCart = {
       "background-color": "rgb(255, 190, 11)",
       color: "white",
-      "font-size": "12px",
+      "font-size": "70%",
     };
     const mouseLeaveCSSAddtoCart = {
       "background-color": "rgb(232, 93, 4)",
       color: "white",
-      "font-size": "12px",
+      "font-size": "70%",
     };
 
     const mouseEnterCSSBuyNow = {
       "background-color": "rgb(255, 190, 11)",
       color: "white",
-      "font-size": "12px",
-      "margin-left": "3rem",
+      "font-size": "70%",
+      "margin-left": "20%",
     };
     const mouseLeaveCSSBuyNow = {
       "background-color": "rgb(232, 93, 4)",
       color: "white",
-      "font-size": "12px",
-      "margin-left": "3rem",
+      "font-size": "70%",
+      "margin-left": "20%",
     };
 
     render(
@@ -245,7 +264,7 @@ describe("WishList", () => {
       "http://localhost:3000/wishlist/remove",
       {
         customerId: "123",
-        productId: "2",
+        prodId: "2",
       }
     );
     expect(screen.queryByTestId("product_2")).not.toBeInTheDocument();

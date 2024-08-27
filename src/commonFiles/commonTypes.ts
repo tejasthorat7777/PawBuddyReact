@@ -8,7 +8,7 @@ export type ProfileType =
   | "/login";
 
 export type UserData = {
-  city: string;
+  acc_type: string;
   gender: string;
   name: string;
   age: string;
@@ -29,17 +29,39 @@ export type SubmitButtonProps = {
   text: string;
 };
 
+export type State = {
+  status: boolean;
+  user: UserData;
+};
+
 export type ProductData = {
-  productId: string;
-  prouctName: string;
-  price: string;
-  description: string;
-  imageSource: string;
+  prodId: string;
+  prodName: string;
+  prodDiscrip: string;
+  prodPrice: string;
+  pordQuant: string;
+  prodDiscount: string;
+  prodBrand: string;
+  prodWeight: string;
+  prodConditon: string;
+  prodImg: string;
   selected: boolean;
   rating: number;
 };
 
-export type State = {
-  status: boolean;
-  user: UserData;
+export type WishListData = {
+  prodId: string;
+  prodName: string;
+  prodDiscrip: string;
+  prodImg: string;
+  prodPrice: string;
+  selected: boolean;
+};
+
+export type CartListData = {
+  prodId: string;
+  prodDiscrip: string;
+  prodImg: string;
+  prodPrice: string;
+  rating: number;
 };

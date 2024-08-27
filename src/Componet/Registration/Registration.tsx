@@ -22,7 +22,7 @@ import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { SendButton } from "../../commonFiles/SendButton";
-import { generateRandomUserId } from "../../FutureUse/commonFunctions";
+import { generateRandomUserId } from "../../commonFiles/commonFunctions";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -43,8 +43,10 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
 }));
 
 export default function Registration() {
+  // TODD we need to introduce a registration form for business also 
+  // currently we are giving select option for acc type but it will be change in future
   const [userData, setUserData] = useState<UserData>({
-    city: "",
+    acc_type: "",
     gender: "",
     name: "",
     age: "",
@@ -61,7 +63,7 @@ export default function Registration() {
   const [uploadError, setUploadError] = useState(false);
   const [formSend, setFormSend] = useState(false);
 
-  const cities = ["Select", "Pune", "Nashik", "Nagpur", "Mumbai", "Banglore"];
+  const accountType = ["Select", "Business", "Customer"];
 
   useEffect(() => {}, [userData]);
 
@@ -69,6 +71,7 @@ export default function Registration() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
+      console.log("userdata>>>>",userData)
       event.preventDefault();
       setIsloading(true);
       await axios.post("http://localhost:3000/sendUsersInfo", userData);
@@ -311,29 +314,29 @@ export default function Registration() {
                     style={{ marginTop: "5%" }}
                   >
                     <InputLabel
-                      data-testid="select-city"
+                      data-testid="select-acc_type"
                       style={{ color: "white", fontFamily: "cursive" }}
                     >
-                      City
+                      Account Type
                     </InputLabel>
                     <StyledSelect
-                      data-testid="city"
-                      id="city"
-                      value={userData.city}
+                      data-testid="acc_type"
+                      id="acc_type"
+                      value={userData.acc_type}
                       onChange={(event) => {
                         setUserData({
                           ...userData,
-                          city: event.target.value as string,
+                          acc_type: event.target.value as string,
                         });
                       }}
                     >
-                      {cities.map((city, index) => (
+                      {accountType.map((acc_type, index) => (
                         <CustomMenuItem
-                          value={city}
-                          key={`city_${city}_${index}`}
-                          data-testid={`city_${city}`}
+                          value={acc_type}
+                          key={`acc_type${acc_type}_${index}`}
+                          data-testid={`acc_type${acc_type}`}
                         >
-                          {city}
+                          {acc_type}
                         </CustomMenuItem>
                       ))}
                     </StyledSelect>
