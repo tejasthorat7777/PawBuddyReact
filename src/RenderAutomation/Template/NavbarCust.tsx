@@ -128,6 +128,7 @@ export default function NavbarCust() {
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
+                id="acc_menu"
                 size="small"
                 sx={{ ml: 2 }}
                 aria-controls={open ? "account-menu" : undefined}
@@ -161,6 +162,7 @@ export default function NavbarCust() {
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <CustomMenuItem
+                  id={`account_${obj.text}`}
                   onClick={() => {
                     handleClose();
                   }}
