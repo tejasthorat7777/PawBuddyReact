@@ -47,7 +47,14 @@ export type ProductData = {
   prodImg: string;
   selected: boolean;
   rating: number;
+  category: string;
+  subCategory: string;
 };
+
+export interface BusinessProduct {
+  customerId: string;
+  item: ProductData[];
+}
 
 export type WishListData = {
   prodId: string;
