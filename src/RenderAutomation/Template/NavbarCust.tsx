@@ -117,7 +117,7 @@ export default function NavbarCust() {
           >
             <Tooltip title="Shopping Cart">
               <Link to={"/cart"} key={"Cart"}>
-                <IconButton>
+                <IconButton data-testid={"shoppingCart"} id={"shoppingCart"}>
                   <ShoppingCartOutlinedIcon
                     style={{ color: "white" }}
                     sx={{ fontSize: 30 }}

@@ -3,7 +3,7 @@ import loginRequired from "../lottieJson/LoginRequired.json";
 
 export const LoginRequired = () => {
   return (
-    <div data-testid="loginRequired">
+    <div data-testid="loginRequired" id="loginRequired">
       <Lottie
         loop
         animationData={loginRequired}
