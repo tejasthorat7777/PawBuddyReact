@@ -115,7 +115,6 @@ server.post("/wishlist/dumped", async (req, res) => {
 server.post("/addProduct", async (req, res) => {
   try {
     const { customerId, products } = req.body;
-    console.log("products>>>",products)
     const existingCustomer = await Products.findOne({ customerId });
 
     if (existingCustomer) {

@@ -111,30 +111,19 @@ const AddProduct = () => {
     setIsLoading(true);
     try {
       event.preventDefault();
-
-      // Log the product data being sent for debugging
-      console.log("Adding product:", addProduct);
-
-      // Make a POST request to add the product
       await axios.post("http://localhost:3000/addProduct", {
-        customerId: userId, // Ensure the correct field name is used based on your backend
-        products: addProduct, // Match the key to what your backend expects
+        customerId: userId,
+        products: addProduct, 
       });
-
-      // If successful, log the success and potentially trigger a success notification
-      console.log("Product added successfully!");
     } catch (error) {
-      // Handle error (consider showing an error animation with Lottie)
       console.error("Error while uploading product:", error);
-
       // TODO: Implement error handling, such as showing a Lottie animation
     } finally {
-      // Reset the loading state and form fields
       setIsLoading(false);
-      reset(); // Reset the form or the relevant state variables
+      reset();
     }
   };
-
+  
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
