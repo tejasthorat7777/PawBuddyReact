@@ -83,7 +83,7 @@ const Profile = () => {
             </div>
           </div>
           <div style={outerDiv}>
-            <div style={{ width: "20%" }}>
+            <div style={{ width: "20%" }} id="profile_username">
               Username
               <div style={styles}>{user.username}</div>
             </div>

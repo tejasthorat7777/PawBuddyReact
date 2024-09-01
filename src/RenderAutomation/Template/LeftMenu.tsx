@@ -244,7 +244,7 @@ export default function LeftMenu() {
         }}
       >
         <Link to={"/"}>
-          <CustomButton>
+          <CustomButton id="homeBtn">
             <div style={customButtonContainer}>
               <img
                 src={homeIcon}
