@@ -5,10 +5,34 @@ import {
   Accordion,
   MenuItem,
   styled,
+  TableCell,
+  TableRow,
+  tableCellClasses,
 } from "@mui/material";
 import loginImage from "../assets/login.jpg";
 
 export const h100w100 = { height: "100%", width: "100%" };
+
+export const CustomTableColumn = styled(TableCell)(() => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#181a22",
+    color: "white",
+    textAlign: "center",
+    fontSize: 16,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 15,
+    textAlign: "center",
+  },
+}));
+export const CustomTableRow = styled(TableRow)(() => ({
+  "&:nth-of-type(even)": {
+    backgroundColor: "#e9ecef",
+  },
+  "&:hover": {
+    backgroundColor: "#ced4da",
+  },
+}));
 
 export const CustomButton = styled(Button)({
   width: "100%",
@@ -214,11 +238,11 @@ export const businessAddproduct = {
     ...flexDiv,
     ...h100w100,
   },
-  uploadBtn:{
+  uploadBtn: {
     borderRadius: "10px",
-    ...h100w100
+    ...h100w100,
   },
-  productBrand:{
+  productBrand: {
     width: "45%",
     backgroundColor: "white",
     height: "10%",
@@ -227,14 +251,14 @@ export const businessAddproduct = {
     marginRight: "5%",
     borderRadius: "5px",
   },
-  prodName:{
+  prodName: {
     width: "100%",
     backgroundColor: "white",
     height: "10%",
     color: "black",
     borderRadius: "5px",
   },
-  prodDiscrip:{
+  prodDiscrip: {
     marginTop: "3%",
     height: "40%",
     width: "100%",
@@ -243,12 +267,12 @@ export const businessAddproduct = {
     fontFamily: "cursive",
     borderRadius: "5px",
   },
-  prodPriceQuantWeight:{
+  prodPriceQuantWeight: {
     width: "45%",
     backgroundColor: "white",
     height: "10%",
     marginTop: "3%",
     color: "black",
     borderRadius: "5px",
-  }
+  },
 };
