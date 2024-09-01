@@ -111,19 +111,19 @@ const AddProduct = () => {
     setIsLoading(true);
     try {
       event.preventDefault();
-      console.log("addProduct>>", addProduct);
       await axios.post("http://localhost:3000/addProduct", {
-        userId,
-        addProduct,
+        customerId: userId,
+        products: addProduct, 
       });
     } catch (error) {
-      // TODO handle error show lottie saying error while uploading data or somehing went wrong
-      console.log("Error>>>>", error);
+      console.error("Error while uploading product:", error);
+      // TODO: Implement error handling, such as showing a Lottie animation
     } finally {
       setIsLoading(false);
       reset();
     }
   };
+  
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {

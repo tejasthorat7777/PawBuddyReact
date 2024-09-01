@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import homeIcon from "../../assets/home.png";
 import addProduct from "../../assets/add-product.png";
+import list from "../../assets/check-list.png";
 import { CustomButton } from "../../commonFiles/commonTheme";
 import { Link } from "react-router-dom";
 
@@ -42,6 +43,12 @@ export default function BusinessLeftMenu() {
       image: addProduct,
       name: "add_product",
       path: "/business/add_product",
+    },
+    {
+      header: "Listed Prodcts",
+      image: list,
+      name: "listed Products",
+      path: "/business/listed_products",
     },
   ];
 

@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  produts: [
+  products: [
     {
       prodId: String,
       prodName: String,
@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
       prodBrand: String,
       prodImg: String,
       prodPrice: String,
-      prodQuantity: String,
+      pordQuant: String,
       prodWeight: String,
       prodDiscount: String,
       selected: Boolean,

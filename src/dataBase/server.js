@@ -115,14 +115,20 @@ server.post("/wishlist/dumped", async (req, res) => {
 server.post("/addProduct", async (req, res) => {
   try {
     const { customerId, products } = req.body;
+    const existingCustomer = await Products.findOne({ customerId });
 
-    const newProduct = new Products({ customerId, products });
-    await newProduct.save();
+    if (existingCustomer) {
+      existingCustomer.products.push(products);
+      await existingCustomer.save();
+    } else {
+      const newProduct = new Products({ customerId, products: products });
+      await newProduct.save();
+    }
 
-    res.status(200).json({ message: "Product added successfully!" });
+    res.status(200).json({ message: "Product(s) added successfully!" });
   } catch (error) {
     console.error("Error uploading product:", error);
-    res.status(500).json({ message: "Failed to upload product" });
+    res.status(500).json({ message: "Failed to upload product", error });
   }
 });
 
@@ -237,5 +243,19 @@ server.get("/cart/get/:customerId", async (req, res) => {
   } catch (error) {
     console.error("Error retrieving wishlist:", error);
     res.status(500).json({ message: "Error retrieving wishlist" });
+  }
+});
+
+server.get("/busi/getProducts/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+    let getProduct;
+    if (customerId) {
+      getProduct = await Products.find({ customerId });
+    }
+    res.status(200).json(getProduct);
+  } catch (error) {
+    console.error("Error retrieving products:", error);
+    res.status(500).json({ message: "Error retrieving products", error });
   }
 });

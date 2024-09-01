@@ -46,9 +46,16 @@ const Home = () => {
 
   const getProducts = async () => {
     try {
+      let Products: ProductData[] = [];
       const getData = await axios.get("http://localhost:3000/getProducts");
       const data = getData.data;
-      setProducts(data);
+      data.map((doc: any) => {
+        doc.products.map((product: any) => {
+          Products.push(product);
+        });
+      });
+
+      setProducts(Products);
     } catch (error) {
       setFetchProduct(true);
       // TODO handle error
@@ -215,7 +222,7 @@ const Home = () => {
         <div style={{ ...h100w100, ...flexDiv }}>
           <CircularProgress
             sx={{
-              color: "#ffb703"
+              color: "#ffb703",
             }}
           />
         </div>
@@ -245,7 +252,19 @@ const Home = () => {
                     </CardMedia>
                   </CardActionArea>
                   <CardContent sx={homeStyle.cardContent}>
-                    <Typography>{card.prodName}</Typography>
+                    <Typography
+                      style={{
+                        fontSize: "14px",
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: "vertical",
+                        maxWidth: "100%",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {card.prodName}
+                    </Typography>
                     <Typography>{`₹ ${card.prodPrice}.00`}</Typography>
                   </CardContent>
                   <CardActions sx={{ backgroundColor: "#00111c" }}>
