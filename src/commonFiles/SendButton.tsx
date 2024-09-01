@@ -13,6 +13,7 @@ export const SendButton: React.FC<SubmitButtonProps> = ({
     <Button
       type="submit"
       data-testid={`btn_${text}`}
+      id={`btn_${text}`}
       variant="contained"
       style={{
         position: "absolute",

@@ -30,6 +30,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
 import { isItemExists } from "../../commonFiles/commonFunctions";
+import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 
 const Home = () => {
   const user = useSelector((state: RootState) => state.finalState.user);
@@ -41,13 +42,22 @@ const Home = () => {
   const productsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [fetchProduct, setFetchProduct] = useState(false);
 
   const getProducts = async () => {
     try {
+      let Products: ProductData[] = [];
       const getData = await axios.get("http://localhost:3000/getProducts");
       const data = getData.data;
-      setProducts(data);
+      data.map((doc: any) => {
+        doc.products.map((product: any) => {
+          Products.push(product);
+        });
+      });
+
+      setProducts(Products);
     } catch (error) {
+      setFetchProduct(true);
       // TODO handle error
       console.log("error ", error);
     }
@@ -194,7 +204,7 @@ const Home = () => {
   };
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
+    _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setCurrentPage(value);
@@ -207,13 +217,24 @@ const Home = () => {
   }, [products, currentPage]);
 
   return (
-    <>
+    <div style={{ ...homeStyle.outerDiv, paddingLeft: "5%" }}>
       {isLoading ? (
         <div style={{ ...h100w100, ...flexDiv }}>
-          <CircularProgress />
+          <CircularProgress
+            sx={{
+              color: "#ffb703",
+            }}
+          />
+        </div>
+      ) : fetchProduct ? (
+        <div style={{ ...h100w100, ...flexDiv }}>
+          <BadRequest />
+          Sorry No Product Found
+          <br />
+          Please try again...
         </div>
       ) : (
-        <div style={{ ...homeStyle.outerDiv, paddingLeft: "5%" }}>
+        <>
           <Grid container spacing={3} key="gridOuter">
             {currentProducts?.map((card, index) => (
               <Grid item md={3} key={index}>
@@ -231,7 +252,19 @@ const Home = () => {
                     </CardMedia>
                   </CardActionArea>
                   <CardContent sx={homeStyle.cardContent}>
-                    <Typography>{card.prodName}</Typography>
+                    <Typography
+                      style={{
+                        fontSize: "14px",
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: "vertical",
+                        maxWidth: "100%",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {card.prodName}
+                    </Typography>
                     <Typography>{`₹ ${card.prodPrice}.00`}</Typography>
                   </CardContent>
                   <CardActions sx={{ backgroundColor: "#00111c" }}>
@@ -289,16 +322,16 @@ const Home = () => {
               }}
             />
           </Container>
-          <ToastContainer
-            position="bottom-left"
-            toastClassName={styles.toast}
-            bodyClassName={styles.body}
-            hideProgressBar={true}
-            autoClose={1000}
-          />
-        </div>
+        </>
       )}
-    </>
+      <ToastContainer
+        position="bottom-left"
+        toastClassName={styles.toast}
+        bodyClassName={styles.body}
+        hideProgressBar={true}
+        autoClose={1000}
+      />
+    </div>
   );
 };
 export default Home;

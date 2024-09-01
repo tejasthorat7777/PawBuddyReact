@@ -12,6 +12,7 @@ import {
   businessAddproduct,
   cartStyle,
   flexDiv,
+  h100w100,
   homeStyle,
 } from "../../commonFiles/commonTheme";
 import { useState } from "react";
@@ -22,6 +23,8 @@ import { styled } from "@mui/material/styles";
 import axios from "axios";
 import { generateProductId } from "../../commonFiles/commonFunctions";
 import { ProductData } from "../../commonFiles/commonTypes";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -35,8 +38,33 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+const getSubCategory = (subcat: string) => {
+  switch (subcat) {
+    case "Food": {
+      return ["Dry Food", "Greavy Food", "Treats"];
+    }
+    case "Accessories": {
+      return ["Leash", "Harness", "Collar"];
+    }
+    case "Shampoo": {
+      return ["Shining Shampoo", "Tick and Fleas Shampoo", "Scented Shampoo"];
+    }
+    case "Bathroom": {
+      return ["Toilet Spray", "Waste Scooper", "Fragnance Perfume"];
+    }
+    default: {
+      return ["SubCatgory"];
+    }
+  }
+};
+
 const AddProduct = () => {
+  const userId = useSelector(
+    (state: RootState) => state.finalState.user.userId
+  );
   const condition = ["Condition", "New", "Used", "Refurbished"];
+  const category = ["category", "Food", "Accessories", "Shampoo", "Bathroom"];
+
   const [addProduct, setAddProduct] = useState<ProductData>({
     prodId: "",
     prodName: "",
@@ -50,7 +78,11 @@ const AddProduct = () => {
     prodImg: "",
     selected: false,
     rating: 0,
+    category: category[0],
+    subCategory: getSubCategory(category[0])[0],
   });
+
+  // setAddProduct({ ...addProduct, customerId: customerId });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -68,6 +100,8 @@ const AddProduct = () => {
       prodImg: "",
       selected: false,
       rating: 0,
+      category: category[0],
+      subCategory: "SubCatgory",
     });
   };
 
@@ -77,15 +111,19 @@ const AddProduct = () => {
     setIsLoading(true);
     try {
       event.preventDefault();
-      await axios.post("http://localhost:3000/addProduct", addProduct);
+      await axios.post("http://localhost:3000/addProduct", {
+        customerId: userId,
+        products: addProduct, 
+      });
     } catch (error) {
-      // TODO handle error show lottie saying error while uploading data or somehing went wrong
-      console.log("Error>>>>", error);
+      console.error("Error while uploading product:", error);
+      // TODO: Implement error handling, such as showing a Lottie animation
     } finally {
       setIsLoading(false);
       reset();
     }
   };
+  
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -99,97 +137,316 @@ const AddProduct = () => {
   };
 
   return (
-    <>
+    <div style={homeStyle.outerDiv}>
       {isLoading ? (
-        <CircularProgress />
+        <div style={{ ...h100w100, ...flexDiv }}>
+          <CircularProgress
+            sx={{
+              color: "#ffb703",
+            }}
+          />
+        </div>
       ) : (
-        <div style={homeStyle.outerDiv}>
-          <div style={businessAddproduct.outerDiv}>
-            <div
-              style={{
-                height: "100%",
-                width: "40%",
-              }}
-            >
-              <div style={businessAddproduct.imgOuter}>
-                {!addProduct.prodImg ? (
-                  <div style={businessAddproduct.uploadBtnDiv}>
-                    <Button
-                      style={businessAddproduct.uploadBtn}
-                      component="label"
-                      variant="outlined"
-                      tabIndex={-1}
-                      startIcon={<CloudUploadIcon />}
-                    >
-                      Upload Image
-                      <VisuallyHiddenInput
-                        type="file"
-                        id="prodFile"
-                        onChange={handleImageUpload}
+        <div style={businessAddproduct.outerDiv}>
+          <div
+            style={{
+              height: "100%",
+              width: "40%",
+            }}
+          >
+            <div style={businessAddproduct.imgOuter}>
+              {!addProduct.prodImg ? (
+                <div style={businessAddproduct.uploadBtnDiv}>
+                  <Button
+                    style={businessAddproduct.uploadBtn}
+                    component="label"
+                    variant="outlined"
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload Image
+                    <VisuallyHiddenInput
+                      type="file"
+                      id="prodFile"
+                      onChange={handleImageUpload}
+                    />
+                  </Button>
+                </div>
+              ) : (
+                <Card data-testid={`product_`}>
+                  <CardActionArea sx={{ height: "17rem", ...flexDiv }}>
+                    <CardMedia sx={{ height: "14rem", objectFit: "cover" }}>
+                      <img
+                        src={addProduct.prodImg}
+                        style={cartStyle.imageStyle}
                       />
-                    </Button>
-                  </div>
-                ) : (
-                  <Card data-testid={`product_`}>
-                    <CardActionArea sx={{ height: "17rem", ...flexDiv }}>
-                      <CardMedia sx={{ height: "14rem", objectFit: "cover" }}>
-                        <img
-                          src={addProduct.prodImg}
-                          style={cartStyle.imageStyle}
-                        />
-                      </CardMedia>
-                    </CardActionArea>
-                  </Card>
-                )}
-              </div>
-              <input
-                type="text"
-                name="Brand"
-                data-testid="prodBrand"
-                placeholder="Product Brand"
-                autoComplete="off"
-                value={addProduct.prodBrand}
-                style={businessAddproduct.productBrand}
+                    </CardMedia>
+                  </CardActionArea>
+                </Card>
+              )}
+            </div>
+            <input
+              type="text"
+              name="Brand"
+              data-testid="prodBrand"
+              placeholder="Product Brand"
+              autoComplete="off"
+              value={addProduct.prodBrand}
+              style={businessAddproduct.productBrand}
+              onChange={(event) => {
+                setAddProduct({
+                  ...addProduct,
+                  prodBrand: event.target.value,
+                  prodId: generateProductId(12),
+                });
+              }}
+            />
+            <FormControl
+              data-testid="selectForm"
+              sx={{
+                width: "50%",
+              }}
+              size="small"
+              style={{ marginTop: "5%", color: "black" }}
+            >
+              <Select
+                data-testid="prodCondition"
+                sx={{
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  fontFamily: "cursive",
+                  color:
+                    addProduct.prodConditon === "Condition" ? "grey" : "black",
+                }}
+                value={addProduct.prodConditon}
+                style={{
+                  backgroundColor: "white",
+                }}
                 onChange={(event) => {
                   setAddProduct({
                     ...addProduct,
-                    prodBrand: event.target.value,
-                    prodId: generateProductId(12),
+                    prodConditon: event.target.value as string,
                   });
                 }}
-              />
-              <FormControl
-                data-testid="selectForm"
-                sx={{
-                  width: "50%",
-                }}
-                size="small"
-                style={{ marginTop: "5%", color: "black" }}
               >
-                <Select
-                  data-testid="prodCondition"
-                  sx={{
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
-                    },
-                    fontFamily: "cursive",
-                    color:
-                      addProduct.prodConditon === "Condition"
-                        ? "grey"
-                        : "black",
-                  }}
-                  value={addProduct.prodConditon}
-                  style={{
-                    backgroundColor: "white",
-                  }}
-                  onChange={(event) => {
-                    setAddProduct({
-                      ...addProduct,
-                      prodConditon: event.target.value as string,
-                    });
-                  }}
-                >
-                  {condition.map((condition, index) => (
+                {condition.map((condition, index) => (
+                  <MenuItem
+                    sx={{ fontFamily: "cursive" }}
+                    value={condition}
+                    key={`condition_${condition}_${index}`}
+                    data-testid={`condition_${condition}`}
+                  >
+                    {condition}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <SendButton
+              operationOnData={reset}
+              text={"Cancel"}
+              style={{
+                top: "70%",
+                left: "10%",
+                backgroundColor: "#597081",
+              }}
+            />
+            <SendButton
+              operationOnData={dumpProduct}
+              text={"Submit"}
+              style={{
+                top: "70%",
+                left: "25%",
+                backgroundColor: "#597081",
+              }}
+            />
+          </div>
+          <Container
+            style={{
+              width: "60%",
+            }}
+          >
+            <input
+              type="text"
+              name="prodName"
+              data-testid="prodName"
+              placeholder="Product Name"
+              autoComplete="off"
+              value={addProduct.prodName}
+              style={businessAddproduct.prodName}
+              onChange={(event) => {
+                setAddProduct({
+                  ...addProduct,
+                  prodName: event.target.value,
+                });
+              }}
+            />
+            <textarea
+              name="prodDiscription"
+              data-testid="prodDiscription"
+              placeholder="Description of Product"
+              autoComplete="off"
+              value={addProduct.prodDiscrip}
+              style={businessAddproduct.prodDiscrip}
+              onChange={(event) => {
+                setAddProduct({
+                  ...addProduct,
+                  prodDiscrip: event.target.value,
+                });
+              }}
+            />
+            <input
+              type="text"
+              name="price"
+              data-testid="prodPrice"
+              placeholder="Product Price (M.R.P.)"
+              autoComplete="off"
+              value={addProduct.prodPrice}
+              style={businessAddproduct.prodPriceQuantWeight}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setAddProduct({
+                    ...addProduct,
+                    prodPrice: value,
+                  });
+                }
+              }}
+            />
+            <input
+              type="text"
+              name="Quant"
+              data-testid="prodQuant"
+              placeholder="Net Quantity"
+              autoComplete="off"
+              value={addProduct.pordQuant}
+              style={{
+                ...businessAddproduct.prodPriceQuantWeight,
+                marginLeft: "10%",
+              }}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setAddProduct({
+                    ...addProduct,
+                    pordQuant: value,
+                  });
+                }
+              }}
+            />
+            <input
+              type="text"
+              name="weight"
+              data-testid="prodWeight"
+              placeholder="Product Weight"
+              autoComplete="off"
+              value={addProduct.prodWeight}
+              style={businessAddproduct.prodPriceQuantWeight}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setAddProduct({
+                    ...addProduct,
+                    prodWeight: value,
+                  });
+                }
+              }}
+            />
+            <input
+              type="text"
+              name="discount"
+              data-testid="prodDiscont"
+              placeholder="Discount in %"
+              autoComplete="off"
+              value={addProduct.prodDiscount}
+              style={{
+                ...businessAddproduct.prodPriceQuantWeight,
+                marginLeft: "10%",
+              }}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setAddProduct({
+                    ...addProduct,
+                    prodDiscount: value,
+                  });
+                }
+              }}
+            />
+            <FormControl
+              data-testid="selectForm"
+              sx={{
+                width: "45%",
+              }}
+              size="small"
+              style={{ marginTop: "3%", color: "black" }}
+            >
+              <Select
+                data-testid="prodCategory"
+                sx={{
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  fontFamily: "cursive",
+                  color: addProduct.category === "category" ? "grey" : "black",
+                }}
+                value={addProduct.category}
+                style={{
+                  backgroundColor: "white",
+                }}
+                onChange={(event) => {
+                  setAddProduct({
+                    ...addProduct,
+                    category: event.target.value as string,
+                    subCategory: getSubCategory(event.target.value)[0],
+                  });
+                }}
+              >
+                {category.map((cat, index) => (
+                  <MenuItem
+                    sx={{ fontFamily: "cursive" }}
+                    value={cat}
+                    key={`cat_${cat}_${index}`}
+                    data-testid={`cat_${cat}`}
+                  >
+                    {cat}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl
+              data-testid="selectForm"
+              sx={{
+                width: "45%",
+                marginLeft: "10%",
+              }}
+              size="small"
+              style={{ marginTop: "3%", color: "black" }}
+              disabled={addProduct.category === "category"}
+            >
+              <Select
+                data-testid="prodSubCategory"
+                sx={{
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  fontFamily: "cursive",
+                  color:
+                    addProduct.subCategory === "Condition" ? "grey" : "black",
+                }}
+                value={addProduct.subCategory}
+                style={{
+                  backgroundColor: "white",
+                }}
+                onChange={(event) => {
+                  setAddProduct({
+                    ...addProduct,
+                    subCategory: event.target.value as string,
+                  });
+                }}
+              >
+                {getSubCategory(addProduct.category)?.map(
+                  (condition, index) => (
                     <MenuItem
                       sx={{ fontFamily: "cursive" }}
                       value={condition}
@@ -198,145 +455,14 @@ const AddProduct = () => {
                     >
                       {condition}
                     </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <SendButton
-                operationOnData={reset}
-                text={"Cancel"}
-                style={{
-                  top: "70%",
-                  left: "10%",
-                  backgroundColor: "#597081",
-                }}
-              />
-              <SendButton
-                operationOnData={dumpProduct}
-                text={"Submit"}
-                style={{
-                  top: "70%",
-                  left: "25%",
-                  backgroundColor: "#597081",
-                }}
-              />
-            </div>
-            <Container
-              style={{
-                width: "60%",
-              }}
-            >
-              <input
-                type="text"
-                name="prodName"
-                data-testid="prodName"
-                placeholder="Product Name"
-                autoComplete="off"
-                value={addProduct.prodName}
-                style={businessAddproduct.prodName}
-                onChange={(event) => {
-                  setAddProduct({
-                    ...addProduct,
-                    prodName: event.target.value,
-                  });
-                }}
-              />
-              <textarea
-                name="prodDiscription"
-                data-testid="prodDiscription"
-                placeholder="Description of Product"
-                autoComplete="off"
-                value={addProduct.prodDiscrip}
-                style={businessAddproduct.prodDiscrip}
-                onChange={(event) => {
-                  setAddProduct({
-                    ...addProduct,
-                    prodDiscrip: event.target.value,
-                  });
-                }}
-              />
-              <input
-                type="text"
-                name="price"
-                data-testid="prodPrice"
-                placeholder="Product Price (M.R.P.)"
-                autoComplete="off"
-                value={addProduct.prodPrice}
-                style={businessAddproduct.prodPriceQuantWeight}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  if (/^\d*\.?\d*$/.test(value)) {
-                    setAddProduct({
-                      ...addProduct,
-                      prodPrice: value,
-                    });
-                  }
-                }}
-              />
-              <input
-                type="text"
-                name="Quant"
-                data-testid="prodQuant"
-                placeholder="Net Quantity"
-                autoComplete="off"
-                value={addProduct.pordQuant}
-                style={{
-                  ...businessAddproduct.prodPriceQuantWeight,
-                  marginLeft: "10%",
-                }}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  if (/^\d*\.?\d*$/.test(value)) {
-                    setAddProduct({
-                      ...addProduct,
-                      pordQuant: value,
-                    });
-                  }
-                }}
-              />
-              <input
-                type="text"
-                name="weight"
-                data-testid="prodWeight"
-                placeholder="Product Weight"
-                autoComplete="off"
-                value={addProduct.prodWeight}
-                style={businessAddproduct.prodPriceQuantWeight}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  if (/^\d*\.?\d*$/.test(value)) {
-                    setAddProduct({
-                      ...addProduct,
-                      prodWeight: value,
-                    });
-                  }
-                }}
-              />
-              <input
-                type="text"
-                name="discount"
-                data-testid="prodDiscont"
-                placeholder="Discount in %"
-                autoComplete="off"
-                value={addProduct.prodDiscount}
-                style={{
-                  ...businessAddproduct.prodPriceQuantWeight,
-                  marginLeft: "10%",
-                }}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  if (/^\d*\.?\d*$/.test(value)) {
-                    setAddProduct({
-                      ...addProduct,
-                      prodDiscount: value,
-                    });
-                  }
-                }}
-              />
-            </Container>
-          </div>
+                  )
+                )}
+              </Select>
+            </FormControl>
+          </Container>
         </div>
       )}
-    </>
+    </div>
   );
 };
 export default AddProduct;
