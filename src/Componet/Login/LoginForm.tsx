@@ -107,7 +107,7 @@ function LoginForm() {
                 style={loginCss.inputStyle}
                 className={isRequired ? "red-placeholder" : ""}
                 type={showPassword ? "text" : "password"}
-                id="pass"
+                id="password"
                 placeholder={
                   isRequired ? "* Password Required" : "Enter Password"
                 }
@@ -118,7 +118,7 @@ function LoginForm() {
                   setIsRequired(false);
                 }}
               />
-              <IconButton onClick={handleVerifyButton} data-testid="verify">
+              <IconButton onClick={handleVerifyButton} data-testid="verify" id="verify">
                 <VisibilityIcon sx={{ color: "white", marginRight: "1rem" }} />
               </IconButton>
             </div>
