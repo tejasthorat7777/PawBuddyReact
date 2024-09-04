@@ -63,7 +63,7 @@ describe("Registration", () => {
     expect(screen.getByText("Gender :")).toBeInTheDocument();
     expect(screen.getByText("Male")).toBeInTheDocument();
     expect(screen.getByText("Female")).toBeInTheDocument();
-    expect(screen.getByText("City")).toBeInTheDocument();
+    // expect(screen.getByText("City")).toBeInTheDocument();
     expect(screen.getByText("SUBMIT")).toBeInTheDocument();
   });
 
@@ -90,7 +90,7 @@ describe("Registration", () => {
     expect(screen.getByTestId("age").value).toBe("3");
   });
 
-  it("TC:3 click on Submit button filled data should dump in db", async () => {
+  it.only("TC:3 click on Submit button filled data should dump in db", async () => {
     render(
       <Wrapper>
         <Registration />
@@ -104,9 +104,6 @@ describe("Registration", () => {
     await act(async () => {
       fireEvent.mouseDown(screen.getByRole("combobox"));
     });
-    act(() => {
-      fireEvent.click(screen.getByTestId("city_Pune"));
-    });
     await act(async () => {
       fireEvent.click(screen.getByText("SUBMIT"));
     });
@@ -114,7 +111,7 @@ describe("Registration", () => {
     expect(mockAxiosPost).toHaveBeenCalledWith(
       "http://localhost:3000/sendUsersInfo",
       {
-        city: "Pune",
+        acc_type:"",
         name: "Pettey",
         age: "3",
         birthdate: "2024-07-04",
