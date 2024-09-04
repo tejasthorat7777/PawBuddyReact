@@ -282,7 +282,7 @@ const Home = () => {
                     >
                       {isItemExists(wishlistItems, card.prodId) ? (
                         <FavoriteIcon
-                          style={{ color: "red" }}
+                          style={{ color: "#FF0000" }}
                           data-testid={`FavoriteIcon_${card.prodId}`}
                         />
                       ) : (
