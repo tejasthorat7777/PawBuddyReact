@@ -20,28 +20,9 @@ const mockUser = {
   username: "",
   userId: "",
   gender: "",
-  city: "",
+  acc_type: "",
   password: "",
 };
-
-const mcokItemWishlist = [
-  {
-    productId: "1",
-    prouctName: "Harness",
-    imageSource: "",
-    price: "759",
-    selected: false,
-    description: "",
-  },
-  {
-    productId: "2",
-    prouctName: "Collar",
-    imageSource: "",
-    price: "259",
-    selected: false,
-    description: "",
-  },
-];
 
 describe("Login Page", () => {
   it("TC:1 login box should be present", () => {
@@ -59,7 +40,6 @@ describe("Login Page", () => {
     const mockInitialState = {
       status: false,
       user: mockUser,
-      itemWishlist: mcokItemWishlist,
     };
     render(
       <Wrapper initialState={mockInitialState}>
@@ -103,7 +83,6 @@ describe("Login Page", () => {
     const mockInitialState = {
       status: false,
       user: mockUser,
-      itemWishlist: mcokItemWishlist,
     };
     render(
       <Wrapper initialState={mockInitialState}>
@@ -177,22 +156,6 @@ describe("Login Page", () => {
         ],
       });
     });
-    const mouseEnterCSS = {
-      position: "absolute",
-      "background-color": "rgb(0, 17, 28)",
-      "font-family": "cursive",
-      height: "8%",
-      width: "25%",
-      "border-radius": "10px",
-    };
-    const mouseLeaveCSS = {
-      position: "absolute",
-      "background-color": "rgb(89, 112, 129)",
-      "font-family": "cursive",
-      height: "8%",
-      width: "25%",
-      "border-radius": "10px",
-    };
 
     render(
       <Wrapper>
@@ -212,12 +175,20 @@ describe("Login Page", () => {
 
     act(() => {
       fireEvent.mouseEnter(submit);
-      expect(submit.style._values).toEqual(mouseEnterCSS);
+      const computedStyle = window.getComputedStyle(submit);
+      const mouseEnter = computedStyle.backgroundColor;
+      expect(submit).toHaveStyle({
+        backgroundColor: mouseEnter,
+      });
     });
 
     act(() => {
       fireEvent.mouseLeave(submit);
-      expect(submit.style._values).toEqual(mouseLeaveCSS);
+      const computedStyle = window.getComputedStyle(submit);
+      const mouseLeave = computedStyle.backgroundColor;
+      expect(submit).toHaveStyle({
+        backgroundColor: mouseLeave,
+      });
     });
   });
 

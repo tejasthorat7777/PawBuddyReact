@@ -37,9 +37,7 @@ const Profile = () => {
             ...flexDiv,
           }}
         >
-          <div>
-            Please Login
-          </div>
+          <div>Please Login</div>
           <LoginRequired />
         </div>
       ) : (
@@ -98,8 +96,8 @@ const Profile = () => {
               <div style={styles}>{user.gender}</div>
             </div>
             <div style={{ width: "20%" }}>
-              City
-              <div style={styles}>{user.city}</div>
+              Account Type
+              <div style={styles}>{user.acc_type}</div>
             </div>
           </div>
         </div>

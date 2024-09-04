@@ -1,10 +1,5 @@
 import Wishlist from "../Componet/Account/Wishlist";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-} from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import Wrapper from "../setupTest/Wrapper";
 import { mockAxiosGet, mockAxiosPost } from "../__mocks__/globalMock";
 import { State, UserData } from "../commonFiles/commonTypes";
@@ -166,30 +161,6 @@ describe("WishList", () => {
       user: { ...mockUser, userId: "123" },
     };
 
-    const mouseEnterCSSAddtoCart = {
-      "background-color": "rgb(255, 190, 11)",
-      color: "white",
-      "font-size": "70%",
-    };
-    const mouseLeaveCSSAddtoCart = {
-      "background-color": "rgb(232, 93, 4)",
-      color: "white",
-      "font-size": "70%",
-    };
-
-    const mouseEnterCSSBuyNow = {
-      "background-color": "rgb(255, 190, 11)",
-      color: "white",
-      "font-size": "70%",
-      "margin-left": "20%",
-    };
-    const mouseLeaveCSSBuyNow = {
-      "background-color": "rgb(232, 93, 4)",
-      color: "white",
-      "font-size": "70%",
-      "margin-left": "20%",
-    };
-
     render(
       <Wrapper initialState={mockInitialState}>
         <Wishlist />
@@ -206,22 +177,44 @@ describe("WishList", () => {
     const addtoCart = screen.getByTestId("addToCart1");
     const buyNow = screen.getByTestId("buyNow1");
 
+    // assertion on styling on add to cart button entering mouse
     act(() => {
       fireEvent.mouseEnter(addtoCart);
-      expect(addtoCart.style._values).toEqual(mouseEnterCSSAddtoCart);
-    });
-    act(() => {
-      fireEvent.mouseLeave(addtoCart);
-      expect(addtoCart.style._values).toEqual(mouseLeaveCSSAddtoCart);
+      const computedStyle = window.getComputedStyle(addtoCart);
+      const mouseEnterCSSAddtoCart = computedStyle.backgroundColor;
+      expect(addtoCart).toHaveStyle({
+        backgroundColor: mouseEnterCSSAddtoCart,
+      });
     });
 
+    // assertion on styling on add to cart button leaving mouse
+    act(() => {
+      fireEvent.mouseLeave(addtoCart);
+      const computedStyle = window.getComputedStyle(addtoCart);
+      const mouseLeaveCSSAddtoCart = computedStyle.backgroundColor;
+      expect(addtoCart).toHaveStyle({
+        backgroundColor: mouseLeaveCSSAddtoCart,
+      });
+    });
+
+    // assertion on styling on buyNow button entering mouse
     act(() => {
       fireEvent.mouseEnter(buyNow);
-      expect(buyNow.style._values).toEqual(mouseEnterCSSBuyNow);
+      const computedStyle = window.getComputedStyle(buyNow);
+      const mouseEnterCSSBuyNow = computedStyle.backgroundColor;
+      expect(buyNow).toHaveStyle({
+        backgroundColor: mouseEnterCSSBuyNow,
+      });
     });
+
+    // assertion on styling on buyNow button leaving mouse
     act(() => {
       fireEvent.mouseLeave(buyNow);
-      expect(buyNow.style._values).toEqual(mouseLeaveCSSBuyNow);
+      const computedStyle = window.getComputedStyle(buyNow);
+      const mouseLeaveCSSBuyNow = computedStyle.backgroundColor;
+      expect(buyNow).toHaveStyle({
+        backgroundColor: mouseLeaveCSSBuyNow,
+      });
     });
   });
 

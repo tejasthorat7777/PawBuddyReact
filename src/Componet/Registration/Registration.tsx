@@ -43,7 +43,7 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
 }));
 
 export default function Registration() {
-  // TODD we need to introduce a registration form for business also 
+  // TODD we need to introduce a registration form for business also
   // currently we are giving select option for acc type but it will be change in future
   const [userData, setUserData] = useState<UserData>({
     acc_type: "",
@@ -71,7 +71,6 @@ export default function Registration() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
-      console.log("userdata>>>>",userData)
       event.preventDefault();
       setIsloading(true);
       await axios.post("http://localhost:3000/sendUsersInfo", userData);

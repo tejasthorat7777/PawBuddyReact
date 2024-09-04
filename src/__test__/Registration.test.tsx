@@ -79,7 +79,8 @@ describe("Registration", () => {
         target: { value: "Pettey" },
       });
     });
-    expect(screen.getByTestId("name").value).toBe("Pettey");
+    const nameInput = screen.getByTestId("name") as HTMLInputElement;
+    expect(nameInput.value).toBe("Pettey");
 
     expect(screen.getByText("Age")).toBeInTheDocument();
     act(() => {
@@ -87,10 +88,11 @@ describe("Registration", () => {
         target: { value: "3" },
       });
     });
-    expect(screen.getByTestId("age").value).toBe("3");
+    const ageInput = screen.getByTestId("age") as HTMLInputElement;
+    expect(ageInput.value).toBe("3");
   });
 
-  it.only("TC:3 click on Submit button filled data should dump in db", async () => {
+  it("TC:3 click on Submit button filled data should dump in db", async () => {
     render(
       <Wrapper>
         <Registration />
@@ -111,7 +113,7 @@ describe("Registration", () => {
     expect(mockAxiosPost).toHaveBeenCalledWith(
       "http://localhost:3000/sendUsersInfo",
       {
-        acc_type:"",
+        acc_type: "",
         name: "Pettey",
         age: "3",
         birthdate: "2024-07-04",

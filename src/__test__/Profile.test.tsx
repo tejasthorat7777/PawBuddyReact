@@ -13,7 +13,7 @@ const mockUser = {
   age: "3",
   birthdate: "2022-01-26",
   breed: "Indie",
-  city: "Pune",
+  acc_type: "Customer",
   gender: "female",
   identification: "Orange Fur",
   name: "Pettey",
@@ -26,7 +26,6 @@ const mockUser = {
 const mockState = {
   status: false,
   user: mockUser,
-  itemWishlist: [],
 };
 
 describe("Profile page", () => {
@@ -55,8 +54,8 @@ describe("Profile page", () => {
     expect(profilePage.getByText("Pettey@7777")).toBeTruthy();
     expect(profilePage.getByText("Gender")).toBeTruthy();
     expect(profilePage.getByText("female")).toBeTruthy();
-    expect(profilePage.getByText("City")).toBeTruthy();
-    expect(profilePage.getByText("Pune")).toBeTruthy();
+    expect(profilePage.getByText("Account Type")).toBeTruthy();
+    expect(profilePage.getByText("Customer")).toBeTruthy();
   });
   it("TC:2 it should ask for login", () => {
     const invalidLogin = {
@@ -65,7 +64,6 @@ describe("Profile page", () => {
         ...mockUser,
         userId: "",
       },
-      itemWishlist: [],
     };
     const profilePage = render(
       <Wrapper initialState={invalidLogin}>
