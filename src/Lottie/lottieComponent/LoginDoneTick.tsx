@@ -3,7 +3,7 @@ import loginDoneTick from "../lottieJson/loginDoneTick.json";
 
 export const LoginDoneTick = () => {
   return (
-    <div data-testid="loginDoneTick" id="loginDoneTick">
+    <div id="loginDoneTick">
       <Lottie
       loop
       animationData={loginDoneTick}

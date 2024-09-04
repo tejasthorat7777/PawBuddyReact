@@ -150,7 +150,7 @@ describe("Login Page", () => {
     const userpass = screen.getByTestId("password");
     fireEvent.change(userpass, { target: { value: "123456" } });
 
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     expect(submit).toBeInTheDocument();
 
     act(() => {
@@ -207,7 +207,7 @@ describe("Login Page", () => {
     expect(userpass).toBeInTheDocument();
     fireEvent.change(userpass, { target: { value: "123456" } });
 
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     expect(submit).toBeInTheDocument();
 
     act(() => {
@@ -251,7 +251,7 @@ describe("Login Page", () => {
     fireEvent.change(userpass, { target: { value: "" } });
     expect(userpass.value).toBe("");
 
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     expect(submit).toBeInTheDocument();
     fireEvent.click(submit);
 
@@ -285,7 +285,7 @@ describe("Login Page", () => {
     fireEvent.change(userpass, { target: { value: "" } });
     expect(userpass.value).toBe("");
 
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     expect(submit).toBeInTheDocument();
 
     await act(async () => {
@@ -331,7 +331,7 @@ describe("Login Page", () => {
       fireEvent.change(userpass, { target: { value: "blacky" } });
     });
 
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     await act(async () => {
       fireEvent.click(submit);
     });
@@ -405,7 +405,7 @@ describe("Login Page", () => {
       fireEvent.change(userpass, { target: { value: "1234567" } });
     });
 
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     await act(async () => {
       fireEvent.click(submit);
     });
@@ -431,7 +431,7 @@ describe("Login Page", () => {
       fireEvent.change(useremail, { target: { value: "priyankathorat" } });
       fireEvent.change(userpass, { target: { value: "blacky" } });
     });
-    const submit = screen.getByTestId("submitBtn");
+    const submit = screen.getByTestId("btn_Login");
     expect(screen.getByText("Login")).toBeTruthy();
     await act(async () => {
       fireEvent.click(submit);
