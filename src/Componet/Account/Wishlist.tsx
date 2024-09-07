@@ -41,12 +41,13 @@ const Wishlist = () => {
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const getWishList = async (customerId: string) => {
     try {
       setIsLoading(true);
       const getData = await axios.get(
-        `http://localhost:3000/wishlist/get/${customerId}`
+        `${apiUrl}/wishlist/get/${customerId}`
       );
       if (getData.data.items.length > 0) {
         setCardData(getData.data.items);
@@ -69,7 +70,7 @@ const Wishlist = () => {
 
   const handleXmark = async (customerId: string, prodId: string) => {
     try {
-      await axios.post("http://localhost:3000/wishlist/remove", {
+      await axios.post(`${apiUrl}/wishlist/remove`, {
         customerId,
         prodId,
       });

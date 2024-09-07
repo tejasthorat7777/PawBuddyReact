@@ -37,8 +37,9 @@ function ListedProducts() {
   const getProduct = async (customerId: string) => {
     setIsLoading(true);
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       const getData = await axios.get(
-        `http://localhost:3000/busi/getProducts/${customerId}`
+        `${apiUrl}/busi/getProducts/${customerId}`
       );
       console.log("items>>>", getData.data[0].products);
       const products = getData.data[0].products;

@@ -46,6 +46,7 @@ const CartIsEmpty = () => {
 };
 const Cart = () => {
   const user = useSelector((state: RootState) => state.finalState.user);
+  const apiUrl = import.meta.env.VITE_API_URL;
   const customerId = user.userId;
   const [cartList, setCartList] = useState<CartListData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,9 +56,7 @@ const Cart = () => {
   const getCartList = async (customerId: string) => {
     try {
       setIsLoading(true);
-      const getData = await axios.get(
-        `http://localhost:3000/cart/get/${customerId}`
-      );
+      const getData = await axios.get(`${apiUrl}/cart/get/${customerId}`);
       if (getData.data.items.length > 0) {
         setCartList(getData.data.items);
       } else {
@@ -79,7 +78,7 @@ const Cart = () => {
 
   const handleRemove = async (customerId: string, prodId: string) => {
     try {
-      await axios.post("http://localhost:3000/cart/remove", {
+      await axios.post(`${apiUrl}/cart/remove`, {
         customerId,
         prodId,
       });

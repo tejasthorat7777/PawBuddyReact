@@ -111,7 +111,8 @@ const AddProduct = () => {
     setIsLoading(true);
     try {
       event.preventDefault();
-      await axios.post("http://localhost:3000/addProduct", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      await axios.post(`${apiUrl}/addProduct`, {
         customerId: userId,
         products: addProduct, 
       });

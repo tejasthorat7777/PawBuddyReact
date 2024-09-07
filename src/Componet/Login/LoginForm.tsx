@@ -39,7 +39,8 @@ function LoginForm() {
 
   const fetchData = async () => {
     try {
-      const getData = await axios.get("http://localhost:3000/getUsersInfo");
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const getData = await axios.get(`${apiUrl}/getUsersInfo`);
       const data = getData.data;
       setUserDataArray(data);
     } catch (error) {
