@@ -18,7 +18,7 @@ server.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 server.use(express.json());
 
 try {
-  mongoose.connect(process.env.VITE_DB_URL);
+  mongoose.connect(process.env.MONGODB_URI);
   console.log("Connected to MongoDB");
 } catch (error) {
   console.error("Error connecting to MongoDB:", error);
