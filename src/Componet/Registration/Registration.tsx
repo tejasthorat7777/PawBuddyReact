@@ -71,9 +71,10 @@ export default function Registration() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
+      const apiUrl = process.env.API_URL;
       event.preventDefault();
       setIsloading(true);
-      await axios.post("http://localhost:3000/sendUsersInfo", userData);
+      await axios.post(`${apiUrl}/sendUsersInfo`, userData);
       setTimeout(() => {
         setIsloading(false);
       }, 3000);

@@ -33,6 +33,7 @@ import { isItemExists } from "../../commonFiles/commonFunctions";
 import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 
 const Home = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const user = useSelector((state: RootState) => state.finalState.user);
   const customerId = user.userId;
 
@@ -47,7 +48,7 @@ const Home = () => {
   const getProducts = async () => {
     try {
       let Products: ProductData[] = [];
-      const getData = await axios.get("http://localhost:3000/getProducts");
+      const getData = await axios.get(`${apiUrl}/getProducts`);
       const data = getData.data;
       data.map((doc: any) => {
         doc.products.map((product: any) => {
@@ -65,9 +66,7 @@ const Home = () => {
 
   const getWishList = async (customerId: string) => {
     try {
-      const getData = await axios.get(
-        `http://localhost:3000/wishlist/get/${customerId}`
-      );
+      const getData = await axios.get(`${apiUrl}/wishlist/get/${customerId}`);
       if (getData.data.items.length > 0) {
         setWishlistItems(getData.data.items);
       }
@@ -78,9 +77,7 @@ const Home = () => {
 
   const getCartList = async (customerId: string) => {
     try {
-      const getData = await axios.get(
-        `http://localhost:3000/cart/get/${customerId}`
-      );
+      const getData = await axios.get(`${apiUrl}/cart/get/${customerId}`);
       if (getData.data.items.length > 0) {
         setCartList(getData.data.items);
       }
@@ -130,11 +127,11 @@ const Home = () => {
     try {
       if (!exists) {
         const dumpedData = { ...item, customerId };
-        await axios.post("http://localhost:3000/cart/dumped", dumpedData);
+        await axios.post(`${apiUrl}/cart/dumped`, dumpedData);
         setCartList((prevCartList) => [...prevCartList, item]);
         toast("Item added to Cart", { autoClose: 1000 });
       } else {
-        await axios.post("http://localhost:3000/cart/remove", {
+        await axios.post(`${apiUrl}/cart/remove`, {
           customerId,
           prodId: item.prodId,
         });
@@ -164,11 +161,11 @@ const Home = () => {
     try {
       if (!exists) {
         const dumpedData = { ...item, customerId };
-        await axios.post("http://localhost:3000/wishlist/dumped", dumpedData);
+        await axios.post(`${apiUrl}/wishlist/dumped`, dumpedData);
         setWishlistItems((prevWishlistItems) => [...prevWishlistItems, item]);
         toast("Item added to Wishlist", { autoClose: 1000 });
       } else {
-        await axios.post("http://localhost:3000/wishlist/remove", {
+        await axios.post(`${apiUrl}/wishlist/remove`, {
           customerId,
           prodId: item.prodId,
         });

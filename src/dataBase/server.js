@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import { wishlistInfo } from "./modal/wishlist.js";
 import { Products } from "./modal/product.js";
 import { cartList } from "./modal/cart.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const server = express();
 const PORT = 3000;
@@ -15,10 +17,8 @@ server.use(bodyParser.json({ limit: "50mb" }));
 server.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 server.use(express.json());
 
-const dbUrl =
-  "mongodb+srv://tejasthorat7777:pettey@pawbuddye.6avh4bl.mongodb.net/?retryWrites=true&w=majority&appName=PawBuddyE";
 try {
-  mongoose.connect(dbUrl);
+  mongoose.connect(process.env.VITE_DB_URL);
   console.log("Connected to MongoDB");
 } catch (error) {
   console.error("Error connecting to MongoDB:", error);
@@ -32,7 +32,6 @@ server.listen(PORT, () => {
 
 server.post("/sendUsersInfo", async (req, res) => {
   const information = req.body;
-  console.log("Information>>>>", information);
   try {
     const newUser = new UserInfo(information);
     await newUser.save();
