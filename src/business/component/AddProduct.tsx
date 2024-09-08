@@ -85,6 +85,7 @@ const AddProduct = () => {
   // setAddProduct({ ...addProduct, customerId: customerId });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [finalPrice, setFinalPrice] = useState("");
 
   const reset = () => {
     setAddProduct({
@@ -114,7 +115,7 @@ const AddProduct = () => {
       const apiUrl = import.meta.env.VITE_API_URL;
       await axios.post(`${apiUrl}/addProduct`, {
         customerId: userId,
-        products: addProduct, 
+        products: addProduct,
       });
     } catch (error) {
       console.error("Error while uploading product:", error);
@@ -124,7 +125,7 @@ const AddProduct = () => {
       reset();
     }
   };
-  
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -135,6 +136,12 @@ const AddProduct = () => {
       };
       reader.readAsDataURL(file); // Convert image to base64 string
     }
+  };
+
+  const handleFinalPrice = (price: string, discount: string) => {
+    const priceBeforeDis = Number(price) * Number(discount);
+    const finalPrice = Number(price) - priceBeforeDis / 100;
+    setFinalPrice(finalPrice.toString());
   };
 
   return (
@@ -460,6 +467,28 @@ const AddProduct = () => {
                 )}
               </Select>
             </FormControl>
+            <div
+              style={{
+                ...businessAddproduct.finalPrice,
+                color: finalPrice ? "black" : "grey",
+              }}
+            >
+              {finalPrice || "Final Price after Discount per Product"}
+              <SendButton
+                operationOnData={() => {
+                  handleFinalPrice(
+                    addProduct.prodPrice,
+                    addProduct.prodDiscount
+                  );
+                }}
+                text={"Show"}
+                style={{
+                  top: "71%",
+                  left: "82%",
+                  backgroundColor: "#597081",
+                }}
+              />
+            </div>
           </Container>
         </div>
       )}

@@ -260,7 +260,7 @@ export const businessAddproduct = {
   },
   prodDiscrip: {
     marginTop: "3%",
-    height: "40%",
+    height: "25%",
     width: "100%",
     backgroundColor: "white",
     padding: "2%",
@@ -274,5 +274,14 @@ export const businessAddproduct = {
     marginTop: "3%",
     color: "black",
     borderRadius: "5px",
+  },
+  finalPrice: {
+    backgroundColor: "white",
+    width: "45%",
+    marginLeft: "25%",
+    padding: "2%",
+    marginTop: "3%",
+    borderRadius: "5px",
+    fontFamily: "cursive",
   },
 };
