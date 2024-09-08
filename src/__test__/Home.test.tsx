@@ -5,7 +5,6 @@ import {
   mockAxiosGet,
   mockAxiosPost,
   mockShare,
-  rgbStringToHex,
 } from "../__mocks__/globalMock";
 
 vi.mock("react-lottie-player", () => {
@@ -91,7 +90,8 @@ describe("Home", () => {
     vi.clearAllMocks();
     vi.clearAllTimers();
   });
-  it("TC:1 should change icon when user clicks on add to wishlist button", async () => {
+
+  it("TC:1 Product should add to cart , when user is logged in", async () => {
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -101,31 +101,61 @@ describe("Home", () => {
         <Home />
       </Wrapper>
     );
-
-    const FavoriteBorderOutlinedIcon = `FavoriteBorderOutlinedIcon_${productsOut[0].products[0].prodId}`;
-    const FavoriteIcon = `FavoriteIcon_${productsOut[0].products[0].prodId}`;
-    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
-
+    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
     await act(async () => {
       vi.advanceTimersByTime(5000);
     });
-    expect(screen.getByTestId(FavoriteBorderOutlinedIcon)).toBeInTheDocument();
     await act(async () => {
-      fireEvent.click(screen.getByTestId(wishilistBtn));
+      fireEvent.click(screen.getByTestId(cartBtn));
     });
-
-    expect(screen.getByTestId(FavoriteIcon)).toBeInTheDocument();
-
-    // checking icon color after clicked
-    const favoriteIconElement = screen.getByTestId(FavoriteIcon);
-    const computedStyle = window.getComputedStyle(favoriteIconElement);
-    const backClr = rgbStringToHex(computedStyle.color);
-    expect(screen.getByTestId(FavoriteIcon)).toHaveStyle({
-      color: backClr,
-    });
+    expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
+    expect(mockAxiosPost).toHaveBeenLastCalledWith(
+      "http://localhost:3000/cart/dumped",
+      {
+        prodId: "1",
+        category: "Dog Food",
+        customerId: "123456",
+        prodName: "Pedegree",
+        prodDiscrip: "nutrients",
+        prodPrice: "100",
+        pordQuant: "1",
+        prodDiscount: "2",
+        prodBrand: "Balaji",
+        prodWeight: "100",
+        prodConditon: "new",
+        prodImg: "",
+        selected: false,
+        rating: 0,
+        subCategory: "Treat",
+      }
+    );
   });
 
-  it("TC:2 should display only first 8 products", async () => {
+  it("TC:2 Product should removed from cartlist, when user click again on add button and should display toast msg", async () => {
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const carBtn = `cart_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(carBtn));
+    });
+    expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(carBtn));
+    });
+    expect(screen.getByText("Item removed from Cart")).toBeInTheDocument();
+  });
+
+  it("TC:3 should display only first 8 products", async () => {
     render(
       <Wrapper>
         <Home />
@@ -152,7 +182,7 @@ describe("Home", () => {
     expect(screen.queryByTestId("product_16")).not.toBeInTheDocument();
   });
 
-  it("TC:3 should display other 8 products, when goes on 2nd page", async () => {
+  it("TC:4 should display other 8 products, when goes on 2nd page", async () => {
     render(
       <Wrapper>
         <Home />
@@ -186,7 +216,7 @@ describe("Home", () => {
     expect(screen.queryByTestId("product_16")).toBeInTheDocument();
   });
 
-  it("TC:4 should display toast message, when user is not login and try to add product to wishlist", async () => {
+  it("TC:5 should display toast message, when user is not login and try to add product to wishlist", async () => {
     render(
       <Wrapper>
         <Home />
@@ -205,7 +235,7 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
-  it("TC:5 Product should add to wishlist, when user is logged in", async () => {
+  it("TC:6 Product should add to wishlist, when user is logged in", async () => {
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -246,7 +276,7 @@ describe("Home", () => {
     );
   });
 
-  it("TC:6 Product should removed from wishlist, when user click again on heart icon", async () => {
+  it("TC:7 Product should removed from wishlist, when user click again on heart icon", async () => {
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -270,7 +300,7 @@ describe("Home", () => {
     expect(screen.getByText("Item removed from Wishlist")).toBeInTheDocument();
   });
 
-  it("TC:7 should display  Error updating wishlist. Please try again later., when axios reject dumping of data", async () => {
+  it("TC:8 should display Error updating wishlist. Please try again later., when axios reject dumping of data", async () => {
     mockAxiosPost.mockRejectedValue({});
     const mockInitialState = {
       status: false,
@@ -293,7 +323,30 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
-  it("TC:8 share funtion should called when user hit share button", async () => {
+  it("TC:9 should display Error updating Cart. Please try again later., when axios reject dumping of data", async () => {
+    mockAxiosPost.mockRejectedValue({});
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(cartBtn));
+    });
+    expect(
+      screen.getByText("Error updating Cart. Please try again later.")
+    ).toBeInTheDocument();
+  });
+
+  it("TC:10 share funtion should called when user hit share button", async () => {
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -312,7 +365,7 @@ describe("Home", () => {
     expect(mockShare).toHaveBeenCalled();
   });
 
-  it("TC:9 should display Sorry, Error in sharing, when user hit share button and error occured", async () => {
+  it("TC:11 should display Sorry, Error in sharing, when user hit share button and error occured", async () => {
     mockShare.mockRejectedValue({});
     const mockInitialState = {
       status: false,
@@ -330,5 +383,118 @@ describe("Home", () => {
       fireEvent.click(screen.getByTestId("share_1"));
     });
     expect(screen.getByText("Sorry, Error in sharing")).toBeInTheDocument();
+  });
+
+  it("TC:12 should display Please log in to add items to your Cart. when user is not logged in", async () => {
+    render(
+      <Wrapper>
+        <Home />
+      </Wrapper>
+    );
+
+    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(cartBtn));
+    });
+    expect(
+      screen.getByText("Please log in to add items to your Cart.")
+    ).toBeInTheDocument();
+  });
+});
+
+describe("Rejection", () => {
+  it("TC:13 should display Sorry No Product Found when axios get Reject", async () => {
+    mockAxiosGet
+      .mockImplementationOnce(async () => {
+        return Promise.reject({});
+      })
+      .mockImplementation(async () => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(screen.getByText(/Sorry No Product Found/i)).toBeInTheDocument();
+  });
+  it("TC:14 should display Unable to load wishlist... when wihslist axios get Reject", async () => {
+    mockAxiosGet
+      .mockImplementationOnce(async () => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementationOnce(async () => {
+        return Promise.reject({});
+      })
+      .mockImplementation(async () => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(screen.getByText("Unable to load wishlist...")).toBeInTheDocument();
+  });
+  it("TC:15 should display Unable to load Cart... when cart axios get Reject", async () => {
+    mockAxiosGet
+      .mockImplementationOnce(async () => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementationOnce(async () => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      })
+      .mockImplementation(async () => {
+        return Promise.reject({});
+      });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(screen.getByText("Unable to load Cart...")).toBeInTheDocument();
   });
 });

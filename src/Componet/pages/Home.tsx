@@ -73,6 +73,9 @@ const Home = () => {
       }
     } catch (error) {
       console.log("error>>>", error);
+      toast("Unable to load wishlist...", {
+        autoClose: 2000,
+      });
     }
   };
 
@@ -86,26 +89,21 @@ const Home = () => {
       }
     } catch (error) {
       console.log("error>>>", error);
+      toast("Unable to load Cart...", {
+        autoClose: 2000,
+      });
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      try {
-        await getProducts();
-        if (customerId) {
-          await getWishList(customerId);
-          await getCartList(customerId);
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-        toast("Unable to load data. Please try again later.", {
-          autoClose: 2000,
-        });
-      } finally {
-        setIsLoading(false);
+      await getProducts();
+      if (customerId) {
+        await getWishList(customerId);
+        await getCartList(customerId);
       }
+      setIsLoading(false);
     };
 
     fetchData();
@@ -292,6 +290,7 @@ const Home = () => {
                       )}
                     </Button>
                     <Button
+                      data-testid={`cart_${card.prodId}`}
                       onClick={() => {
                         addTocart(card);
                       }}
