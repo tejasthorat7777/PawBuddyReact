@@ -3,10 +3,12 @@ import bodyParser from "body-parser";
 import { UserInfo } from "./modal/userInfo.js";
 import cors from "cors";
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { wishlistInfo } from "./modal/wishlist.js";
 import { Products } from "./modal/product.js";
 import { cartList } from "./modal/cart.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const server = express();
@@ -30,10 +32,37 @@ server.listen(PORT, () => {
 
 // ######################################### POST METHODS #####################################################
 
+// User login route
+server.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  // Find user in database
+  const user = await UserInfo.findOne({ username });
+  if (!user) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+  // Compare password
+  const isMatch = bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+  // Generate JWT
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  // Send token to client
+  res.json({ token, user });
+});
+
 server.post("/sendUsersInfo", async (req, res) => {
   const information = req.body;
   try {
-    const newUser = new UserInfo(information);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const newUser = new UserInfo({ ...information, password: hashedPassword });
     await newUser.save();
     res.status(200).json({ message: "User created successfully!" });
   } catch (error) {

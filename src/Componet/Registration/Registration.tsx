@@ -71,7 +71,7 @@ export default function Registration() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
-      const apiUrl = process.env.API_URL;
+      const apiUrl = import.meta.env.VITE_API_URL;
       event.preventDefault();
       setIsloading(true);
       await axios.post(`${apiUrl}/sendUsersInfo`, userData);
