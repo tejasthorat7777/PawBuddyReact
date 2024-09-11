@@ -59,22 +59,28 @@ function LoginForm() {
     }
     e.preventDefault();
     setLoading(true);
-    const user = userDataArray.find(
-      (user: UserData) => user.username === email
-    );
-    if (user) {
-      if (user.password === password) {
-        dispatch(userInfo({ user }));
-        setTimeout(() => {
-          loginSuccess();
-        }, 3000);
-      } else {
-        setLoading(false);
-        setCorrectUser(true);
-      }
-    } else {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}/login`, {
+        username: email,
+        password,
+      });
+
+      // If login is successful, the token will be returned
+      const token = response.data.token;
+      const user = response.data.user;
+
+      // Store token in localStorage for persistence
+      localStorage.setItem("token", token);
+
+      // Optionally, dispatch user info to Redux state
+      dispatch(userInfo({ user }));
+
+      // Handle successful login
+      loginSuccess();
+    } catch (error) {
       setLoading(false);
-      setCorrectUser(true);
+      setCorrectUser(true); // Show error message if credentials are incorrect
     }
   };
 
@@ -119,7 +125,11 @@ function LoginForm() {
                   setIsRequired(false);
                 }}
               />
-              <IconButton onClick={handleVerifyButton} data-testid="verify" id="verify">
+              <IconButton
+                onClick={handleVerifyButton}
+                data-testid="verify"
+                id="verify"
+              >
                 <VisibilityIcon sx={{ color: "white", marginRight: "1rem" }} />
               </IconButton>
             </div>
