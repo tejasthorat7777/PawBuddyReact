@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { loginCss } from "../../commonFiles/commonTheme";
+import { h100w100, loginCss } from "../../commonFiles/commonTheme";
 import "../../commonFiles/commonCss/handleInputAuto.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -81,7 +81,7 @@ function LoginForm() {
   return (
     <div style={loginCss.outerDiv}>
       <div style={loginCss.innerDiv}>
-        <div style={{ height: "100%", width: "100%" }}>
+        <div style={h100w100}>
           <span style={loginCss.textStyle}>Login Here</span>
           <div style={loginCss.inputOuterDiv}>
             <div style={loginCss.inputDiv}>
@@ -119,7 +119,11 @@ function LoginForm() {
                   setIsRequired(false);
                 }}
               />
-              <IconButton onClick={handleVerifyButton} data-testid="verify" id="verify">
+              <IconButton
+                onClick={handleVerifyButton}
+                data-testid="verify"
+                id="verify"
+              >
                 <VisibilityIcon sx={{ color: "white", marginRight: "1rem" }} />
               </IconButton>
             </div>
