@@ -44,12 +44,18 @@ const mockItemWishlist = [
     prodDescip: "",
   },
 ];
+let testCaseNumber = 0;
+
+const getNumber = () => {
+  testCaseNumber = testCaseNumber + 1;
+  return `TC:${testCaseNumber}`;
+};
 
 describe("WishList", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  it("TC:1 should display Please Login when user is not logged in", async () => {
+  it(`${getNumber()} should display Please Login when user is not logged in`, async () => {
     const mockInitialState: State = {
       status: false,
       user: mockUser,
@@ -63,7 +69,7 @@ describe("WishList", () => {
     expect(screen.getByTestId("loginRequired")).toBeInTheDocument();
   });
 
-  it("TC:2 should display You Don't have any favourite item, when no product is added to wishlist", async () => {
+  it(`${getNumber()} should display You Don't have any favourite item, when no product is added to wishlist`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: {
@@ -92,7 +98,7 @@ describe("WishList", () => {
     expect(screen.getByTestId("emptyCart")).toBeInTheDocument();
   });
 
-  it("TC:3 should display Product, if present in database", async () => {
+  it(`${getNumber()} should display Product, if present in database`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: {
@@ -124,7 +130,7 @@ describe("WishList", () => {
     ).toBeInTheDocument();
   });
 
-  it("TC:4 should display Sorry We are unable to get your wishlist, when DB rejects", async () => {
+  it(`${getNumber()} should display Sorry We are unable to get your wishlist, when DB rejects`, async () => {
     mockAxiosGet.mockRejectedValue({});
     const mockInitialState = {
       status: true,
@@ -148,7 +154,7 @@ describe("WishList", () => {
     expect(screen.getByTestId("fetchErrorEmptyCart")).toBeInTheDocument();
   });
 
-  it("TC:5 styling of button should change on hover", async () => {
+  it(`${getNumber()} styling of button should change on hover`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: {
@@ -218,7 +224,7 @@ describe("WishList", () => {
     });
   });
 
-  it("TC:6 should remove product from wishlist, when clickd of X mark", async () => {
+  it(`${getNumber()} should remove product from wishlist, when clickd of X mark`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: {
@@ -260,10 +266,54 @@ describe("WishList", () => {
         prodId: "2",
       }
     );
+    expect(screen.getByTestId("product_1")).toBeInTheDocument();
     expect(screen.queryByTestId("product_2")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("emptyCart")).not.toBeInTheDocument();
   });
 
-  it("TC:7 should not remove product from wishlist, when axios get rejected for removal", async () => {
+  it(`${getNumber()} should display You Don't have any favourite item, when products are removed from wishlist`, async () => {
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.resolve({
+        data: {
+          items: mockItemWishlist,
+        },
+      });
+    });
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Wishlist />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("Xbutton_1"));
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("Xbutton_2"));
+    });
+
+    expect(mockAxiosPost).toBeCalledWith(
+      "http://localhost:3000/wishlist/remove",
+      {
+        customerId: "123",
+        prodId: "2",
+      }
+    );
+    expect(screen.queryByTestId("product_2")).not.toBeInTheDocument();
+    expect(screen.getByTestId("emptyCart")).toBeInTheDocument();
+  });
+
+  it(`${getNumber()} should not remove product from wishlist, when axios get rejected for removal`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: {
@@ -290,4 +340,14 @@ describe("WishList", () => {
     });
     expect(screen.getByTestId("toast")).toBeInTheDocument();
   });
+
+  it(`${getNumber()} Should display the loading spinner (CircularProgress) while the wishlist data is being fetched`, async () => {});
+
+  it(`${getNumber()} Should change the background color of the "Add to Cart" button when hovered.`, async () => {});
+
+  it(`${getNumber()} Should change the background color of the "Buy Now" button when hovered`, async () => {});
+
+  it(`${getNumber()} should correctly display the product image inside the CardMedia component for each product`, async () => {});
+
+  it(`${getNumber()} should truncate long product descriptions with an ellipsis after three lines`, async () => {});
 });
