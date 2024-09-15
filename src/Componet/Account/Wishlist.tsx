@@ -96,6 +96,7 @@ const Wishlist = () => {
       {isLoading ? (
         <div style={{ ...h100w100, ...flexDiv }}>
           <CircularProgress
+            data-testid="loader"
             sx={{
               color: "#ffb703",
             }}
@@ -154,9 +155,13 @@ const Wishlist = () => {
                     width: "10rem",
                   }}
                 >
-                  <CardMedia sx={{ ...homeStyle.cardMedia, padding: "1%" }}>
+                  <CardMedia
+                    sx={{ ...homeStyle.cardMedia, padding: "1%" }}
+                    data-testid={`imag_${card.prodId}`}
+                  >
                     <img
                       src={card?.prodImg}
+                      alt={`Product Image ${index + 1}`}
                       style={{ height: "90%", width: "80%" }}
                     />
                   </CardMedia>
@@ -173,12 +178,12 @@ const Wishlist = () => {
                   }}
                 >
                   <Typography
+                    data-testid={`prodDiscipt_${card.prodId}`}
                     style={{
                       fontSize: "14px",
                       overflow: "hidden",
                       display: "-webkit-box",
                       WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
                       maxWidth: "100%",
                       textOverflow: "ellipsis",
                     }}

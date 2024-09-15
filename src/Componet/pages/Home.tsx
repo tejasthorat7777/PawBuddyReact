@@ -47,6 +47,7 @@ const Home = () => {
 
   const getProducts = async () => {
     try {
+      setIsLoading(true);
       let Products: ProductData[] = [];
       const getData = await axios.get(`${apiUrl}/getProducts`);
       const data = getData.data;
@@ -61,6 +62,8 @@ const Home = () => {
       setFetchProduct(true);
       // TODO handle error
       console.log("error ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,26 +90,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        await getProducts();
-        if (customerId) {
-          await getWishList(customerId);
-          await getCartList(customerId);
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-        toast("Unable to load data. Please try again later.", {
-          autoClose: 2000,
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-
+    getProducts();
+    if (customerId) {
+      getWishList(customerId);
+      getCartList(customerId);
+    }
     return () => {
       setProducts([]);
       setWishlistItems([]);
@@ -289,6 +277,7 @@ const Home = () => {
                       )}
                     </Button>
                     <Button
+                      data-testid={`cart_${card.prodId}`}
                       onClick={() => {
                         addTocart(card);
                       }}

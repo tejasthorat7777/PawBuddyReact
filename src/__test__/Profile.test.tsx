@@ -3,9 +3,7 @@ import Profile from "../Componet/Account/Profile";
 import { render } from "@testing-library/react";
 vi.mock("react-lottie-player", () => {
   return {
-    default: vi.fn(() => {
-      return <div data-testid="loginlottie"></div>;
-    }),
+    default: vi.fn(),
   };
 });
 
@@ -72,6 +70,6 @@ describe("Profile page", () => {
     );
     expect(profilePage.getByText("Please Login")).toBeTruthy();
     // a lottie animation is displayed on screen
-    expect(profilePage.getByTestId("loginlottie")).toBeTruthy();
+    expect(profilePage.getByTestId("loginRequired")).toBeTruthy();
   });
 });
