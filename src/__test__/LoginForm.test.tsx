@@ -1,14 +1,25 @@
 import LoginForm from "../Componet/Login/LoginForm";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import Wrapper from "../setupTest/Wrapper";
 import { mockAxiosGet } from "../__mocks__/globalMock";
 
-vi.useFakeTimers();
 vi.mock("react-lottie-player", () => {
   return {
-    default: vi.fn(() => ""),
+    default: vi.fn(),
   };
 });
+
+let testCaseNumber = 0;
+const getTestCaseNumber = () => {
+  testCaseNumber = testCaseNumber + 1;
+  return `TC:${testCaseNumber}`;
+};
 
 const mockUser = {
   name: "",
@@ -25,7 +36,8 @@ const mockUser = {
 };
 
 describe("Login Page", () => {
-  it("TC:1 login box should be present", () => {
+  vi.useFakeTimers();
+  it(`${getTestCaseNumber()} login box should be present`, () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -48,7 +60,7 @@ describe("Login Page", () => {
     );
     const text = screen.getByText("Login Here");
     expect(text).toBeInTheDocument();
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     expect(useremail).toBeInTheDocument();
     expect(useremail).toHaveStyle({
       height: "100%",
@@ -68,7 +80,7 @@ describe("Login Page", () => {
     });
   });
 
-  it("TC:2 given input email and password should be visible in respective box", () => {
+  it(`${getTestCaseNumber()} given input email and password should be visible in respective box`, () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -91,7 +103,7 @@ describe("Login Page", () => {
     );
     const text = screen.getByText("Login Here");
     expect(text).toBeInTheDocument();
-    const useremail = screen.getByTestId("username") as HTMLInputElement;
+    const useremail = screen.getByTestId("userName") as HTMLInputElement;
     expect(useremail).toBeInTheDocument();
     act(() => {
       fireEvent.change(useremail, { target: { value: "test@example.com" } });
@@ -106,7 +118,7 @@ describe("Login Page", () => {
     expect(userpass.value).toBe("123456");
   });
 
-  it("TC:3 should display Incorrect email or password when incorrect password and email given", async () => {
+  it(`${getTestCaseNumber()} should display Incorrect email or password when incorrect password and email given`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -124,7 +136,7 @@ describe("Login Page", () => {
         <LoginForm />
       </Wrapper>
     );
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     fireEvent.change(useremail, { target: { value: "test1s@example.com" } });
     const userpass = screen.getByTestId("password");
     fireEvent.change(userpass, { target: { value: "123456" } });
@@ -132,19 +144,18 @@ describe("Login Page", () => {
     const submit = screen.getByTestId("btn_Login");
     expect(submit).toBeInTheDocument();
 
-    act(() => {
+    await act(async () => {
       fireEvent.click(submit);
-      fireEvent.mouseEnter(submit);
-      fireEvent.mouseLeave(submit);
     });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(3000);
     });
+
     expect(screen.getByText("Incorrect email or password")).toBeInTheDocument();
   });
 
-  it("TC:4 styling of submit button should change on hover", async () => {
+  it(`${getTestCaseNumber()} styling of submit button should change on hover`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -163,7 +174,7 @@ describe("Login Page", () => {
       </Wrapper>
     );
 
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     expect(useremail).toBeInTheDocument();
     fireEvent.change(useremail, { target: { value: "test1s@example.com" } });
     const userpass = screen.getByTestId("password");
@@ -192,7 +203,7 @@ describe("Login Page", () => {
     });
   });
 
-  it("TC:5 button should not get clicked when email and password is not provided", async () => {
+  it(`${getTestCaseNumber()} button should not get clicked when email and password is not provided`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -212,7 +223,7 @@ describe("Login Page", () => {
     const text = screen.getByText("Login Here");
     expect(text).toBeInTheDocument();
 
-    const useremail = screen.getByTestId("username") as HTMLInputElement;
+    const useremail = screen.getByTestId("userName") as HTMLInputElement;
     expect(useremail).toBeInTheDocument();
     fireEvent.change(useremail, { target: { value: "" } });
     expect(useremail.value).toBe("");
@@ -230,7 +241,7 @@ describe("Login Page", () => {
     expect(progressBar).not.toBeInTheDocument();
   });
 
-  it("TC:6 should show email required and password required in respective input box if user try to click login button without credentials", async () => {
+  it(`${getTestCaseNumber()} should show email required and password required in respective input box if user try to click login button without credentials`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -248,7 +259,7 @@ describe("Login Page", () => {
       </Wrapper>
     );
 
-    const useremail = screen.getByTestId("username") as HTMLInputElement;
+    const useremail = screen.getByTestId("userName") as HTMLInputElement;
     fireEvent.change(useremail, { target: { value: "" } });
     expect(useremail.value).toBe("");
 
@@ -261,32 +272,26 @@ describe("Login Page", () => {
 
     await act(async () => {
       fireEvent.click(submit);
-      fireEvent.mouseEnter(submit);
-      fireEvent.mouseLeave(submit);
     });
 
     act(() => {
       vi.advanceTimersByTime(3000);
     });
 
-    expect(
-      screen.getByPlaceholderText("* Username Required")
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("* Email Required")).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("* Password Required")
     ).toBeInTheDocument();
   });
 
-  it("TC:7 should done tick appear when credentials are correct", async () => {
+  it(`${getTestCaseNumber()} should done tick appear when credentials are correct`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
-        data: [
-          {
-            ...mockUser,
-            username: "priyankathorat",
-            password: "blacky",
-          },
-        ],
+        data: {
+          ...mockUser,
+          username: "priyankathorat",
+          password: "blacky",
+        },
       });
     });
 
@@ -295,7 +300,7 @@ describe("Login Page", () => {
         <LoginForm />
       </Wrapper>
     );
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     const userpass = screen.getByTestId("password");
     await act(async () => {
       fireEvent.change(useremail, { target: { value: "priyankathorat" } });
@@ -314,7 +319,79 @@ describe("Login Page", () => {
     expect(screen.getByTestId("loginDoneTick")).toBeInTheDocument();
   });
 
-  it("TC:8 should password visible after clicking on verify button", async () => {
+  it(`${getTestCaseNumber()} Should fail if trimming logic is missing`, async () => {
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.resolve({
+        data: {
+          ...mockUser,
+          username: "priyankathorat",
+          password: "blacky",
+        },
+      });
+    });
+
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+
+    const useremail = screen.getByTestId("userName") as HTMLInputElement;
+    const userpass = screen.getByTestId("password") as HTMLInputElement;
+
+    await act(async () => {
+      fireEvent.change(useremail, {
+        target: { value: "   priyankathorat   " },
+      });
+      fireEvent.change(userpass, { target: { value: "   blacky   " } });
+    });
+
+    const submit = screen.getByTestId("btn_Login");
+    await act(async () => {
+      fireEvent.click(submit);
+    });
+
+    expect(useremail.value).toBe("priyankathorat");
+    expect(userpass.value).toBe("blacky");
+  });
+
+  it(`${getTestCaseNumber()} Should reset password fields after unsuccessful login`, async () => {
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.resolve({
+        data: {
+          ...mockUser,
+          username: "priyankathorat",
+          password: "blacky",
+        },
+      });
+    });
+
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+
+    const useremail = screen.getByTestId("userName") as HTMLInputElement;
+    const userpass = screen.getByTestId("password") as HTMLInputElement;
+
+    await act(async () => {
+      fireEvent.change(useremail, {
+        target: { value: "priyankathorat" },
+      });
+      fireEvent.change(userpass, { target: { value: "blacky123" } });
+    });
+
+    const submit = screen.getByTestId("btn_Login");
+    await act(async () => {
+      fireEvent.click(submit);
+    });
+
+    expect(useremail.value).toBe("priyankathorat");
+    expect(userpass.value).toBe("");
+  });
+
+  it(`${getTestCaseNumber()} should password visible after clicking on verify button`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
         data: [
@@ -332,7 +409,7 @@ describe("Login Page", () => {
         <LoginForm />
       </Wrapper>
     );
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     const userpass = screen.getByTestId("password");
     await act(async () => {
       fireEvent.change(useremail, { target: { value: "priyankathorat" } });
@@ -350,7 +427,8 @@ describe("Login Page", () => {
     });
     expect(userpass).toHaveAttribute("type", "password");
   });
-  it("TC:9 it should show message'Incorrect email or password' when email is correct but password is incorrect ", async () => {
+
+  it(`${getTestCaseNumber()} should show message'Incorrect email or password' when email is correct but password is incorrect`, async () => {
     vi.clearAllMocks();
     mockAxiosGet.mockImplementation(async () => {
       return Promise.resolve({
@@ -369,7 +447,7 @@ describe("Login Page", () => {
         <LoginForm />
       </Wrapper>
     );
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     const userpass = screen.getByTestId("password");
     await act(async () => {
       fireEvent.change(useremail, { target: { value: "priyankathorat" } });
@@ -387,7 +465,8 @@ describe("Login Page", () => {
 
     expect(screen.getByText("Incorrect email or password")).toBeInTheDocument();
   });
-  it("TC:10 unable to fetch users information", async () => {
+
+  it(`${getTestCaseNumber()} should unable to fetch users information`, async () => {
     mockAxiosGet.mockImplementation(async () => {
       return Promise.reject({});
     });
@@ -396,7 +475,7 @@ describe("Login Page", () => {
         <LoginForm />
       </Wrapper>
     );
-    const useremail = screen.getByTestId("username");
+    const useremail = screen.getByTestId("userName");
     const userpass = screen.getByTestId("password");
     await act(async () => {
       fireEvent.change(useremail, { target: { value: "priyankathorat" } });
@@ -413,5 +492,35 @@ describe("Login Page", () => {
     });
 
     expect(screen.getByText("Incorrect email or password")).toBeTruthy();
+  });
+
+  it(`${getTestCaseNumber()} should reset password and username when axios rejects`, async () => {
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.reject({});
+    });
+    render(
+      <Wrapper>
+        <LoginForm />
+      </Wrapper>
+    );
+    const useremail = screen.getByTestId("userName") as HTMLInputElement;
+    const userpass = screen.getByTestId("password") as HTMLInputElement;
+    await act(async () => {
+      fireEvent.change(useremail, { target: { value: "priyankathorat" } });
+      fireEvent.change(userpass, { target: { value: "blacky" } });
+    });
+    const submit = screen.getByTestId("btn_Login");
+    expect(screen.getByText("Login")).toBeTruthy();
+    await act(async () => {
+      fireEvent.click(submit);
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(screen.getByText("Incorrect email or password")).toBeTruthy();
+    expect(useremail.value).toBe("");
+    expect(userpass.value).toBe("");
   });
 });

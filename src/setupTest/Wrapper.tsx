@@ -12,9 +12,7 @@ interface WrapperProps {
 
 const Wrapper: React.FC<WrapperProps> = ({ children, initialState }) => {
   const store = configureStore({
-    reducer: {
-      finalState: userReducer,
-    },
+    reducer: userReducer,
   });
 
   if (initialState?.user) {

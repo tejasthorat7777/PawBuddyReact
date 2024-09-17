@@ -36,6 +36,11 @@ function LoginForm() {
     setShowPassword(!showPassword);
   };
 
+  const reset = () => {
+    setPassword("");
+    setUserName("");
+  };
+
   const getUser = async (userName: string) => {
     const getData = await axios.get(`${apiUrl}/getUsersInfo/${userName}`);
     return getData.data;
@@ -48,20 +53,23 @@ function LoginForm() {
     }
     e.preventDefault();
     setLoading(true);
-    const user = await getUser(userName);
-    if (user) {
+    try {
+      const user = await getUser(userName);
       if (user.password === password) {
         dispatch(userInfo({ user }));
         setTimeout(() => {
           loginSuccess();
         }, 3000);
       } else {
-        setLoading(false);
+        setPassword("");
         setCorrectUser(true);
       }
-    } else {
-      setLoading(false);
+    } catch (error) {
+      console.log("catch>>>>>", error);
       setCorrectUser(true);
+      reset();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,12 +86,10 @@ function LoginForm() {
                 style={loginCss.inputStyle}
                 type="text"
                 id="userName"
-                placeholder={
-                  isRequired ? "* userName Required" : "Enter userName"
-                }
+                placeholder={isRequired ? "* Email Required" : "Enter userName"}
                 value={userName}
                 onChange={(e) => {
-                  setUserName(e.target.value);
+                  setUserName(e.target.value.trim());
                   setCorrectUser(false);
                   setIsRequired(false);
                 }}
@@ -101,7 +107,7 @@ function LoginForm() {
                 }
                 value={password}
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  setPassword(e.target.value.trim());
                   setCorrectUser(false);
                   setIsRequired(false);
                 }}
@@ -124,7 +130,7 @@ function LoginForm() {
                 fontFamily: "cursive",
               }}
             >
-              Incorrect userName or password
+              Incorrect email or password
             </span>
           )}
           <div style={loginCss.buttonDiv}>
