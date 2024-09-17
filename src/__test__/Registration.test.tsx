@@ -1,7 +1,13 @@
 import Registration from "../Componet/Registration/Registration";
 import { mockAxiosPost } from "../__mocks__/globalMock";
 import Wrapper from "../setupTest/Wrapper";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 
 vi.mock("react-lottie-player", () => {
   return {
@@ -11,34 +17,51 @@ vi.mock("react-lottie-player", () => {
 
 vi.useFakeTimers();
 
-const sendData = (female?: string) => {
-  fireEvent.change(screen.getByTestId("name"), {
+const sendData = (femaleRadio?: string) => {
+  const name = screen.getByTestId("name") as HTMLInputElement;
+  fireEvent.change(name, {
     target: { value: "Pettey" },
   });
-  fireEvent.change(screen.getByTestId("age"), {
+
+  const age = screen.getByTestId("age") as HTMLInputElement;
+  fireEvent.change(age, {
     target: { value: "3" },
   });
-  fireEvent.change(screen.getByTestId("breed"), {
+
+  const breed = screen.getByTestId("breed") as HTMLInputElement;
+  fireEvent.change(breed, {
     target: { value: "Indie" },
   });
-  fireEvent.change(screen.getByTestId("birthdate"), {
+
+  const birthDate = screen.getByTestId("birthdate") as HTMLInputElement;
+  fireEvent.change(birthDate, {
     target: { value: "2024-07-04" },
   });
-  fireEvent.change(screen.getByTestId("owner"), {
+
+  const owner = screen.getByTestId("owner") as HTMLInputElement;
+  fireEvent.change(owner, {
     target: { value: "Tejas Thorat" },
   });
-  fireEvent.change(screen.getByTestId("identity"), {
+
+  const identity = screen.getByTestId("identity") as HTMLInputElement;
+  fireEvent.change(identity, {
     target: { value: "white and orange fur" },
   });
-  fireEvent.change(screen.getByTestId("username"), {
+
+  const username = screen.getByTestId("username") as HTMLInputElement;
+  fireEvent.change(username, {
     target: { value: "tejasthorat7777" },
   });
-  fireEvent.change(screen.getByTestId("password"), {
+
+  const password = screen.getByTestId("password") as HTMLInputElement;
+  fireEvent.change(password, {
     target: { value: "Pettey@7777" },
   });
-  female
-    ? fireEvent.click(screen.getByTestId("female"))
-    : fireEvent.click(screen.getByTestId("male"));
+
+  const female = screen.getByTestId("female") as HTMLInputElement;
+  const male = screen.getByTestId("male") as HTMLInputElement;
+
+  femaleRadio ? fireEvent.click(female) : fireEvent.click(male);
 };
 
 describe("Registration", () => {
@@ -63,7 +86,7 @@ describe("Registration", () => {
     expect(screen.getByText("Gender :")).toBeInTheDocument();
     expect(screen.getByText("Male")).toBeInTheDocument();
     expect(screen.getByText("Female")).toBeInTheDocument();
-    // expect(screen.getByText("City")).toBeInTheDocument();
+    expect(screen.getByText("Account Type")).toBeInTheDocument();
     expect(screen.getByText("SUBMIT")).toBeInTheDocument();
   });
 
@@ -107,13 +130,16 @@ describe("Registration", () => {
       fireEvent.mouseDown(screen.getByRole("combobox"));
     });
     await act(async () => {
+      fireEvent.click(screen.getByTestId("acc_typeBusiness"));
+    });
+    await act(async () => {
       fireEvent.click(screen.getByText("SUBMIT"));
     });
 
     expect(mockAxiosPost).toHaveBeenCalledWith(
       "http://localhost:3000/sendUsersInfo",
       {
-        acc_type: "",
+        acc_type: "Business",
         name: "Pettey",
         age: "3",
         birthdate: "2024-07-04",
@@ -128,7 +154,28 @@ describe("Registration", () => {
     );
   });
 
-  it("TC:4 should display loader when click submit button", async () => {
+  it("TC:4 should display Registration Successful on submitting information to db is successful", async () => {
+    render(
+      <Wrapper>
+        <Registration />
+      </Wrapper>
+    );
+    await act(async () => {
+      sendData();
+      fireEvent.click(screen.getByText("SUBMIT"));
+    });
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(screen.getByText("Registration Successful")).toBeInTheDocument();
+  });
+
+  it("TC:6 should display loader when click submit button", async () => {
+    mockAxiosPost.mockImplementation(async () => {
+      return new Promise((resolve) => setTimeout(() => resolve({}), 3000));
+    });
     render(
       <Wrapper>
         <Registration />
@@ -144,28 +191,7 @@ describe("Registration", () => {
     expect(screen.getByTestId("waiting")).toBeInTheDocument();
   });
 
-  it("TC:5 should display Registration Successful on submitting information to db is successful", async () => {
-    render(
-      <Wrapper>
-        <Registration />
-      </Wrapper>
-    );
-    await act(async () => {
-      sendData();
-      fireEvent.click(screen.getByText("SUBMIT"));
-    });
-
-    act(() => {
-      vi.advanceTimersByTime(3000);
-    });
-    act(() => {
-      vi.advanceTimersByTime(3000);
-    });
-
-    expect(screen.getByText("Registration Successful")).toBeInTheDocument();
-  });
-
-  it("TC:6 should display not found on submitting information to db is Unsuccessful", async () => {
+  it("TC:7 should display not found on submitting information to db is Unsuccessful", async () => {
     mockAxiosPost.mockRejectedValue({});
     render(
       <Wrapper>

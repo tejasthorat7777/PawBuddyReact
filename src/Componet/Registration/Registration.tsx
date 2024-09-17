@@ -22,7 +22,10 @@ import { UserData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { SendButton } from "../../commonFiles/SendButton";
-import { generateRandomUserId } from "../../commonFiles/commonFunctions";
+import {
+  apiUrl,
+  generateRandomUserId,
+} from "../../commonFiles/commonFunctions";
 
 const BaseSelect = styled(Select)(() => ({
   backgroundColor: "#00111C",
@@ -42,22 +45,24 @@ const StyledSelect = styled(({ className, ...props }: SelectProps) => (
   backgroundColor: "#00111C",
 }));
 
+const initialUserData: UserData = {
+  acc_type: "",
+  gender: "",
+  name: "",
+  age: "",
+  breed: "",
+  birthdate: "",
+  owner: "",
+  identification: "",
+  username: "",
+  password: "",
+  userId: generateRandomUserId().toString(),
+};
+
 export default function Registration() {
   // TODD we need to introduce a registration form for business also
   // currently we are giving select option for acc type but it will be change in future
-  const [userData, setUserData] = useState<UserData>({
-    acc_type: "",
-    gender: "",
-    name: "",
-    age: "",
-    breed: "",
-    birthdate: "",
-    owner: "",
-    identification: "",
-    username: "",
-    password: "",
-    userId: generateRandomUserId().toString(),
-  });
+  const [userData, setUserData] = useState<UserData>(initialUserData);
 
   const [isLoading, setIsloading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
@@ -70,19 +75,17 @@ export default function Registration() {
   const sendData = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setIsloading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       event.preventDefault();
-      setIsloading(true);
       await axios.post(`${apiUrl}/sendUsersInfo`, userData);
-      setTimeout(() => {
-        setIsloading(false);
-      }, 3000);
       setFormSend(true);
     } catch (error) {
       console.log("Error>>>>", error);
-      setIsloading(false);
       setUploadError(true);
+    }
+    finally{
+      setIsloading(false);
     }
   };
 
