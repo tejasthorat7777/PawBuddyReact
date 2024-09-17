@@ -1,12 +1,6 @@
 import logo from "../../assets/logo.png";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import {
-  Box,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  Tooltip,
-} from "@mui/material";
+import { Box, IconButton, ListItemIcon, Menu, Tooltip } from "@mui/material";
 import { CustomMenuItem } from "../../commonFiles/commonTheme";
 import { Login, Logout } from "@mui/icons-material";
 import React, { useState } from "react";
@@ -15,10 +9,11 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import StoreIcon from '@mui/icons-material/Store';
-import { RootState } from "../../redux/store/store";
+import StoreIcon from "@mui/icons-material/Store";
+import { persistor, RootState } from "../../redux/store/store";
+import { logout } from "../../redux/Slice/Slices";
 
 const inputStyle = {
   width: "100%",
@@ -46,8 +41,8 @@ const navLeft = {
 };
 
 export default function NavbarCust() {
-  const user = useSelector((state: RootState) => state.finalState.user.userId);
-
+  const user = useSelector((state: RootState) => state.user.userId);
+  const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -86,6 +81,11 @@ export default function NavbarCust() {
       ? { text: "Logout", icon: <Logout />, path: "/login" }
       : { text: "Log-In", icon: <Login />, path: "/login" },
   ];
+
+  const handleLogout = () => {
+    dispatch(logout());
+    persistor.purge();
+  };
 
   return (
     <div style={innerNav}>
@@ -164,6 +164,7 @@ export default function NavbarCust() {
                 <CustomMenuItem
                   id={`account_${obj.text}`}
                   onClick={() => {
+                    obj.text === "Logout" ? handleLogout() : null;
                     handleClose();
                   }}
                   style={{ fontSize: "1rem", fontFamily: "cursive" }}

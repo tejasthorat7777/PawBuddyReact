@@ -34,7 +34,7 @@ import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 
 const Home = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const user = useSelector((state: RootState) => state.finalState.user);
+  const user = useSelector((state: RootState) => state.user);
   const customerId = user.userId;
 
   const [products, setProducts] = useState<ProductData[]>([]);

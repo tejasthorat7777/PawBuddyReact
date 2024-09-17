@@ -20,7 +20,7 @@ const outerDiv = {
 };
 
 const Profile = () => {
-  const user = useSelector((state: RootState) => state.finalState.user);
+  const user = useSelector((state: RootState) => state.user);
   return (
     <div
       style={{

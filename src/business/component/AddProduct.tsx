@@ -60,7 +60,7 @@ const getSubCategory = (subcat: string) => {
 
 const AddProduct = () => {
   const userId = useSelector(
-    (state: RootState) => state.finalState.user.userId
+    (state: RootState) => state.user.userId
   );
   const condition = ["Condition", "New", "Used", "Refurbished"];
   const category = ["category", "Food", "Accessories", "Shampoo", "Bathroom"];

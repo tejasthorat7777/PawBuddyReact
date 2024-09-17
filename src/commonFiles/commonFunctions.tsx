@@ -4,6 +4,8 @@ export const generateRandomUserId = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+export const apiUrl = import.meta.env.VITE_API_URL;
+
 export const generateProductId = (length: number) => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

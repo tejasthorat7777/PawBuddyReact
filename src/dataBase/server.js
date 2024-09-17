@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import { wishlistInfo } from "./modal/wishlist.js";
 import { Products } from "./modal/product.js";
 import { cartList } from "./modal/cart.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const server = express();
@@ -195,10 +195,11 @@ server.post("/cart/remove", async (req, res) => {
 
 // ######################################### GET METHODS #####################################################
 
-server.get("/getUsersInfo", async (req, res) => {
+server.get("/getUsersInfo/:username", async (req, res) => {
   try {
-    const users = await UserInfo.find();
-    res.json(users);
+    const { username } = req.params;
+    const user = await UserInfo.findOne({ username });
+    res.json(user);
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "Error retrieving user data" });

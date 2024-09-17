@@ -11,9 +11,13 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, userSlice);
 
 const store = configureStore({
-  reducer: {
-    finalState: persistedReducer,
-  },
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+      },
+    }),
 });
 
 export const persistor = persistStore(store);

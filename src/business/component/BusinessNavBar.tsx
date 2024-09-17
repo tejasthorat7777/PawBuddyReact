@@ -6,6 +6,9 @@ import { Logout } from "@mui/icons-material";
 import React, { useState } from "react";
 import CallIcon from "@mui/icons-material/Call";
 import { Link } from "react-router-dom";
+import { persistor } from "../../redux/store/store";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/Slice/Slices";
 
 const inputStyle = {
   width: "100%",
@@ -33,8 +36,8 @@ const navLeft = {
 };
 
 export default function BusinessNavbar() {
-
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: {
@@ -58,6 +61,11 @@ export default function BusinessNavbar() {
     { text: "Contact Us", icon: <CallIcon />, path: "/contact" },
     { text: "Logout", icon: <Logout />, path: "/login" },
   ];
+
+  const handleLogout = () => {
+    dispatch(logout());
+    persistor.purge();
+  };
 
   return (
     <div style={innerNav}>
@@ -124,6 +132,7 @@ export default function BusinessNavbar() {
               >
                 <CustomMenuItem
                   onClick={() => {
+                    obj.text === "Logout" ? handleLogout() : null;
                     handleClose();
                   }}
                   style={{ fontSize: "1rem", fontFamily: "cursive" }}

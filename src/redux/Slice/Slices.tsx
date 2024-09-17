@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {State } from "../../commonFiles/commonTypes";
+import { State } from "../../commonFiles/commonTypes";
 
 const initialState: State = {
   status: false,
@@ -14,8 +14,8 @@ const initialState: State = {
     userId: "",
     gender: "",
     acc_type: "",
-    password: ""
-  }
+    password: "",
+  },
 };
 
 const userSlice = createSlice({
@@ -26,8 +26,15 @@ const userSlice = createSlice({
       state.status = true;
       state.user = action.payload.user;
     },
+    logout: (state) => {
+      return {
+        ...state,
+        status: false,
+        user: initialState.user,
+      };
+    },
   },
 });
 
 export default userSlice.reducer;
-export const { userInfo } = userSlice.actions;
+export const { userInfo, logout } = userSlice.actions;

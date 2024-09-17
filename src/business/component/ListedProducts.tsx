@@ -29,7 +29,7 @@ function ListedProducts() {
     "Discount(%)",
     "Quantity",
   ];
-  const user = useSelector((state: RootState) => state.finalState.user);
+  const user = useSelector((state: RootState) => state.user);
   const customerId = user.userId;
   const [products, setProducts] = useState<ProductData[]>([]);
   const [isLoading, setIsLoading] = useState(false);

@@ -45,7 +45,7 @@ const CartIsEmpty = () => {
   );
 };
 const Cart = () => {
-  const user = useSelector((state: RootState) => state.finalState.user);
+  const user = useSelector((state: RootState) => state.user);
   const apiUrl = import.meta.env.VITE_API_URL;
   const customerId = user.userId;
   const [cartList, setCartList] = useState<CartListData[]>([]);

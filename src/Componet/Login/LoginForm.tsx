@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { h100w100, loginCss } from "../../commonFiles/commonTheme";
 import "../../commonFiles/commonCss/handleInputAuto.css";
@@ -8,18 +8,17 @@ import { userInfo } from "../../redux/Slice/Slices";
 import { useNavigate } from "react-router-dom";
 import { SendButton } from "../../commonFiles/SendButton";
 import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
-import { UserData } from "../../commonFiles/commonTypes";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { apiUrl } from "../../commonFiles/commonFunctions";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [correctUser, setCorrectUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const [lottie, setLottie] = useState(false);
   const [isRequired, setIsRequired] = useState(false);
-  const [userDataArray, setUserDataArray] = useState<UserData[]>([]);
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
@@ -37,31 +36,19 @@ function LoginForm() {
     setShowPassword(!showPassword);
   };
 
-  const fetchData = async () => {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const getData = await axios.get(`${apiUrl}/getUsersInfo`);
-      const data = getData.data;
-      setUserDataArray(data);
-    } catch (error) {
-      console.log("error ", error);
-    }
+  const getUser = async (userName: string) => {
+    const getData = await axios.get(`${apiUrl}/getUsersInfo/${userName}`);
+    return getData.data;
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handlelogIn = async (e: { preventDefault: () => void }) => {
-    if (!email || !password) {
+    if (!userName || !password) {
       setIsRequired(true);
       return;
     }
     e.preventDefault();
     setLoading(true);
-    const user = userDataArray.find(
-      (user: UserData) => user.username === email
-    );
+    const user = await getUser(userName);
     if (user) {
       if (user.password === password) {
         dispatch(userInfo({ user }));
@@ -86,17 +73,17 @@ function LoginForm() {
           <div style={loginCss.inputOuterDiv}>
             <div style={loginCss.inputDiv}>
               <input
-                data-testid="username"
+                data-testid="userName"
                 className={isRequired ? "red-placeholder" : ""}
                 style={loginCss.inputStyle}
                 type="text"
-                id="username"
+                id="userName"
                 placeholder={
-                  isRequired ? "* Username Required" : "Enter Username"
+                  isRequired ? "* userName Required" : "Enter userName"
                 }
-                value={email}
+                value={userName}
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  setUserName(e.target.value);
                   setCorrectUser(false);
                   setIsRequired(false);
                 }}
@@ -137,7 +124,7 @@ function LoginForm() {
                 fontFamily: "cursive",
               }}
             >
-              Incorrect email or password
+              Incorrect userName or password
             </span>
           )}
           <div style={loginCss.buttonDiv}>

@@ -39,7 +39,7 @@ const Wishlist = () => {
   const [fetchError, setFetchError] = useState(false);
   const [emptyCart, setEmptyCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector((state: RootState) => state.finalState.user);
+  const user = useSelector((state: RootState) => state.user);
   const customerId = user.userId;
   const apiUrl = import.meta.env.VITE_API_URL;
 
