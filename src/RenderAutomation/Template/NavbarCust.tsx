@@ -74,7 +74,7 @@ export default function NavbarCust() {
       icon: <FavoriteBorderOutlinedIcon />,
       path: "/account/whishlist",
     },
-    { text: "Orders", icon: <AddShoppingCartIcon />, path: "/orders" },
+    { text: "Orders", icon: <AddShoppingCartIcon />, path: "/account/orders" },
     { text: "Contact Us", icon: <CallIcon />, path: "/contact" },
     { text: "Business Login", icon: <StoreIcon />, path: "/businesslogin" },
     user != ""

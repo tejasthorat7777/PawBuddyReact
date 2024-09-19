@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type ProfileType =
   | "/"
   | "/profile"
@@ -27,6 +29,12 @@ export type SubmitButtonProps = {
   ) => void;
   style?: React.CSSProperties;
   text: string;
+};
+
+export type ClickableProps = {
+  onClick?: () => void;
+  text: string;
+  style?: React.CSSProperties;
 };
 
 export type State = {
