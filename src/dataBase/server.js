@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { wishlistInfo } from "./modal/wishlist.js";
 import { Products } from "./modal/product.js";
 import { cartList } from "./modal/cart.js";
+import { ordersInfo } from "./modal/orders.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -193,6 +194,46 @@ server.post("/cart/remove", async (req, res) => {
   }
 });
 
+server.post("/orders/dumped", async (req, res) => {
+  try {
+    const {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      orderId,
+      customerName,
+      orderDate,
+    } = req.body;
+
+    const newItem = {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      orderId,
+      customerName,
+      orderDate,
+    };
+
+    const updatedOrderslist = await ordersInfo.findOneAndUpdate(
+      { customerId },
+      { $push: { items: newItem } },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      message: "Item added to orders successfully!",
+      cartList: updatedOrderslist,
+    });
+  } catch (error) {
+    console.error("Error updating orders:", error);
+    res.status(500).json({ message: "Error submitting item" });
+  }
+});
+
 // ######################################### GET METHODS #####################################################
 
 server.get("/getUsersInfo/:username", async (req, res) => {
@@ -212,7 +253,7 @@ server.get("/wishlist/get/:customerId", async (req, res) => {
 
     const wishlist = await wishlistInfo.findOne({ customerId });
     if (!wishlist) {
-      return res.status(404).json({ message: "Wishlist not found" });
+      return res.status(200).json({ items: [] });
     }
     res.status(200).json(wishlist);
   } catch (error) {
@@ -237,7 +278,7 @@ server.get("/cart/get/:customerId", async (req, res) => {
 
     const cartListItems = await cartList.findOne({ customerId });
     if (!cartListItems) {
-      return res.status(404).json({ message: "Wishlist not found" });
+      return res.status(200).json({ items: [] });
     }
     res.status(200).json(cartListItems);
   } catch (error) {
@@ -257,5 +298,20 @@ server.get("/busi/getProducts/:customerId", async (req, res) => {
   } catch (error) {
     console.error("Error retrieving products:", error);
     res.status(500).json({ message: "Error retrieving products", error });
+  }
+});
+
+server.get("/orders/get/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const orders = await ordersInfo.findOne({ customerId });
+    if (!orders) {
+      return res.status(200).json({ items: [] });
+    }
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error retrieving orders:", error);
+    res.status(500).json({ message: "Error retrieving orders" });
   }
 });

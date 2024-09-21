@@ -29,7 +29,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
-import { isItemExists } from "../../commonFiles/commonFunctions";
+import { clearData, isItemExists, loadCached } from "../../commonFiles/commonFunctions";
 import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 
 const Home = () => {
@@ -48,6 +48,12 @@ const Home = () => {
   const getProducts = async () => {
     try {
       setIsLoading(true);
+      const cachedProducts = loadCached("cachedProducts");
+      if (cachedProducts) {
+        setProducts(cachedProducts);
+        setIsLoading(false);
+        return;
+      }
       let Products: ProductData[] = [];
       const getData = await axios.get(`${apiUrl}/getProducts`);
       const data = getData.data;
@@ -58,6 +64,7 @@ const Home = () => {
       });
 
       setProducts(Products);
+      localStorage.setItem("cachedProducts", JSON.stringify(Products));
     } catch (error) {
       setFetchProduct(true);
       // TODO handle error
@@ -90,6 +97,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    clearData("cachedProducts")
     getProducts();
     if (customerId) {
       getWishList(customerId);
@@ -115,18 +123,18 @@ const Home = () => {
     try {
       if (!exists) {
         const dumpedData = { ...item, customerId };
-        await axios.post(`${apiUrl}/cart/dumped`, dumpedData);
         setCartList((prevCartList) => [...prevCartList, item]);
         toast("Item added to Cart", { autoClose: 1000 });
+        await axios.post(`${apiUrl}/cart/dumped`, dumpedData);
       } else {
-        await axios.post(`${apiUrl}/cart/remove`, {
-          customerId,
-          prodId: item.prodId,
-        });
         setCartList((prevCartList) =>
           prevCartList.filter((cartList) => cartList.prodId !== item.prodId)
         );
         toast("Item removed from Cart", { autoClose: 1000 });
+        await axios.post(`${apiUrl}/cart/remove`, {
+          customerId,
+          prodId: item.prodId,
+        });
       }
     } catch (error) {
       toast("Error updating Cart. Please try again later.", {

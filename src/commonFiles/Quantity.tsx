@@ -5,17 +5,16 @@ import { flexDiv } from "./commonTheme";
 import { useState } from "react";
 
 const Quantity = ({ style = {} }) => {
+  const [quantity, setQuantity] = useState(0);
 
-    const [quantity, setQuantity] = useState(0);
+  const addProduct = () => {
+    setQuantity(quantity + 1);
+  };
 
-    const addProduct = () => {
-      setQuantity(quantity + 1);
-    };
-  
-    const subtractProduct = () => {
-      setQuantity(quantity > 0 ? quantity - 1 : 0);
-    };
-    
+  const subtractProduct = () => {
+    setQuantity(quantity > 0 ? quantity - 1 : 0);
+  };
+
   return (
     <Box
       style={{
@@ -24,23 +23,25 @@ const Quantity = ({ style = {} }) => {
         backgroundColor: "grey",
         ...flexDiv,
         ...style,
-        borderRadius:"3%"
+        borderRadius: "3%",
       }}
     >
-      <IconButton  onClick={subtractProduct} >
+      <IconButton onClick={subtractProduct}>
         <DeleteIcon sx={{ fontSize: 20, color: "white" }} />
       </IconButton>
       <input
         value={quantity}
         type="text"
+        onChange={(e) => setQuantity(Number(e.target.value) || 0)}
         style={{
           backgroundColor: "white",
-          padding:"4%",
+          padding: "4%",
           color: "black",
           textAlign: "center",
         }}
       />
-      <IconButton onClick={addProduct} >
+
+      <IconButton onClick={addProduct}>
         <AddIcon sx={{ fontSize: 20, color: "white" }} />
       </IconButton>
     </Box>

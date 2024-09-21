@@ -1,6 +1,18 @@
-import React, { useState } from "react";
-import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
-import { CircularProgress } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  cartStyle,
+  flexDiv,
+  h100w100,
+  homeStyle,
+  ordersCss,
+  universalDiv,
+} from "../../commonFiles/commonTheme";
+import {
+  Button,
+  CardActionArea,
+  CardMedia,
+  CircularProgress,
+} from "@mui/material";
 import { RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
@@ -8,22 +20,77 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { ClickableText } from "../../commonFiles/Clickabletext";
+import axios from "axios";
+import {
+  apiUrl,
+  clearData,
+  currency,
+  loadCached,
+} from "../../commonFiles/commonFunctions";
+import { OrdersData } from "../../commonFiles/commonTypes";
+import { EmptyOrders } from "../../Lottie/lottieComponent/EmptyOrders";
+import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmptyCart";
+
+const NoOrder = () => {
+  return (
+    <div style={{ ...h100w100, ...flexDiv }}>
+      You Don't have any Order yett
+      <EmptyOrders />
+    </div>
+  );
+};
+
 function Orders() {
   const [isLoading, setIsLoading] = useState(false);
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const [orders, setOrders] = useState<OrdersData[]>([]);
+  const [noOrder, setNoOrder] = useState(false);
+  const [fetchError, setFetchError] = useState("");
+
   const user = useSelector((state: RootState) => state.user);
   const customerId = user.userId;
 
-  const temp = [
-    {
-      text: "tejas",
-      date: "15 September 2024",
-      total: "₹299",
-      customer: "Arun Thorat",
-      orderId: "406-3326306-7330700",
-    },
-  ];
+  const getOrderDetails = async (customerId: string) => {
+    try {
+      setIsLoading(true);
+      const cachedCart = loadCached("cachedOrders");
+      if (cachedCart) {
+        setOrders(cachedCart);
+        setIsLoading(false);
+        return;
+      }
+      const getData = await axios.get(`${apiUrl}/orders/get/${customerId}`);
+      if (getData.data.items.length === 0) {
+        setNoOrder(true);
+      } else {
+        localStorage.setItem(
+          "cachedOrders",
+          JSON.stringify(getData.data.items)
+        );
+        setOrders(getData.data.items);
+      }
+    } catch (error) {
+      console.log("error>>>", error);
+      setFetchError("Sorry We are unable to get your Items");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const detailsConst = ["ORDER PLACED", "TOTAL", "SHIP TO"];
+  useEffect(() => {
+    clearData("cachedOrders");
+    if (customerId) {
+      getOrderDetails(customerId);
+    }
+  }, [customerId]);
+
+  const detailsConst = ["Order Placed", "Total", "Ship To"];
+  const buttonsText = [
+    "Buy Again",
+    "Track Package",
+    "Write Product Review",
+    "Return or Replace",
+  ];
 
   return (
     <div
@@ -34,7 +101,7 @@ function Orders() {
       }}
     >
       {isLoading ? (
-        <div style={{ ...h100w100, ...flexDiv }}>
+        <div style={universalDiv}>
           <CircularProgress
             data-testid="loader"
             sx={{
@@ -43,67 +110,32 @@ function Orders() {
           />
         </div>
       ) : customerId === "" ? (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            ...flexDiv,
-          }}
-        >
+        <div style={universalDiv}>
           Please Login
           <LoginRequired />
         </div>
-      ) : (
-        temp.map((obj, index) => (
-          <div
-            key={`order_${index}`}
-            style={{
-              width: "90%",
-              height: "60%",
-              backgroundColor: "#FFFFFF",
-              marginLeft: "5%",
-              marginBottom: "5%",
-              borderRadius: "10px",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                height: "20%",
-                backgroundColor: "#bac5cb",
-                borderRadius: "10px 10px 0rem 0rem",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: "50%",
-                  height: "100%",
-                  padding: "2%",
-                  ...flexDiv,
-                  justifyContent: "space-evenly",
-                }}
-              >
+      ) : fetchError ? (
+        <div style={universalDiv}>
+          {fetchError}
+          <FetchErrorEmptyCart />
+        </div>
+      ) : orders.length ? (
+        orders.map((obj, index) => (
+          <div key={`order_${index}`} style={ordersCss.orderOuter}>
+            <div style={ordersCss.dateAndOrderIdOuter}>
+              <div style={ordersCss.datePriceAndShip}>
                 {detailsConst.map((text, index) => {
                   const displayValue =
-                    text === "ORDER PLACED"
-                      ? obj.date
-                      : text === "TOTAL"
-                      ? obj.total
-                      : text === "SHIP TO"
-                      ? obj.customer
+                    text === "Order Placed"
+                      ? obj.orderDate
+                      : text === "Total"
+                      ? `${currency} ${obj.prodPrice}`
+                      : text === "Ship To"
+                      ? obj.customerName
                       : null;
 
                   return (
-                    <div
-                      key={index.toString()}
-                      style={{
-                        fontSize: "14px",
-                        fontFamily: "cursive",
-                      }}
-                    >
+                    <div key={index.toString()} style={ordersCss.textCss}>
                       {text}
                       {displayValue && (
                         <>
@@ -115,21 +147,8 @@ function Orders() {
                   );
                 })}
               </div>
-              <div
-                style={{
-                  width: "50%",
-                  height: "100%",
-                  ...flexDiv,
-                  justifyContent: "flex-end",
-                  padding: "2%",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "14px",
-                    fontFamily: "cursive",
-                  }}
-                >
+              <div style={ordersCss.orderId}>
+                <div style={ordersCss.textCss}>
                   Order # {obj.orderId}
                   <div>
                     <ClickableText
@@ -145,10 +164,44 @@ function Orders() {
                 </div>
               </div>
             </div>
-            {obj.text}
+            <div style={ordersCss.downDiv}>
+              <div style={ordersCss.imageDiv}>
+                <CardActionArea sx={cartStyle.cardAction}>
+                  <CardMedia sx={cartStyle.cardMedia}>
+                    <img src={obj.prodImg} style={cartStyle.imageStyle} />
+                  </CardMedia>
+                </CardActionArea>
+              </div>
+              <div style={ordersCss.discriptionDiv}>{obj.prodDiscrip}</div>
+              <div style={ordersCss.buttons}>
+                {buttonsText.map((text, index) => (
+                  <Button
+                    data-testid={`button${index}`}
+                    style={{
+                      ...homeStyle.IconButton,
+                      fontSize: "100%",
+                      backgroundColor:
+                        hoveredButton === `button${index}`
+                          ? "#e85d04"
+                          : "#ffbe0b",
+                      width: "100%",
+                      marginTop: "5%",
+                      borderRadius: "15px",
+                      fontFamily: "cursive",
+                      textTransform: "none",
+                    }}
+                    onMouseEnter={() => setHoveredButton(`button${index}`)}
+                    onMouseLeave={() => setHoveredButton(null)}
+                  >
+                    {text}
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
         ))
-      )}
+      ) : null}
+      {noOrder && <NoOrder />}
       <div data-testid="toast">
         <ToastContainer
           position="bottom-left"

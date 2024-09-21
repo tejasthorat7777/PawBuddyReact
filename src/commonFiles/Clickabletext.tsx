@@ -15,7 +15,7 @@ export const ClickableText: React.FC<ClickableProps> = ({
         ...style,
         cursor: "pointer",
         textDecoration: "none",
-        color: isHovered ? "blue" : "black",
+        color: isHovered ? "#e85d04" : "black",
       }}
       // Event handlers for hover
       onMouseEnter={() => setIsHovered(true)}

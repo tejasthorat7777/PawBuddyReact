@@ -80,3 +80,15 @@ export type CartListData = {
   prodPrice: string;
   rating: number;
 };
+
+export type OrdersData = {
+  prodId: string;
+  prodName: string;
+  prodDiscrip: string;
+  prodImg: string;
+  prodPrice: string;
+  selected: Boolean;
+  customerName: string;
+  orderId: string;
+  orderDate: string;
+};

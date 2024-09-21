@@ -23,6 +23,7 @@ import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmpt
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
+import { clearData, loadCached } from "../../commonFiles/commonFunctions";
 
 const EmptyCartComponent = () => {
   return (
@@ -46,11 +47,21 @@ const Wishlist = () => {
   const getWishList = async (customerId: string) => {
     try {
       setIsLoading(true);
+      const cachedWishlist = loadCached("cachedWishlist");
+      if (cachedWishlist) {
+        setCardData(cachedWishlist);
+        setIsLoading(false);
+        return;
+      }
       const getData = await axios.get(`${apiUrl}/wishlist/get/${customerId}`);
-      if (getData.data.items.length > 0) {
-        setCardData(getData.data.items);
-      } else {
+      if (getData.data.items.length === 0) {
         setEmptyCart(true);
+      } else {
+        localStorage.setItem(
+          "cachedWishlist",
+          JSON.stringify(getData.data.items)
+        );
+        setCardData(getData.data.items);
       }
     } catch (error) {
       setFetchError(true);
@@ -61,6 +72,7 @@ const Wishlist = () => {
   };
 
   useEffect(() => {
+    clearData("cachedWishlist");
     if (customerId) {
       getWishList(customerId);
     }

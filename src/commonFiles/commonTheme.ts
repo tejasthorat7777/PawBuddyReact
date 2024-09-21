@@ -92,6 +92,11 @@ export const linkStyle = {
   color: "white",
 };
 
+export const universalDiv = {
+  ...h100w100,
+  ...flexDiv,
+};
+
 export const loginCss = {
   outerDiv: {
     ...flexDiv,
@@ -283,5 +288,66 @@ export const businessAddproduct = {
     marginTop: "3%",
     borderRadius: "5px",
     fontFamily: "cursive",
+  },
+};
+
+export const ordersCss = {
+  orderOuter: {
+    width: "90%",
+    height: "60%",
+    backgroundColor: "#FFFFFF",
+    marginLeft: "5%",
+    marginBottom: "5%",
+    borderRadius: "10px",
+  },
+  dateAndOrderIdOuter: {
+    width: "100%",
+    height: "20%",
+    backgroundColor: "#bac5cb",
+    borderRadius: "10px 10px 0rem 0rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  datePriceAndShip: {
+    width: "50%",
+    height: "100%",
+    padding: "2%",
+    ...flexDiv,
+    justifyContent: "space-evenly",
+  },
+  orderId: {
+    width: "50%",
+    height: "100%",
+    ...flexDiv,
+    justifyContent: "flex-end",
+    padding: "2%",
+  },
+  textCss: {
+    fontSize: "14px",
+    fontFamily: "cursive",
+  },
+  downDiv: {
+    height: "80%",
+    width: "100%",
+    ...flexDiv,
+    justifyContent: "flex-start",
+  },
+  imageDiv: {
+    height: "100%",
+    width: "20%",
+    padding: "3%",
+  },
+  discriptionDiv: {
+    height: "100%",
+    width: "60%",
+    padding: "2%",
+    fontFamily: "cursive",
+    fontSize: "16px",
+  },
+  buttons: {
+    height: "100%",
+    width: "25%",
+    padding: "2%",
   },
 };
