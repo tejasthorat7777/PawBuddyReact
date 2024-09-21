@@ -65,3 +65,16 @@ export const clearData = (notToClear: string) => {
     localStorage.removeItem(key);
   });
 };
+
+export const clearAllData = () => {
+  const allKeys = [
+    "cachedCart",
+    "cachedOrders",
+    "cachedProducts",
+    "cachedWishlist",
+  ];
+
+  allKeys.forEach((key) => {
+    localStorage.removeItem(key);
+  });
+};
