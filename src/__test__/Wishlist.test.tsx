@@ -56,18 +56,28 @@ describe("WishList", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  it(`${getTestCaseNumber()} should display Please Login when user is not logged in`, async () => {
-    const mockInitialState: State = {
-      status: false,
-      user: mockUser,
+  it(`${getTestCaseNumber()} should display Sorry We are unable to get your wishlist, when DB rejects`, async () => {
+    mockAxiosGet.mockRejectedValue({});
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123" },
     };
     render(
       <Wrapper initialState={mockInitialState}>
         <Wishlist />
       </Wrapper>
     );
-    expect(screen.getByText("Please Login")).toBeInTheDocument();
-    expect(screen.getByTestId("loginRequired")).toBeInTheDocument();
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(
+      screen.getByText("Sorry We are unable to get your wishlist")
+    ).toBeInTheDocument();
+    expect(screen.getByTestId("fetchErrorEmptyCart")).toBeInTheDocument();
   });
 
   it(`${getTestCaseNumber()} should display You Don't have any favourite item, when no product is added to wishlist`, async () => {
@@ -97,6 +107,40 @@ describe("WishList", () => {
       screen.getByText("You Don't have any favourite item")
     ).toBeInTheDocument();
     expect(screen.getByTestId("emptyCart")).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} Should display the loading spinner (CircularProgress) while the wishlist data is being fetched`, async () => {
+    mockAxiosGet.mockImplementation(async () => {
+      return Promise.resolve({
+        data: {
+          items: mockItemWishlist,
+        },
+      });
+    });
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Wishlist />
+      </Wrapper>
+    );
+    expect(screen.getByTestId("loader")).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} should display Please Login when user is not logged in`, async () => {
+    const mockInitialState: State = {
+      status: false,
+      user: mockUser,
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Wishlist />
+      </Wrapper>
+    );
+    expect(screen.getByText("Please Login")).toBeInTheDocument();
+    expect(screen.getByTestId("loginRequired")).toBeInTheDocument();
   });
 
   it(`${getTestCaseNumber()} should display Product, if present in database`, async () => {
@@ -129,30 +173,6 @@ describe("WishList", () => {
     expect(
       screen.getByTestId(`product_${mockItemWishlist[1].prodId}`)
     ).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} should display Sorry We are unable to get your wishlist, when DB rejects`, async () => {
-    mockAxiosGet.mockRejectedValue({});
-    const mockInitialState = {
-      status: true,
-      user: { ...mockUser, userId: "123" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Wishlist />
-      </Wrapper>
-    );
-    await act(async () => {
-      vi.advanceTimersByTime(3000);
-    });
-    await act(async () => {
-      vi.advanceTimersByTime(3000);
-    });
-
-    expect(
-      screen.getByText("Sorry We are unable to get your wishlist")
-    ).toBeInTheDocument();
-    expect(screen.getByTestId("fetchErrorEmptyCart")).toBeInTheDocument();
   });
 
   it(`${getTestCaseNumber()} styling of button should change on hover`, async () => {
@@ -340,26 +360,6 @@ describe("WishList", () => {
       fireEvent.click(screen.getByTestId("Xbutton_2"));
     });
     expect(screen.getByTestId("toast")).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} Should display the loading spinner (CircularProgress) while the wishlist data is being fetched`, async () => {
-    mockAxiosGet.mockImplementation(async () => {
-      return Promise.resolve({
-        data: {
-          items: mockItemWishlist,
-        },
-      });
-    });
-    const mockInitialState = {
-      status: true,
-      user: { ...mockUser, userId: "123" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Wishlist />
-      </Wrapper>
-    );
-    expect(screen.getByTestId("loader")).toBeInTheDocument();
   });
 
   it(`${getTestCaseNumber()} should correctly display the product image inside the CardMedia component for each product`, async () => {

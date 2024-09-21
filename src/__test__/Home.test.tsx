@@ -75,14 +75,36 @@ const items = [
 
 describe("Home", () => {
   vi.useFakeTimers();
-  beforeEach(() => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.clearAllTimers();
+  });
+
+  it(`${getTestCaseNumber()} should display Sorry No Product Found when axios rejects`, async () => {
+    mockAxiosGet.mockRejectedValue({});
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(screen.getByText(/Sorry No Product Found/i)).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} Product should add to wishlist, when user is logged in`, async () => {
     mockAxiosGet
-      .mockImplementationOnce(async () => {
+      .mockImplementationOnce(() => {
         return {
           data: productsOut,
         };
       })
-      .mockImplementation(async () => {
+      .mockImplementation(() => {
         return {
           data: {
             customerId: "936819838169",
@@ -90,12 +112,55 @@ describe("Home", () => {
           },
         };
       });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(wishilistBtn));
+    });
+
+    expect(screen.getByText("Item added to Wishlist")).toBeInTheDocument();
+    expect(mockAxiosPost).toHaveBeenLastCalledWith(
+      "http://localhost:3000/wishlist/dumped",
+      {
+        prodId: "1",
+        category: "Dog Food",
+        customerId: "123456",
+        prodName: "Pedegree",
+        prodDiscrip: "nutrients",
+        prodPrice: "100",
+        pordQuant: "1",
+        prodDiscount: "2",
+        prodBrand: "Balaji",
+        prodWeight: "100",
+        prodConditon: "new",
+        prodImg: "",
+        selected: false,
+        rating: 0,
+        subCategory: "Treat",
+      }
+    );
   });
-  afterEach(() => {
-    vi.clearAllMocks();
-    vi.clearAllTimers();
-  });
+
   it(`${getTestCaseNumber()} should change icon when user clicks on add to wishlist button`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -127,6 +192,238 @@ describe("Home", () => {
     expect(screen.getByTestId(FavoriteIcon)).toHaveStyle({
       color: backClr,
     });
+  });
+
+  it(`${getTestCaseNumber()} Product should add to Cart, when user is logged in`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    const caartBtn = `cart_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(caartBtn));
+    });
+
+    expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
+    expect(mockAxiosPost).toHaveBeenLastCalledWith(
+      "http://localhost:3000/cart/dumped",
+      {
+        prodId: "1",
+        category: "Dog Food",
+        customerId: "123456",
+        prodName: "Pedegree",
+        prodDiscrip: "nutrients",
+        prodPrice: "100",
+        pordQuant: "1",
+        prodDiscount: "2",
+        prodBrand: "Balaji",
+        prodWeight: "100",
+        prodConditon: "new",
+        prodImg: "",
+        selected: false,
+        rating: 0,
+        subCategory: "Treat",
+      }
+    );
+  });
+
+  it(`${getTestCaseNumber()} Product should removed from wishlist, when user click again on heart icon`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(wishilistBtn));
+    });
+    expect(screen.getByText("Item added to Wishlist")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(wishilistBtn));
+    });
+    expect(screen.getByText("Item removed from Wishlist")).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} Product should removed from Cart, when user click again on + icon`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(cartBtn));
+    });
+    expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(cartBtn));
+    });
+    expect(screen.getByText("Item removed from Cart")).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} should display Error updating wishlist. Please try again later., when axios reject dumping of data`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    mockAxiosPost.mockRejectedValue({});
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(wishilistBtn));
+    });
+    expect(
+      screen.getByText("Error updating wishlist. Please try again later.")
+    ).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} should display Error updating Cart. Please try again later., when axios reject dumping of data`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    mockAxiosPost.mockRejectedValue({});
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId(cartBtn));
+    });
+    expect(
+      screen.getByText("Error updating Cart. Please try again later.")
+    ).toBeInTheDocument();
+  });
+
+  it(`${getTestCaseNumber()} share funtion should called when user hit share button`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("share_1"));
+    });
+    expect(mockShare).toHaveBeenCalled();
+  });
+
+  it(`${getTestCaseNumber()} should display Sorry, Error in sharing, when user hit share button and error occured`, async () => {
+    mockAxiosGet.mockImplementation(() => {
+      return {
+        data: {
+          customerId: "936819838169",
+          items: items,
+        },
+      };
+    });
+    mockShare.mockRejectedValue({});
+    const mockInitialState = {
+      status: false,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Home />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("share_1"));
+    });
+    expect(screen.getByText("Sorry, Error in sharing")).toBeInTheDocument();
   });
 
   it(`${getTestCaseNumber()} should display only first 8 products`, async () => {
@@ -226,241 +523,5 @@ describe("Home", () => {
     expect(
       screen.getByText("Please log in to add items to your Cart.")
     ).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} Product should add to wishlist, when user is logged in`, async () => {
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(wishilistBtn));
-    });
-
-    expect(screen.getByText("Item added to Wishlist")).toBeInTheDocument();
-    expect(mockAxiosPost).toHaveBeenLastCalledWith(
-      "http://localhost:3000/wishlist/dumped",
-      {
-        prodId: "1",
-        category: "Dog Food",
-        customerId: "123456",
-        prodName: "Pedegree",
-        prodDiscrip: "nutrients",
-        prodPrice: "100",
-        pordQuant: "1",
-        prodDiscount: "2",
-        prodBrand: "Balaji",
-        prodWeight: "100",
-        prodConditon: "new",
-        prodImg: "",
-        selected: false,
-        rating: 0,
-        subCategory: "Treat",
-      }
-    );
-  });
-
-  it(`${getTestCaseNumber()} Product should add to Cart, when user is logged in`, async () => {
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-
-    const caartBtn = `cart_${productsOut[0].products[0].prodId}`;
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(caartBtn));
-    });
-
-    expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
-    expect(mockAxiosPost).toHaveBeenLastCalledWith(
-      "http://localhost:3000/cart/dumped",
-      {
-        prodId: "1",
-        category: "Dog Food",
-        customerId: "123456",
-        prodName: "Pedegree",
-        prodDiscrip: "nutrients",
-        prodPrice: "100",
-        pordQuant: "1",
-        prodDiscount: "2",
-        prodBrand: "Balaji",
-        prodWeight: "100",
-        prodConditon: "new",
-        prodImg: "",
-        selected: false,
-        rating: 0,
-        subCategory: "Treat",
-      }
-    );
-  });
-
-  it(`${getTestCaseNumber()} Product should removed from wishlist, when user click again on heart icon`, async () => {
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(wishilistBtn));
-    });
-    expect(screen.getByText("Item added to Wishlist")).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(wishilistBtn));
-    });
-    expect(screen.getByText("Item removed from Wishlist")).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} Product should removed from Cart, when user click again on + icon`, async () => {
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(cartBtn));
-    });
-    expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(cartBtn));
-    });
-    expect(screen.getByText("Item removed from Cart")).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} should display Error updating wishlist. Please try again later., when axios reject dumping of data`, async () => {
-    mockAxiosPost.mockRejectedValue({});
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    const wishilistBtn = `wishlist_${productsOut[0].products[0].prodId}`;
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(wishilistBtn));
-    });
-    expect(
-      screen.getByText("Error updating wishlist. Please try again later.")
-    ).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} should display Error updating Cart. Please try again later., when axios reject dumping of data`, async () => {
-    mockAxiosPost.mockRejectedValue({});
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    const cartBtn = `cart_${productsOut[0].products[0].prodId}`;
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId(cartBtn));
-    });
-    expect(
-      screen.getByText("Error updating Cart. Please try again later.")
-    ).toBeInTheDocument();
-  });
-
-  it(`${getTestCaseNumber()} share funtion should called when user hit share button`, async () => {
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("share_1"));
-    });
-    expect(mockShare).toHaveBeenCalled();
-  });
-
-  it(`${getTestCaseNumber()} should display Sorry, Error in sharing, when user hit share button and error occured`, async () => {
-    mockShare.mockRejectedValue({});
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("share_1"));
-    });
-    expect(screen.getByText("Sorry, Error in sharing")).toBeInTheDocument();
-  });
-});
-
-describe("Axios Rejects", () => {
-  it(`${getTestCaseNumber()} should display Sorry No Product Found when axios rejects`, async () => {
-    mockAxiosGet.mockRejectedValue({});
-    const mockInitialState = {
-      status: false,
-      user: { ...mockUser, userId: "123456" },
-    };
-    render(
-      <Wrapper initialState={mockInitialState}>
-        <Home />
-      </Wrapper>
-    );
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
-    });
-    expect(screen.getByText(/Sorry No Product Found/i)).toBeInTheDocument();
   });
 });
