@@ -31,7 +31,7 @@ export const generateRandomOrderId = () => {
   return `${part1}-${part2}-${part3}`;
 };
 
-export const getData = () => {
+export const getDate = () => {
   const date = new Date();
   const formattedDate = date.toLocaleDateString("en-IN", {
     day: "2-digit",

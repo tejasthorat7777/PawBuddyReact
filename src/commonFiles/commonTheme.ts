@@ -206,10 +206,10 @@ export const cartStyle = {
   },
   IconButton: {
     color: "white",
-    fontSize: "60%",
+    fontSize: "65%",
     backgroundColor: "grey",
     fontWeight: "400",
-    padding: "2%",
+    padding: "2%"
   },
   cardStyle: {
     width: "75%",

@@ -16,8 +16,8 @@ import {
   homeStyle,
 } from "../../commonFiles/commonTheme";
 import StarRating from "../../commonFiles/StartRatins";
-import Quantity from "../../commonFiles/Quantity";
-import { CartListData, OrdersData } from "../../commonFiles/commonTypes";
+import { Quantity } from "../../commonFiles/Quantity";
+import { CartListData } from "../../commonFiles/commonTypes";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -32,7 +32,7 @@ import {
   apiUrl,
   clearData,
   generateRandomOrderId,
-  getData,
+  getDate,
   loadCached,
 } from "../../commonFiles/commonFunctions";
 
@@ -93,7 +93,7 @@ const Cart = () => {
   const handleOrder = async (customerId: string, card: CartListData) => {
     setIsLoading(true);
     const customerName = user.name;
-    const orderDate = getData();
+    const orderDate = getDate();
     const orderId = generateRandomOrderId();
     const newItem = {
       customerId,
@@ -143,6 +143,7 @@ const Cart = () => {
       {isLoading ? (
         <div style={{ ...h100w100, ...flexDiv }}>
           <CircularProgress
+            data-testid="loader"
             sx={{
               color: "#ffb703",
             }}
@@ -180,8 +181,15 @@ const Cart = () => {
                 key={`Card_${index}`}
               >
                 <CardActionArea sx={cartStyle.cardAction}>
-                  <CardMedia sx={cartStyle.cardMedia}>
-                    <img src={card.prodImg} style={cartStyle.imageStyle} />
+                  <CardMedia
+                    sx={cartStyle.cardMedia}
+                    data-testid={`CartImage_${card.prodId}`}
+                  >
+                    <img
+                      src={card.prodImg}
+                      alt={`Product Image ${index + 1}`}
+                      style={cartStyle.imageStyle}
+                    />
                   </CardMedia>
                 </CardActionArea>
                 <Box
@@ -225,14 +233,19 @@ const Cart = () => {
                     </Box>
                     <CardActions sx={{ padding: "0", marginTop: "2%" }}>
                       <Button
+                        sx={{
+                          textTransform: "none",
+                        }}
+                        data-testid={`remove_${card.prodId}`}
                         style={cartStyle.IconButton}
                         onClick={() => {
                           handleRemove(customerId, card.prodId);
                         }}
                       >
-                        Remove from cart
+                        Remove From Cart
                       </Button>
                       <Quantity
+                        id={card.prodId}
                         style={{
                           width: "50%",
                           marginLeft: "10%",
@@ -243,6 +256,7 @@ const Cart = () => {
                   </div>
                 </Box>
                 <Button
+                  data-testid={`orderBtn_${card.prodId}`}
                   style={orderButton}
                   onClick={() => {
                     handleOrder(customerId, card);

@@ -1,14 +1,3 @@
-import { ReactNode } from "react";
-
-export type ProfileType =
-  | "/"
-  | "/profile"
-  | "/wishList"
-  | "/orders"
-  | "/contact"
-  | "/settings"
-  | "/login";
-
 export type UserData = {
   acc_type: string;
   gender: string;
@@ -34,6 +23,11 @@ export type SubmitButtonProps = {
 export type ClickableProps = {
   onClick?: () => void;
   text: string;
+  style?: React.CSSProperties;
+};
+
+export type QuantProps = {
+  id: any;
   style?: React.CSSProperties;
 };
 
