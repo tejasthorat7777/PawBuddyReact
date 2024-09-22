@@ -15,7 +15,7 @@ import {
   h100w100,
   homeStyle,
 } from "../../commonFiles/commonTheme";
-import StarRating from "../../commonFiles/StartRatins";
+import StarRating from "../../commonFiles/StarRating";
 import { Quantity } from "../../commonFiles/Quantity";
 import { CartListData } from "../../commonFiles/commonTypes";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
