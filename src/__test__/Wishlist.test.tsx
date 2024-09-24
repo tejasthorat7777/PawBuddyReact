@@ -281,7 +281,7 @@ describe("WishList", () => {
     });
 
     expect(mockAxiosPost).toBeCalledWith(
-      "http://localhost:3000/wishlist/remove",
+      "http://localhost:3000/api/wishlist/remove",
       {
         customerId: "123",
         prodId: "2",
@@ -324,7 +324,7 @@ describe("WishList", () => {
     });
 
     expect(mockAxiosPost).toBeCalledWith(
-      "http://localhost:3000/wishlist/remove",
+      "http://localhost:3000/api/wishlist/remove",
       {
         customerId: "123",
         prodId: "2",

@@ -59,7 +59,7 @@ function Orders() {
         setIsLoading(false);
         return;
       }
-      const getData = await axios.get(`${apiUrl}/orders/get/${customerId}`);
+      const getData = await axios.get(`${apiUrl}/api/orders/get/${customerId}`);
       if (getData.data.items.length === 0) {
         setNoOrder(true);
       } else {

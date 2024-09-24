@@ -137,7 +137,7 @@ describe("Registration", () => {
     });
 
     expect(mockAxiosPost).toHaveBeenCalledWith(
-      "http://localhost:3000/sendUsersInfo",
+      "http://localhost:3000/api/sendUsersInfo",
       {
         acc_type: "Business",
         name: "Pettey",

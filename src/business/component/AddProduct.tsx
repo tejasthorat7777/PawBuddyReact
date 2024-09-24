@@ -59,9 +59,7 @@ const getSubCategory = (subcat: string) => {
 };
 
 const AddProduct = () => {
-  const userId = useSelector(
-    (state: RootState) => state.user.userId
-  );
+  const userId = useSelector((state: RootState) => state.user.userId);
   const condition = ["Condition", "New", "Used", "Refurbished"];
   const category = ["category", "Food", "Accessories", "Shampoo", "Bathroom"];
 
@@ -113,7 +111,7 @@ const AddProduct = () => {
     try {
       event.preventDefault();
       const apiUrl = import.meta.env.VITE_API_URL;
-      await axios.post(`${apiUrl}/addProduct`, {
+      await axios.post(`${apiUrl}/api/addProduct`, {
         customerId: userId,
         products: addProduct,
       });

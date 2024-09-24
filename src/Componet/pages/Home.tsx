@@ -29,7 +29,11 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import axios from "axios";
-import { clearData, isItemExists, loadCached } from "../../commonFiles/commonFunctions";
+import {
+  clearData,
+  isItemExists,
+  loadCached,
+} from "../../commonFiles/commonFunctions";
 import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 
 const Home = () => {
@@ -55,7 +59,7 @@ const Home = () => {
         return;
       }
       let Products: ProductData[] = [];
-      const getData = await axios.get(`${apiUrl}/getProducts`);
+      const getData = await axios.get(`${apiUrl}/api/getProducts`);
       const data = getData.data;
       data.map((doc: any) => {
         doc.products.map((product: any) => {
@@ -76,7 +80,9 @@ const Home = () => {
 
   const getWishList = async (customerId: string) => {
     try {
-      const getData = await axios.get(`${apiUrl}/wishlist/get/${customerId}`);
+      const getData = await axios.get(
+        `${apiUrl}/api/wishlist/get/${customerId}`
+      );
       if (getData.data.items.length > 0) {
         setWishlistItems(getData.data.items);
       }
@@ -87,7 +93,7 @@ const Home = () => {
 
   const getCartList = async (customerId: string) => {
     try {
-      const getData = await axios.get(`${apiUrl}/cart/get/${customerId}`);
+      const getData = await axios.get(`${apiUrl}/api/cart/get/${customerId}`);
       if (getData.data.items.length > 0) {
         setCartList(getData.data.items);
       }
@@ -97,7 +103,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    clearData("cachedProducts")
+    clearData("cachedProducts");
     getProducts();
     if (customerId) {
       getWishList(customerId);
@@ -125,13 +131,13 @@ const Home = () => {
         const dumpedData = { ...item, customerId };
         setCartList((prevCartList) => [...prevCartList, item]);
         toast("Item added to Cart", { autoClose: 1000 });
-        await axios.post(`${apiUrl}/cart/dumped`, dumpedData);
+        await axios.post(`${apiUrl}/api/cart/dumped`, dumpedData);
       } else {
         setCartList((prevCartList) =>
           prevCartList.filter((cartList) => cartList.prodId !== item.prodId)
         );
         toast("Item removed from Cart", { autoClose: 1000 });
-        await axios.post(`${apiUrl}/cart/remove`, {
+        await axios.post(`${apiUrl}/api/cart/remove`, {
           customerId,
           prodId: item.prodId,
         });
@@ -157,11 +163,11 @@ const Home = () => {
     try {
       if (!exists) {
         const dumpedData = { ...item, customerId };
-        await axios.post(`${apiUrl}/wishlist/dumped`, dumpedData);
+        await axios.post(`${apiUrl}/api/wishlist/dumped`, dumpedData);
         setWishlistItems((prevWishlistItems) => [...prevWishlistItems, item]);
         toast("Item added to Wishlist", { autoClose: 1000 });
       } else {
-        await axios.post(`${apiUrl}/wishlist/remove`, {
+        await axios.post(`${apiUrl}/api/wishlist/remove`, {
           customerId,
           prodId: item.prodId,
         });

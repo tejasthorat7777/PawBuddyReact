@@ -53,7 +53,9 @@ const Wishlist = () => {
         setIsLoading(false);
         return;
       }
-      const getData = await axios.get(`${apiUrl}/wishlist/get/${customerId}`);
+      const getData = await axios.get(
+        `${apiUrl}/api/wishlist/get/${customerId}`
+      );
       if (getData.data.items.length === 0) {
         setEmptyCart(true);
       } else {
@@ -80,7 +82,7 @@ const Wishlist = () => {
 
   const handleXmark = async (customerId: string, prodId: string) => {
     try {
-      await axios.post(`${apiUrl}/wishlist/remove`, {
+      await axios.post(`${apiUrl}/api/wishlist/remove`, {
         customerId,
         prodId,
       });

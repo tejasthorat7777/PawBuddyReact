@@ -78,7 +78,7 @@ export default function Registration() {
     setIsloading(true);
     try {
       event.preventDefault();
-      await axios.post(`${apiUrl}/sendUsersInfo`, userData);
+      await axios.post(`${apiUrl}/api/sendUsersInfo`, userData);
       setFormSend(true);
     } catch (error) {
       console.log("Error>>>>", error);

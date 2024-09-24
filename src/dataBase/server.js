@@ -31,7 +31,7 @@ server.listen(PORT, () => {
 
 // ######################################### POST METHODS #####################################################
 
-server.post("/sendUsersInfo", async (req, res) => {
+server.post("/api/sendUsersInfo", async (req, res) => {
   const information = req.body;
   try {
     const newUser = new UserInfo(information);
@@ -43,7 +43,7 @@ server.post("/sendUsersInfo", async (req, res) => {
   }
 });
 
-server.post("/wishlist/remove", async (req, res) => {
+server.post("/api/wishlist/remove", async (req, res) => {
   try {
     const { customerId, prodId } = req.body;
 
@@ -63,7 +63,7 @@ server.post("/wishlist/remove", async (req, res) => {
   }
 });
 
-server.post("/wishlist/dumped", async (req, res) => {
+server.post("/api/wishlist/dumped", async (req, res) => {
   try {
     const {
       customerId,
@@ -112,7 +112,7 @@ server.post("/wishlist/dumped", async (req, res) => {
   }
 });
 
-server.post("/addProduct", async (req, res) => {
+server.post("/api/addProduct", async (req, res) => {
   try {
     const { customerId, products } = req.body;
     const existingCustomer = await Products.findOne({ customerId });
@@ -132,7 +132,7 @@ server.post("/addProduct", async (req, res) => {
   }
 });
 
-server.post("/cart/dumped", async (req, res) => {
+server.post("/api/cart/dumped", async (req, res) => {
   try {
     const { customerId, prodId, prodPrice, prodDiscrip, prodImg, rating } =
       req.body;
@@ -174,7 +174,7 @@ server.post("/cart/dumped", async (req, res) => {
   }
 });
 
-server.post("/cart/remove", async (req, res) => {
+server.post("/api/cart/remove", async (req, res) => {
   try {
     const { customerId, prodId } = req.body;
 
@@ -194,7 +194,7 @@ server.post("/cart/remove", async (req, res) => {
   }
 });
 
-server.post("/orders/dumped", async (req, res) => {
+server.post("/api/orders/dumped", async (req, res) => {
   try {
     const {
       customerId,
@@ -236,7 +236,7 @@ server.post("/orders/dumped", async (req, res) => {
 
 // ######################################### GET METHODS #####################################################
 
-server.get("/getUsersInfo/:username", async (req, res) => {
+server.get("/api/getUsersInfo/:username", async (req, res) => {
   try {
     const { username } = req.params;
     const user = await UserInfo.findOne({ username });
@@ -247,7 +247,7 @@ server.get("/getUsersInfo/:username", async (req, res) => {
   }
 });
 
-server.get("/wishlist/get/:customerId", async (req, res) => {
+server.get("/api/wishlist/get/:customerId", async (req, res) => {
   try {
     const { customerId } = req.params;
 
@@ -262,7 +262,7 @@ server.get("/wishlist/get/:customerId", async (req, res) => {
   }
 });
 
-server.get("/getProducts", async (req, res) => {
+server.get("/api/getProducts", async (req, res) => {
   try {
     const getProduct = await Products.find();
     res.status(200).json(getProduct);
@@ -272,7 +272,7 @@ server.get("/getProducts", async (req, res) => {
   }
 });
 
-server.get("/cart/get/:customerId", async (req, res) => {
+server.get("/api/cart/get/:customerId", async (req, res) => {
   try {
     const { customerId } = req.params;
 
@@ -287,7 +287,7 @@ server.get("/cart/get/:customerId", async (req, res) => {
   }
 });
 
-server.get("/busi/getProducts/:customerId", async (req, res) => {
+server.get("/api/busi/getProducts/:customerId", async (req, res) => {
   try {
     const { customerId } = req.params;
     let getProduct;
@@ -301,7 +301,7 @@ server.get("/busi/getProducts/:customerId", async (req, res) => {
   }
 });
 
-server.get("/orders/get/:customerId", async (req, res) => {
+server.get("/api/orders/get/:customerId", async (req, res) => {
   try {
     const { customerId } = req.params;
 

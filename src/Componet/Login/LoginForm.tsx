@@ -25,8 +25,11 @@ function LoginForm() {
   const dispatch = useDispatch();
 
   const loginSuccess = () => {
-    setLoading(false);
-    setLottie(true);
+    setTimeout(() => {
+      setLoading(false);
+      setLottie(true);
+    }, 1000);
+
     setTimeout(() => {
       navigate("/");
     }, 3000);
@@ -42,7 +45,7 @@ function LoginForm() {
   };
 
   const getUser = async (userName: string) => {
-    const getData = await axios.get(`${apiUrl}/getUsersInfo/${userName}`);
+    const getData = await axios.get(`${apiUrl}/api/getUsersInfo/${userName}`);
     return getData.data;
   };
 
@@ -63,13 +66,13 @@ function LoginForm() {
       } else {
         setPassword("");
         setCorrectUser(true);
+        setLoading(false);
       }
     } catch (error) {
       console.log("catch>>>>>", error);
+      setLoading(false);
       setCorrectUser(true);
       reset();
-    } finally {
-      setLoading(false);
     }
   };
 

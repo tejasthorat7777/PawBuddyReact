@@ -131,7 +131,7 @@ describe("Home", () => {
 
     expect(screen.getByText("Item added to Wishlist")).toBeInTheDocument();
     expect(mockAxiosPost).toHaveBeenLastCalledWith(
-      "http://localhost:3000/wishlist/dumped",
+      "http://localhost:3000/api/wishlist/dumped",
       {
         prodId: "1",
         category: "Dog Food",
@@ -224,7 +224,7 @@ describe("Home", () => {
 
     expect(screen.getByText("Item added to Cart")).toBeInTheDocument();
     expect(mockAxiosPost).toHaveBeenLastCalledWith(
-      "http://localhost:3000/cart/dumped",
+      "http://localhost:3000/api/cart/dumped",
       {
         prodId: "1",
         category: "Dog Food",

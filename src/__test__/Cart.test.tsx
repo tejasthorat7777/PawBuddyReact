@@ -162,7 +162,7 @@ describe("CartList", () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId("orderBtn_1"));
     });
-    expect(mockAxiosPost).toHaveBeenCalledWith(`${apiUrl}/cart/remove`, {
+    expect(mockAxiosPost).toHaveBeenCalledWith(`${apiUrl}/api/cart/remove`, {
       customerId: "123",
       prodId: "1",
     });
@@ -249,10 +249,13 @@ describe("CartList", () => {
       vi.advanceTimersByTime(3000);
     });
 
-    expect(mockAxiosPost).toBeCalledWith("http://localhost:3000/cart/remove", {
-      customerId: "123",
-      prodId: "2",
-    });
+    expect(mockAxiosPost).toBeCalledWith(
+      "http://localhost:3000/api/cart/remove",
+      {
+        customerId: "123",
+        prodId: "2",
+      }
+    );
     expect(screen.getByTestId("product_1")).toBeInTheDocument();
     expect(screen.queryByTestId("product_2")).not.toBeInTheDocument();
     expect(screen.queryByTestId("emptyCart")).not.toBeInTheDocument();
@@ -289,10 +292,13 @@ describe("CartList", () => {
       fireEvent.click(screen.getByTestId("remove_2"));
     });
 
-    expect(mockAxiosPost).toBeCalledWith("http://localhost:3000/cart/remove", {
-      customerId: "123",
-      prodId: "2",
-    });
+    expect(mockAxiosPost).toBeCalledWith(
+      "http://localhost:3000/api/cart/remove",
+      {
+        customerId: "123",
+        prodId: "2",
+      }
+    );
     expect(screen.queryByTestId("product_2")).not.toBeInTheDocument();
     expect(screen.getByTestId("emptyCart")).toBeInTheDocument();
   });
@@ -413,7 +419,7 @@ describe("CartList", () => {
     };
 
     expect(mockAxiosPost).toHaveBeenCalledWith(
-      `${apiUrl}/orders/dumped`,
+      `${apiUrl}/api/orders/dumped`,
       newItm
     );
   });

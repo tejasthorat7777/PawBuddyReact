@@ -68,7 +68,7 @@ const Cart = () => {
         setIsLoading(false);
         return;
       }
-      const getData = await axios.get(`${apiUrl}/cart/get/${customerId}`);
+      const getData = await axios.get(`${apiUrl}/api/cart/get/${customerId}`);
       if (getData.data.items.length === 0) {
         setEmptyCart(true);
       } else {
@@ -103,7 +103,7 @@ const Cart = () => {
       ...card,
     };
     try {
-      await axios.post(`${apiUrl}/orders/dumped`, newItem);
+      await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
       handleRemove(customerId, card.prodId);
     } catch (error) {
       console.log("error>>>>", error);
@@ -117,7 +117,7 @@ const Cart = () => {
 
   const handleRemove = async (customerId: string, prodId: string) => {
     try {
-      await axios.post(`${apiUrl}/cart/remove`, {
+      await axios.post(`${apiUrl}/api/cart/remove`, {
         customerId,
         prodId,
       });

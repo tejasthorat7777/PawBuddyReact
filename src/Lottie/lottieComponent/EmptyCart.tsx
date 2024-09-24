@@ -3,7 +3,7 @@ import emptyCart from "../lottieJson/emptyCart.json";
 
 export const EmptyCart = () => {
   return (
-    <div data-testid="emptyCart">
+    <div data-testid="emptyCart" id="emptyCart">
       <Lottie
         loop
         animationData={emptyCart}
