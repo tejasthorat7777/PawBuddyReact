@@ -14,7 +14,7 @@ describe("Login Page", () => {
   });
   it("Enter username and Password Correct", () => {
     cy.visit("http://localhost:5173/login");
-    login();
+    login("testpaw","123456");
   });
   it("Error messages should clear when the user starts typing", () => {
     cy.visit("http://localhost:5173/login");

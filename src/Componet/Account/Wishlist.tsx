@@ -153,6 +153,7 @@ const Wishlist = () => {
               >
                 <IconButton
                   data-testid={`Xbutton_${card.prodId}`}
+                  id={`Xbutton_${card.prodId}`}
                   sx={{
                     position: "absolute",
                     top: -10,

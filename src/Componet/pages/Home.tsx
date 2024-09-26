@@ -276,6 +276,7 @@ const Home = () => {
                     </Button>
                     <Button
                       data-testid={`wishlist_${card.prodId}`}
+                      id={`wishlist_${card.prodId}`}
                       onClick={() => addToWishlist(card)}
                       style={homeStyle.IconButton}
                     >
