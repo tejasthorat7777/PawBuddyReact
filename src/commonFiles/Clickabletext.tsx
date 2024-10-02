@@ -5,11 +5,13 @@ export const ClickableText: React.FC<ClickableProps> = ({
   onClick,
   text,
   style = {},
+  id,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <span
+      data-testid={id}
       onClick={onClick}
       style={{
         ...style,

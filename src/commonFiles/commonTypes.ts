@@ -24,6 +24,7 @@ export type ClickableProps = {
   onClick?: () => void;
   text: string;
   style?: React.CSSProperties;
+  id: string;
 };
 
 export type QuantProps = {

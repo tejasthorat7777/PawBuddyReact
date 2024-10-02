@@ -16,9 +16,6 @@ import {
 import { RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import styles from "../../commonFiles/commonCss/toast.module.css";
 import { ClickableText } from "../../commonFiles/Clickabletext";
 import axios from "axios";
 import {
@@ -135,12 +132,22 @@ function Orders() {
                       : null;
 
                   return (
-                    <div key={index.toString()} style={ordersCss.textCss}>
+                    <div key={index} style={ordersCss.textCss}>
                       {text}
                       {displayValue && (
                         <>
                           <br />
-                          {displayValue}
+                          <span
+                            data-testid={
+                              text === "Total"
+                                ? `value_${obj.prodPrice}`
+                                : text === "Ship To"
+                                ? `value_${obj.customerName}`
+                                : `value_${obj.orderDate}`
+                            }
+                          >
+                            {displayValue}
+                          </span>
                         </>
                       )}
                     </div>
@@ -149,16 +156,20 @@ function Orders() {
               </div>
               <div style={ordersCss.orderId}>
                 <div style={ordersCss.textCss}>
-                  Order # {obj.orderId}
+                  <span data-testid={`orderId_${obj.orderId}`}>
+                    Order # {obj.orderId}
+                  </span>
                   <div>
                     <ClickableText
                       text={"View order details"}
                       style={{ marginRight: "5%" }}
+                      id={`orderDetail_${obj.prodId}`}
                     />
                     |
                     <ClickableText
                       text={"Invoice"}
                       style={{ marginLeft: "5%" }}
+                      id={`invoice_${obj.prodId}`}
                     />
                   </div>
                 </div>
@@ -168,15 +179,24 @@ function Orders() {
               <div style={ordersCss.imageDiv}>
                 <CardActionArea sx={cartStyle.cardAction}>
                   <CardMedia sx={cartStyle.cardMedia}>
-                    <img src={obj.prodImg} style={cartStyle.imageStyle} />
+                    <img
+                      src={obj.prodImg}
+                      style={cartStyle.imageStyle}
+                      data-testid={`image_${obj.prodId}`}
+                    />
                   </CardMedia>
                 </CardActionArea>
               </div>
-              <div style={ordersCss.discriptionDiv}>{obj.prodDiscrip}</div>
+              <div
+                style={ordersCss.discriptionDiv}
+                data-testid={`prodDisc_${obj.prodId}`}
+              >
+                {obj.prodDiscrip}
+              </div>
               <div style={ordersCss.buttons}>
                 {buttonsText.map((text, index) => (
                   <Button
-                    data-testid={`button${index}`}
+                    data-testid={`button_${text}`}
                     style={{
                       ...homeStyle.IconButton,
                       fontSize: "100%",
@@ -202,15 +222,6 @@ function Orders() {
         ))
       ) : null}
       {noOrder && <NoOrder />}
-      <div data-testid="toast">
-        <ToastContainer
-          position="bottom-left"
-          toastClassName={styles.toast}
-          bodyClassName={styles.body}
-          hideProgressBar={true}
-          autoClose={1000}
-        />
-      </div>
     </div>
   );
 }

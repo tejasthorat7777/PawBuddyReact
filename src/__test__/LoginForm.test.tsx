@@ -306,7 +306,10 @@ describe("Login Page", () => {
       fireEvent.click(submit);
     });
 
-    act(() => {
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    await act(async () => {
       vi.advanceTimersByTime(3000);
     });
 
