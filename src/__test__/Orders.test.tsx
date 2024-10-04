@@ -46,6 +46,9 @@ const getTestCaseNumber = () => {
 };
 
 describe("Orders", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   it(`${getTestCaseNumber()} should display Please login , when user is not logged in`, async () => {
     render(
       <Wrapper>
@@ -78,7 +81,7 @@ describe("Orders", () => {
   });
 
   it(`${getTestCaseNumber()} should display order details`, async () => {
-    mockAxiosGet.mockImplementation(async () => {
+    mockAxiosGet.mockImplementation(() => {
       return Promise.resolve({
         data: {
           items: mockItemWishlist,
@@ -123,7 +126,7 @@ describe("Orders", () => {
   });
 
   it(`${getTestCaseNumber()} should display product details in Orders`, async () => {
-    mockAxiosGet.mockImplementation(async () => {
+    mockAxiosGet.mockImplementation(() => {
       return Promise.resolve({
         data: {
           items: mockItemWishlist,
@@ -170,5 +173,128 @@ describe("Orders", () => {
     );
     expect(prodDisc).toBeInTheDocument();
     expect(prodDisc).toHaveTextContent(mockItemWishlist[0].prodDiscrip);
+  });
+
+  it(`${getTestCaseNumber()} should display No Date Found when date is undefined or null`, async () => {
+    const dateUndefined = [
+      {
+        prodId: "1",
+        prodName: "Harness",
+        prodImg: "image 1",
+        prodPrice: "759",
+        selected: false,
+        customerName: "Arun Thorat",
+        orderId: generateRandomOrderId(),
+        orderDate: undefined,
+        prodDiscrip:
+          "This is a very long product description that should be truncated with an ellipsis after three lines. This text will simulate a long description for testing purposes.",
+      },
+    ];
+
+    mockAxiosGet.mockImplementation(() => {
+      return Promise.resolve({
+        data: {
+          items: dateUndefined,
+        },
+      });
+    });
+
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Orders />
+      </Wrapper>
+    );
+
+    await waitFor(() => {
+      const date = screen.getByTestId(`value_${dateUndefined[0].orderDate}`);
+      expect(date).toBeInTheDocument();
+      expect(date).toHaveTextContent("No Date Found");
+    });
+  });
+
+  it(`${getTestCaseNumber()} should display PawBuddy User when CustomerName is undefined`, async () => {
+    const dateUndefined = [
+      {
+        prodId: "1",
+        prodName: "Harness",
+        prodImg: "image 1",
+        prodPrice: "759",
+        selected: false,
+        customerName: undefined,
+        orderId: generateRandomOrderId(),
+        orderDate: getDate(),
+        prodDiscrip:
+          "This is a very long product description that should be truncated with an ellipsis after three lines. This text will simulate a long description for testing purposes.",
+      },
+    ];
+
+    mockAxiosGet.mockImplementation(() => {
+      return Promise.resolve({
+        data: {
+          items: dateUndefined,
+        },
+      });
+    });
+
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Orders />
+      </Wrapper>
+    );
+
+    await waitFor(() => {
+      const date = screen.getByTestId(`value_${dateUndefined[0].customerName}`);
+      expect(date).toBeInTheDocument();
+      expect(date).toHaveTextContent("PawBuddy User");
+    });
+  });
+
+  it(`${getTestCaseNumber()} should display PawBuddy User when CustomerName is empty`, async () => {
+    const dateUndefined = [
+      {
+        prodId: "1",
+        prodName: "Harness",
+        prodImg: "image 1",
+        prodPrice: "759",
+        selected: false,
+        customerName: "",
+        orderId: generateRandomOrderId(),
+        orderDate: getDate(),
+        prodDiscrip:
+          "This is a very long product description that should be truncated with an ellipsis after three lines. This text will simulate a long description for testing purposes.",
+      },
+    ];
+
+    mockAxiosGet.mockImplementation(() => {
+      return Promise.resolve({
+        data: {
+          items: dateUndefined,
+        },
+      });
+    });
+
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123456" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Orders />
+      </Wrapper>
+    );
+
+    await waitFor(() => {
+      const date = screen.getByTestId(`value_`);
+      expect(date).toBeInTheDocument();
+      expect(date).toHaveTextContent("PawBuddy User");
+    });
   });
 });
