@@ -4,9 +4,12 @@ import { vi } from "vitest";
 export const mockAxiosGet = vi.fn().mockImplementation(() => {});
 export const mockAxiosPost = vi.fn().mockImplementation(() => {});
 export const mockShare = vi.fn().mockImplementation(() => {});
+export const mockStorageGetItem = vi.fn().mockImplementation(() => []);
 
-vi.spyOn(axios, "get").mockImplementation(mockAxiosGet);
+vi.spyOn(axios, "get").mockImplementation((...arg) => mockAxiosGet(...arg));
 vi.spyOn(axios, "post").mockImplementation(mockAxiosPost);
+
+vi.spyOn(Storage.prototype, "getItem").mockImplementation(mockStorageGetItem);
 
 function rgbToHex(r: any, g: any, b: any) {
   const redHex = r.toString(16).padStart(2, "0");

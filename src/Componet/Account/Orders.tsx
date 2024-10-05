@@ -126,7 +126,7 @@ function Orders() {
                     text === "Order Placed"
                       ? obj.orderDate ?? "No Date Found"
                       : text === "Total"
-                      ? `${currency} ${obj.prodPrice}` ?? ""
+                      ? `${currency} ${obj.prodPrice}` || ""
                       : text === "Ship To"
                       ? obj.customerName && obj.customerName.trim() !== ""
                         ? obj.customerName

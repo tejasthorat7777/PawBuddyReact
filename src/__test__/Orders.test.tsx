@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import Orders from "../Componet/Account/Orders";
 import Wrapper from "../setupTest/Wrapper";
-import { mockAxiosGet } from "../__mocks__/globalMock";
+import { mockAxiosGet, mockStorageGetItem } from "../__mocks__/globalMock";
 import { generateRandomOrderId, getDate } from "../commonFiles/commonFunctions";
 
 vi.mock("react-lottie-player", () => {
@@ -45,6 +45,12 @@ const getTestCaseNumber = () => {
   return `TC:${testCaseNumber}`;
 };
 
+mockStorageGetItem.mockImplementation((key) => {
+  if (key === "cachedOrders") {
+    return false;
+  }
+});
+
 describe("Orders", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -81,7 +87,7 @@ describe("Orders", () => {
   });
 
   it(`${getTestCaseNumber()} should display order details`, async () => {
-    mockAxiosGet.mockImplementation(() => {
+    mockAxiosGet.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
           items: mockItemWishlist,
@@ -126,7 +132,7 @@ describe("Orders", () => {
   });
 
   it(`${getTestCaseNumber()} should display product details in Orders`, async () => {
-    mockAxiosGet.mockImplementation(() => {
+    mockAxiosGet.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
           items: mockItemWishlist,
@@ -144,38 +150,42 @@ describe("Orders", () => {
       </Wrapper>
     );
 
-    const date = screen.getByTestId(`value_${mockItemWishlist[0].orderDate}`);
-    expect(date).toBeInTheDocument();
-    expect(date).toHaveTextContent(mockItemWishlist[0].orderDate);
+    await waitFor(() => {
+      const date = screen.getByTestId(`value_${mockItemWishlist[0].orderDate}`);
+      expect(date).toBeInTheDocument();
+      expect(date).toHaveTextContent(mockItemWishlist[0].orderDate);
 
-    const price = screen.getByTestId(`value_${mockItemWishlist[0].prodPrice}`);
-    expect(price).toBeInTheDocument();
-    expect(price).toHaveTextContent(mockItemWishlist[0].prodPrice);
+      const price = screen.getByTestId(
+        `value_${mockItemWishlist[0].prodPrice}`
+      );
+      expect(price).toBeInTheDocument();
+      expect(price).toHaveTextContent(mockItemWishlist[0].prodPrice);
 
-    const custName = screen.getByTestId(
-      `value_${mockItemWishlist[0].customerName}`
-    );
-    expect(custName).toBeInTheDocument();
-    expect(custName).toHaveTextContent(mockItemWishlist[0].customerName);
+      const custName = screen.getByTestId(
+        `value_${mockItemWishlist[0].customerName}`
+      );
+      expect(custName).toBeInTheDocument();
+      expect(custName).toHaveTextContent(mockItemWishlist[0].customerName);
 
-    const orderId = screen.getByTestId(
-      `orderId_${mockItemWishlist[0].orderId}`
-    );
-    expect(orderId).toBeInTheDocument();
-    expect(orderId).toHaveTextContent(mockItemWishlist[0].orderId);
+      const orderId = screen.getByTestId(
+        `orderId_${mockItemWishlist[0].orderId}`
+      );
+      expect(orderId).toBeInTheDocument();
+      expect(orderId).toHaveTextContent(mockItemWishlist[0].orderId);
 
-    const image = screen.getByTestId(`image_${mockItemWishlist[0].prodId}`);
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", mockItemWishlist[0].prodImg);
+      const image = screen.getByTestId(`image_${mockItemWishlist[0].prodId}`);
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute("src", mockItemWishlist[0].prodImg);
 
-    const prodDisc = screen.getByTestId(
-      `prodDisc_${mockItemWishlist[0].prodId}`
-    );
-    expect(prodDisc).toBeInTheDocument();
-    expect(prodDisc).toHaveTextContent(mockItemWishlist[0].prodDiscrip);
+      const prodDisc = screen.getByTestId(
+        `prodDisc_${mockItemWishlist[0].prodId}`
+      );
+      expect(prodDisc).toBeInTheDocument();
+      expect(prodDisc).toHaveTextContent(mockItemWishlist[0].prodDiscrip);
+    });
   });
 
-  it(`${getTestCaseNumber()} should display No Date Found when date is undefined or null`, async () => {
+  it(`${getTestCaseNumber()} should display No Date Found when date is undefined`, async () => {
     const dateUndefined = [
       {
         prodId: "1",
@@ -191,7 +201,7 @@ describe("Orders", () => {
       },
     ];
 
-    mockAxiosGet.mockImplementation(() => {
+    mockAxiosGet.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
           items: dateUndefined,
@@ -232,7 +242,7 @@ describe("Orders", () => {
       },
     ];
 
-    mockAxiosGet.mockImplementation(() => {
+    mockAxiosGet.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
           items: dateUndefined,
@@ -273,7 +283,7 @@ describe("Orders", () => {
       },
     ];
 
-    mockAxiosGet.mockImplementation(() => {
+    mockAxiosGet.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
           items: dateUndefined,
