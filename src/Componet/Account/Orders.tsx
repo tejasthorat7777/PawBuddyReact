@@ -31,7 +31,7 @@ import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmpt
 const NoOrder = () => {
   return (
     <div style={{ ...h100w100, ...flexDiv }}>
-      You Don't have any Order yett
+      You Don't have any Order yet
       <EmptyOrders />
     </div>
   );
@@ -127,30 +127,26 @@ function Orders() {
                       ? obj.orderDate ?? "No Date Found"
                       : text === "Total"
                       ? `${currency} ${obj.prodPrice}` || ""
-                      : text === "Ship To"
-                      ? obj.customerName && obj.customerName.trim() !== ""
-                        ? obj.customerName
-                        : "PawBuddy User"
-                      : null;
+                      : obj.customerName && obj.customerName.trim() !== ""
+                      ? obj.customerName
+                      : "PawBuddy User";
 
                   return (
                     <div key={index} style={ordersCss.textCss}>
                       {text}
                       {displayValue && (
-                        <>
+                        <span
+                          data-testid={
+                            text === "Total"
+                              ? `value_${obj.prodPrice}`
+                              : text === "Ship To"
+                              ? `value_${obj.customerName}`
+                              : `value_${obj.orderDate}`
+                          }
+                        >
                           <br />
-                          <span
-                            data-testid={
-                              text === "Total"
-                                ? `value_${obj.prodPrice}`
-                                : text === "Ship To"
-                                ? `value_${obj.customerName}`
-                                : `value_${obj.orderDate}`
-                            }
-                          >
-                            {displayValue}
-                          </span>
-                        </>
+                          {displayValue}
+                        </span>
                       )}
                     </div>
                   );
@@ -159,7 +155,7 @@ function Orders() {
               <div style={ordersCss.orderId}>
                 <div style={ordersCss.textCss}>
                   <span data-testid={`orderId_${obj.orderId}`}>
-                    Order # {obj.orderId}
+                    {`Order # ${obj.orderId || "Number"}`}
                   </span>
                   <div>
                     <ClickableText
@@ -198,6 +194,7 @@ function Orders() {
               <div style={ordersCss.buttons}>
                 {buttonsText.map((text, index) => (
                   <Button
+                    key={`button_${text}`}
                     data-testid={`button_${text}`}
                     style={{
                       ...homeStyle.IconButton,
