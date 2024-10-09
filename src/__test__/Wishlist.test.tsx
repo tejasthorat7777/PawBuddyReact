@@ -1,30 +1,19 @@
 import Wishlist from "../Componet/Account/Wishlist";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import Wrapper from "../setupTest/Wrapper";
-import { mockAxiosGet, mockAxiosPost } from "../__mocks__/globalMock";
-import { State, UserData } from "../commonFiles/commonTypes";
+import {
+  mockAxiosGet,
+  mockAxiosPost,
+  mockStorageGetItem,
+  mockUser,
+} from "../__mocks__/globalMock";
+import { State } from "../commonFiles/commonTypes";
 
 vi.mock("react-lottie-player", () => {
   return {
     default: vi.fn(),
   };
 });
-
-vi.useFakeTimers();
-
-const mockUser: UserData = {
-  name: "",
-  age: "",
-  breed: "",
-  birthdate: "",
-  identification: "",
-  owner: "",
-  username: "",
-  userId: "",
-  gender: "",
-  acc_type: "",
-  password: "",
-};
 
 const mockItemWishlist = [
   {
@@ -52,7 +41,14 @@ const getTestCaseNumber = () => {
   return `TC:${testCaseNumber}`;
 };
 
+mockStorageGetItem.mockImplementation((key) => {
+  if (key === "cachedWishlist") {
+    return false;
+  }
+});
+
 describe("WishList", () => {
+  vi.useFakeTimers();
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -429,5 +425,35 @@ describe("WishList", () => {
       "max-width": "100%",
       "text-overflow": "ellipsis",
     });
+  });
+
+  it(`${getTestCaseNumber()} should display Product, from cache`, async () => {
+    mockStorageGetItem.mockImplementation((key) => {
+      if (key === "cachedWishlist") {
+        return JSON.stringify(mockItemWishlist);
+      }
+    });
+    const mockInitialState = {
+      status: true,
+      user: { ...mockUser, userId: "123" },
+    };
+    render(
+      <Wrapper initialState={mockInitialState}>
+        <Wishlist />
+      </Wrapper>
+    );
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(
+      screen.getByTestId(`product_${mockItemWishlist[0].prodId}`)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`product_${mockItemWishlist[1].prodId}`)
+    ).toBeInTheDocument();
   });
 });

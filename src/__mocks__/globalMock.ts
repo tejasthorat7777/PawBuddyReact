@@ -29,3 +29,17 @@ export const rgbStringToHex = (rgbString: any) => {
 Object.assign(navigator, {
   share: mockShare,
 });
+
+export const mockUser = {
+  name: "",
+  age: "",
+  breed: "",
+  birthdate: "",
+  identification: "",
+  owner: "",
+  username: "",
+  userId: "",
+  gender: "",
+  acc_type: "",
+  password: "",
+};

@@ -7,7 +7,7 @@ import {
 } from "@testing-library/react";
 import Orders from "../Componet/Account/Orders";
 import Wrapper from "../setupTest/Wrapper";
-import { mockAxiosGet, mockStorageGetItem } from "../__mocks__/globalMock";
+import { mockAxiosGet, mockStorageGetItem, mockUser } from "../__mocks__/globalMock";
 import { generateRandomOrderId, getDate } from "../commonFiles/commonFunctions";
 
 vi.mock("react-lottie-player", () => {
@@ -16,19 +16,7 @@ vi.mock("react-lottie-player", () => {
   };
 });
 
-const mockUser = {
-  name: "",
-  age: "",
-  breed: "",
-  birthdate: "",
-  identification: "",
-  owner: "",
-  username: "",
-  userId: "",
-  gender: "",
-  acc_type: "",
-  password: "",
-};
+
 
 const mockItemWishlist = [
   {
