@@ -6,7 +6,7 @@ import {
   mockStorageGetItem,
   mockUser,
 } from "../__mocks__/globalMock";
-import { State, UserData } from "../commonFiles/commonTypes";
+import { State } from "../commonFiles/commonTypes";
 import Cart from "../Componet/pages/Cart";
 import { apiUrl, getDate } from "../commonFiles/commonFunctions";
 
