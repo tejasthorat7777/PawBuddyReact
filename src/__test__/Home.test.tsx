@@ -5,6 +5,8 @@ import {
   mockAxiosGet,
   mockAxiosPost,
   mockShare,
+  mockStorageGetItem,
+  mockUser,
   rgbStringToHex,
 } from "../__mocks__/globalMock";
 
@@ -14,24 +16,16 @@ vi.mock("react-lottie-player", () => {
   };
 });
 
+mockStorageGetItem.mockImplementation((key) => {
+  if (key === "cachedCart") {
+    return false;
+  }
+});
+
 let testCaseNumber = 0;
 const getTestCaseNumber = () => {
   testCaseNumber = testCaseNumber + 1;
   return `TC:${testCaseNumber}`;
-};
-
-const mockUser = {
-  name: "",
-  age: "",
-  breed: "",
-  birthdate: "",
-  identification: "",
-  owner: "",
-  username: "",
-  userId: "",
-  gender: "",
-  acc_type: "",
-  password: "",
 };
 
 const dummpProducts = [];
@@ -153,14 +147,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should change icon when user clicks on add to wishlist button`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -195,14 +195,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} Product should add to Cart, when user is logged in`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -246,14 +252,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} Product should removed from wishlist, when user click again on heart icon`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -278,14 +290,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} Product should removed from Cart, when user click again on + icon`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
