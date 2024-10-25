@@ -328,14 +328,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display Error updating wishlist. Please try again later., when axios reject dumping of data`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     mockAxiosPost.mockRejectedValue({});
     const mockInitialState = {
       status: false,
@@ -359,14 +365,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display Error updating Cart. Please try again later., when axios reject dumping of data`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     mockAxiosPost.mockRejectedValue({});
     const mockInitialState = {
       status: false,
@@ -390,14 +402,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} share funtion should called when user hit share button`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     const mockInitialState = {
       status: false,
       user: { ...mockUser, userId: "123456" },
@@ -417,14 +435,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display Sorry, Error in sharing, when user hit share button and error occured`, async () => {
-    mockAxiosGet.mockImplementation(() => {
-      return {
-        data: {
-          customerId: "936819838169",
-          items: items,
-        },
-      };
-    });
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     mockShare.mockRejectedValue({});
     const mockInitialState = {
       status: false,
@@ -445,6 +469,21 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display only first 8 products`, async () => {
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
+
     render(
       <Wrapper>
         <Home />
@@ -472,6 +511,20 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display other 8 products, when goes on 2nd page`, async () => {
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
     render(
       <Wrapper>
         <Home />
@@ -506,6 +559,21 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display toast message, when user is not login and try to add product to wishlist`, async () => {
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
+
     render(
       <Wrapper>
         <Home />
@@ -525,6 +593,21 @@ describe("Home", () => {
   });
 
   it(`${getTestCaseNumber()} should display toast message, when user is not login and try to add product to Cart`, async () => {
+    mockAxiosGet
+      .mockImplementationOnce(() => {
+        return {
+          data: productsOut,
+        };
+      })
+      .mockImplementation(() => {
+        return {
+          data: {
+            customerId: "936819838169",
+            items: items,
+          },
+        };
+      });
+
     render(
       <Wrapper>
         <Home />
