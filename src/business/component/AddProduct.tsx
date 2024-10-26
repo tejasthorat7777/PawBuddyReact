@@ -86,6 +86,7 @@ const AddProduct = () => {
   const [finalPrice, setFinalPrice] = useState("");
 
   const reset = () => {
+    setFinalPrice("");
     setAddProduct({
       prodId: "",
       prodName: "",

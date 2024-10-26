@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { persistor } from "../../redux/store/store";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/Slice/Slices";
+import { clearAllData } from "../../commonFiles/commonFunctions";
 
 const inputStyle = {
   width: "100%",
@@ -63,6 +64,7 @@ export default function BusinessNavbar() {
   ];
 
   const handleLogout = () => {
+    clearAllData();
     dispatch(logout());
     persistor.purge();
   };

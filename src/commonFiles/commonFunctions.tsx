@@ -56,7 +56,7 @@ export const clearData = (notToClear: string) => {
     "cachedProducts",
     "cachedWishlist",
   ];
-
+  
   const keysToClear = allKeys.filter((key) => {
     return key !== notToClear;
   });

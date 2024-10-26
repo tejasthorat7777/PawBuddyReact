@@ -234,6 +234,26 @@ server.post("/api/orders/dumped", async (req, res) => {
   }
 });
 
+server.post("/api/busi/delete", async (req, res) => {
+  try {
+    const { customerId, prodId } = req.body;
+
+    const upadtedProductlist = await Products.findOneAndUpdate(
+      { customerId },
+      { $pull: { products: { prodId } } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Item removed from Product list",
+      productList: upadtedProductlist,
+    });
+  } catch (error) {
+    console.error("Error removing item from Product list:", error);
+    res.status(500).json({ message: "Error removing item" });
+  }
+});
+
 // ######################################### GET METHODS #####################################################
 
 server.get("/api/getUsersInfo/:username", async (req, res) => {

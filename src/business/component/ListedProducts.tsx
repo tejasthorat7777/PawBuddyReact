@@ -1,5 +1,6 @@
 import {
   CircularProgress,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -19,9 +20,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { ProductData } from "../../commonFiles/commonTypes";
 import { EmptyList } from "../../Lottie/lottieComponent/EmptyList";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { apiUrl } from "../../commonFiles/commonFunctions";
 
 function ListedProducts() {
   const headers = [
+    "",
     "Product",
     "Name",
     "Brand",
@@ -41,13 +45,27 @@ function ListedProducts() {
       const getData = await axios.get(
         `${apiUrl}/api/busi/getProducts/${customerId}`
       );
-      console.log("items>>>", getData.data[0].products);
       const products = getData.data[0].products;
       setProducts(products);
     } catch (error) {
       console.log("error>>>>", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (customerId: string, prodId: string) => {
+    try {
+      await axios.post(`${apiUrl}/api/busi/delete`, {
+        customerId,
+        prodId,
+      });
+      const updateProductList = products.filter(
+        (item) => item.prodId !== prodId
+      );
+      setProducts(updateProductList);
+    } catch (error) {
+      console.log("error>>>>>>", error);
     }
   };
 
@@ -58,7 +76,7 @@ function ListedProducts() {
   }, []);
 
   return (
-    <div style={homeStyle.outerDiv}>
+    <div style={{ ...homeStyle.outerDiv, overflow: "hidden" }}>
       {isLoading ? (
         <div style={{ ...h100w100, ...flexDiv }}>
           <CircularProgress
@@ -69,43 +87,57 @@ function ListedProducts() {
         </div>
       ) : products.length > 0 ? (
         <Paper>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                {headers.map((label, index) => (
-                  <CustomTableColumn key={`row_${index}`}>
-                    {label}
-                  </CustomTableColumn>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {products.map((prod, index) => (
-                <CustomTableRow
-                  key={`row-${index}`}
-                  style={{ cursor: "pointer" }}
-                >
-                  <CustomTableColumn
-                    sx={{
-                      padding: "0",
-                    }}
+          <div style={{ maxHeight: "85vh", overflowY: "auto" }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  {headers.map((label, index) => (
+                    <CustomTableColumn
+                      key={`row_${index}`}
+                      style={{ position: "sticky", top: 0, zIndex: 1 }}
+                    >
+                      {label}
+                    </CustomTableColumn>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {products.map((prod, index) => (
+                  <CustomTableRow
+                    key={`row-${index}`}
+                    style={{ cursor: "pointer" }}
                   >
-                    <img
-                      src={prod.prodImg}
-                      style={{
-                        height: "35px",
+                    <CustomTableColumn>
+                      <IconButton
+                        onClick={() => {
+                          handleDelete(customerId, prod.prodId);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </CustomTableColumn>
+                    <CustomTableColumn
+                      sx={{
+                        padding: "0",
                       }}
-                    />
-                  </CustomTableColumn>
-                  <CustomTableColumn>{prod.prodName}</CustomTableColumn>
-                  <CustomTableColumn>{prod.prodBrand}</CustomTableColumn>
-                  <CustomTableColumn>{prod.prodPrice}</CustomTableColumn>
-                  <CustomTableColumn>{prod.prodDiscount}</CustomTableColumn>
-                  <CustomTableColumn>{prod.pordQuant}</CustomTableColumn>
-                </CustomTableRow>
-              ))}
-            </TableBody>
-          </Table>
+                    >
+                      <img
+                        src={prod.prodImg}
+                        style={{
+                          height: "35px",
+                        }}
+                      />
+                    </CustomTableColumn>
+                    <CustomTableColumn>{prod.prodName}</CustomTableColumn>
+                    <CustomTableColumn>{prod.prodBrand}</CustomTableColumn>
+                    <CustomTableColumn>{prod.prodPrice}</CustomTableColumn>
+                    <CustomTableColumn>{prod.prodDiscount}</CustomTableColumn>
+                    <CustomTableColumn>{prod.pordQuant}</CustomTableColumn>
+                  </CustomTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </Paper>
       ) : products.length === 0 ? (
         <div style={{ ...h100w100, ...flexDiv }}>

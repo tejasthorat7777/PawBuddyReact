@@ -271,6 +271,7 @@ export const businessAddproduct = {
     padding: "2%",
     fontFamily: "cursive",
     borderRadius: "5px",
+    color:"black"
   },
   prodPriceQuantWeight: {
     width: "45%",
@@ -282,8 +283,8 @@ export const businessAddproduct = {
   },
   finalPrice: {
     backgroundColor: "white",
-    width: "45%",
-    marginLeft: "25%",
+    width: "50%",
+    marginLeft: "20%",
     padding: "2%",
     marginTop: "3%",
     borderRadius: "5px",
