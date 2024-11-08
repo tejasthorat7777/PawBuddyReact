@@ -12,6 +12,19 @@ export type UserData = {
   userId: string;
 };
 
+export type iProductPage = {
+  handleFunction: () => Promise<any[]>;
+  cacheKey: string;
+};
+export type iRenderProducts = {
+  products: ProductData[];
+  handleShare: (name: string, price: string) => void;
+  addToWishlist: (card: ProductData) => void;
+  addTocart: (card: ProductData) => void;
+  wishlistItems: WishListData[];
+  cartList: CartListData[];
+};
+
 export type SubmitButtonProps = {
   operationOnData: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

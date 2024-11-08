@@ -287,8 +287,8 @@ server.get("/api/getProducts", async (req, res) => {
     const getProduct = await Products.find();
     res.status(200).json(getProduct);
   } catch (error) {
-    console.error("Error retrieving wishlist:", error);
-    res.status(500).json({ message: "Error retrieving wishlist" });
+    console.error("Error retrieving Products:", error);
+    res.status(500).json({ message: "Error retrieving Products" });
   }
 });
 
@@ -302,8 +302,8 @@ server.get("/api/cart/get/:customerId", async (req, res) => {
     }
     res.status(200).json(cartListItems);
   } catch (error) {
-    console.error("Error retrieving wishlist:", error);
-    res.status(500).json({ message: "Error retrieving wishlist" });
+    console.error("Error retrieving cartList:", error);
+    res.status(500).json({ message: "Error retrieving cartList" });
   }
 });
 
@@ -333,5 +333,24 @@ server.get("/api/orders/get/:customerId", async (req, res) => {
   } catch (error) {
     console.error("Error retrieving orders:", error);
     res.status(500).json({ message: "Error retrieving orders" });
+  }
+});
+
+server.get("/api/getdogfood/:type", async (req, res) => {
+  try {
+    const getProducts = [];
+    const { type } = req.params;
+    const data = await Products.find();
+    data.map((doc) => {
+      doc.products.map((product) => {
+        if (product.subCategory === type) {
+          getProducts.push(product);
+        }
+      });
+    });
+    res.status(200).json(getProducts);
+  } catch (error) {
+    console.error("Error retrieving products:" + type, error);
+    res.status(500).json({ message: "Error retrieving products" + type });
   }
 });

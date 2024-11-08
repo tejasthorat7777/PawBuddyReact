@@ -6,6 +6,9 @@ export const generateRandomUserId = () => {
 
 export const apiUrl = import.meta.env.VITE_API_URL;
 export const currency = "₹";
+export const formattedValue = (value: any) => {
+  return value.toLowerCase().replace(/\s+/g, "");
+};
 
 export const generateProductId = (length: number) => {
   const characters =
@@ -56,7 +59,7 @@ export const clearData = (notToClear: string) => {
     "cachedProducts",
     "cachedWishlist",
   ];
-  
+
   const keysToClear = allKeys.filter((key) => {
     return key !== notToClear;
   });

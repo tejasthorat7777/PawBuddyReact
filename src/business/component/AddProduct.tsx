@@ -21,7 +21,10 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
-import { generateProductId } from "../../commonFiles/commonFunctions";
+import {
+  formattedValue,
+  generateProductId,
+} from "../../commonFiles/commonFunctions";
 import { ProductData } from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -41,7 +44,7 @@ const VisuallyHiddenInput = styled("input")({
 const getSubCategory = (subcat: string) => {
   switch (subcat) {
     case "Food": {
-      return ["Dry Food", "Greavy Food", "Treats"];
+      return ["Dry Food", "Greavy", "Treats"];
     }
     case "Accessories": {
       return ["Leash", "Harness", "Collar"];
@@ -448,7 +451,7 @@ const AddProduct = () => {
                 onChange={(event) => {
                   setAddProduct({
                     ...addProduct,
-                    subCategory: event.target.value as string,
+                    subCategory: formattedValue(event.target.value as string),
                   });
                 }}
               >
