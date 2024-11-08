@@ -354,3 +354,22 @@ server.get("/api/getdogfood/:type", async (req, res) => {
     res.status(500).json({ message: "Error retrieving products" + type });
   }
 });
+
+server.get("/api/accessories/:type", async (req, res) => {
+  try {
+    const getProducts = [];
+    const { type } = req.params;
+    const data = await Products.find();
+    data.map((doc) => {
+      doc.products.map((product) => {
+        if (product.subCategory === type) {
+          getProducts.push(product);
+        }
+      });
+    });
+    res.status(200).json(getProducts);
+  } catch (error) {
+    console.error("Error retrieving products:" + type, error);
+    res.status(500).json({ message: "Error retrieving products" + type });
+  }
+});

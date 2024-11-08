@@ -13,7 +13,7 @@ export type UserData = {
 };
 
 export type iProductPage = {
-  handleFunction: () => Promise<any[]>;
+  callback: () => Promise<any[]>;
   cacheKey: string;
 };
 export type iRenderProducts = {

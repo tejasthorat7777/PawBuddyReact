@@ -1,6 +1,6 @@
 import axios from "axios";
-import { apiUrl, loadCached } from "../../../commonFiles/commonFunctions";
-import ProductPage from "../../../commonFiles/ProductPage";
+import { apiUrl, loadCached } from "../../commonFiles/commonFunctions";
+import ProductPage from "../../commonFiles/ProductPage";
 type iDogFood = {
   foodType: string;
 };
@@ -18,5 +18,5 @@ export const DogFood: React.FC<iDogFood> = ({ foodType }) => {
     }
   };
 
-  return <ProductPage handleFunction={getDogFood} cacheKey={foodType} />;
+  return <ProductPage callback={getDogFood} cacheKey={foodType} />;
 };

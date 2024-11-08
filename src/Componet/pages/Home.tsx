@@ -26,8 +26,6 @@ const Home = () => {
     }
   };
 
-  return (
-    <ProductPage handleFunction={getAllProducts} cacheKey={"cachedProducts"} />
-  );
+  return <ProductPage callback={getAllProducts} cacheKey={"cachedProducts"} />;
 };
 export default Home;

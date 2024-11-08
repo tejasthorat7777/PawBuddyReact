@@ -12,6 +12,9 @@ const Orders = lazy(() => import("../Componet/Account/Orders"));
 const Dryfood = lazy(() => import("../Componet/pages/Dogfood/DryFood"));
 const Gravy = lazy(() => import("../Componet/pages/Dogfood/Gravy"));
 const Treats = lazy(() => import("../Componet/pages/Dogfood/Treats"));
+const Leash = lazy(() => import("../Componet/pages/Accessories/Leash"));
+const Collar = lazy(() => import("../Componet/pages/Accessories/Collar"));
+const Harness = lazy(() => import("../Componet/pages/Accessories/Harness"));
 
 const page_routing = [
   { url: "/", component_name: Home },
@@ -24,6 +27,9 @@ const page_routing = [
   { url: "/dogfood/dryfood", component_name: Dryfood },
   { url: "/dogfood/gravy", component_name: Gravy },
   { url: "/dogfood/treats", component_name: Treats },
+  { url: "/accessories/leash", component_name: Leash },
+  { url: "/accessories/harness", component_name: Collar },
+  { url: "/accessories/collar", component_name: Harness },
 ];
 
 export default page_routing;

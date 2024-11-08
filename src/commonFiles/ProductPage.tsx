@@ -8,7 +8,7 @@ import {
   WishListData,
 } from "./commonTypes";
 import axios from "axios";
-import { clearData, isItemExists, loadCached } from "./commonFunctions";
+import { clearData, isItemExists } from "./commonFunctions";
 import { toast, ToastContainer } from "react-toastify";
 import { flexDiv, h100w100, homeStyle } from "./commonTheme";
 import { CircularProgress } from "@mui/material";
@@ -18,6 +18,9 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "./commonCss/toast.module.css";
 import { EmptyCart } from "../Lottie/lottieComponent/EmptyCart";
 
+/**
+ * following code is temporarily need to change it with good LOTTIE 
+ */
 const EmptyCartComponent = () => {
   return (
     <div style={{ ...h100w100, ...flexDiv }}>
@@ -27,7 +30,7 @@ const EmptyCartComponent = () => {
   );
 };
 
-const ProductPage: React.FC<iProductPage> = ({ handleFunction, cacheKey }) => {
+const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const user = useSelector((state: RootState) => state.user);
   const customerId = user.userId;
@@ -41,7 +44,7 @@ const ProductPage: React.FC<iProductPage> = ({ handleFunction, cacheKey }) => {
   const getProducts = async () => {
     try {
       setIsLoading(true);
-      const data = await handleFunction();
+      const data = await callback();
       setProducts(data);
     } catch (error) {
       setFetchProduct(true);

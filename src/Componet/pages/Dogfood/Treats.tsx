@@ -1,4 +1,4 @@
-import { DogFood } from "./DogFood";
+import { DogFood } from "../DogFood";
 
 const Treats = () => {
   return <DogFood foodType="treats" />;
