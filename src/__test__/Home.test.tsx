@@ -1,5 +1,5 @@
 import Wrapper from "../setupTest/Wrapper";
-import Home from "../Componet/pages/Home";
+import Home from "../Componet/LeftMenu/Home";
 import { fireEvent, render, screen, act } from "@testing-library/react";
 import {
   mockAxiosGet,

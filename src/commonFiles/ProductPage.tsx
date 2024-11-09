@@ -19,7 +19,7 @@ import styles from "./commonCss/toast.module.css";
 import { EmptyCart } from "../Lottie/lottieComponent/EmptyCart";
 
 /**
- * following code is temporarily need to change it with good LOTTIE 
+ * following code is temporarily need to change it with good LOTTIE
  */
 const EmptyCartComponent = () => {
   return (
@@ -40,12 +40,17 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const [cartList, setCartList] = useState<CartListData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [fetchProduct, setFetchProduct] = useState(false);
+  const [empty, setEmpty] = useState(false);
 
   const getProducts = async () => {
     try {
       setIsLoading(true);
       const data = await callback();
-      setProducts(data);
+      if (data.length) {
+        setProducts(data);
+      } else {
+        setEmpty(true);
+      }
     } catch (error) {
       setFetchProduct(true);
       // TODO handle error
@@ -205,9 +210,8 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
           wishlistItems={wishlistItems}
           cartList={cartList}
         />
-      ) : (
-        <EmptyCartComponent />
-      )}
+      ) : null}
+      {empty && <EmptyCartComponent />}
       <ToastContainer
         position="bottom-left"
         toastClassName={styles.toast}
