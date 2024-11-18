@@ -336,7 +336,7 @@ export const ordersCss = {
   },
   imageDiv: {
     height: "100%",
-    width: "20%",
+    width: "30%",
     padding: "3%",
   },
   discriptionDiv: {

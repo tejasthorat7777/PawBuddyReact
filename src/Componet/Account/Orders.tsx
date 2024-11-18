@@ -13,6 +13,7 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
+import LZString from "lz-string";
 import { RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
@@ -23,6 +24,7 @@ import {
   clearData,
   currency,
   loadCached,
+  sortOrderByDate,
 } from "../../commonFiles/commonFunctions";
 import { OrdersData } from "../../commonFiles/commonTypes";
 import { EmptyOrders } from "../../Lottie/lottieComponent/EmptyOrders";
@@ -60,11 +62,12 @@ function Orders() {
       if (getData.data.items.length === 0) {
         setNoOrder(true);
       } else {
+        const orders = sortOrderByDate(getData.data.items);
         localStorage.setItem(
           "cachedOrders",
-          JSON.stringify(getData.data.items)
+          LZString.compress(JSON.stringify(orders))
         );
-        setOrders(getData.data.items);
+        setOrders(orders);
       }
     } catch (error) {
       console.log("error>>>", error);
@@ -209,7 +212,9 @@ function Orders() {
                       fontFamily: "cursive",
                       textTransform: "none",
                     }}
-                    onMouseEnter={() => setHoveredButton(`button${obj.orderId}_${index}`)}
+                    onMouseEnter={() =>
+                      setHoveredButton(`button${obj.orderId}_${index}`)
+                    }
                     onMouseLeave={() => setHoveredButton(null)}
                   >
                     {text}

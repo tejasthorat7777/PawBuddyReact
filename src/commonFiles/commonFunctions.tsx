@@ -1,3 +1,6 @@
+import { OrdersData } from "./commonTypes";
+import LZString from "lz-string";
+
 export const generateRandomUserId = () => {
   const min = Math.pow(10, 11);
   const max = Math.pow(10, 12) - 1;
@@ -29,9 +32,14 @@ export const isItemExists = (list: any[], id: any) => {
 export const generateRandomOrderId = () => {
   const part1 = Math.floor(100 + Math.random() * 900);
   const part2 = Math.floor(1000000 + Math.random() * 9000000);
-  const part3 = Math.floor(1000000 + Math.random() * 9000000);
+  const date = new Date();
+  const hrs = date.getHours();
+  const min = date.getMinutes();
+  const sec = date.getSeconds();
 
-  return `${part1}-${part2}-${part3}`;
+  const completeTime = `${hrs}${min}${sec}`;
+
+  return `${part1}-${completeTime}-${part2}`;
 };
 
 export const getDate = () => {
@@ -47,7 +55,8 @@ export const getDate = () => {
 export const loadCached = (id: string) => {
   const cached = localStorage.getItem(id);
   if (cached) {
-    return JSON.parse(cached);
+    const decompressedCache = JSON.parse(LZString.decompress(cached));
+    return decompressedCache;
   }
   return null;
 };
@@ -79,5 +88,24 @@ export const clearAllData = () => {
 
   allKeys.forEach((key) => {
     localStorage.removeItem(key);
+  });
+};
+
+const getHrsMinSec = (orderId: string) => {
+  return orderId.split("-")[1];
+};
+
+export const sortOrderByDate = (orders: OrdersData[]) => {
+  return orders.sort((a, b) => {
+    if (a.orderDate === b.orderDate) {
+      const aDate = Number(getHrsMinSec(a.orderId));
+      const bDate = Number(getHrsMinSec(b.orderId));
+
+      return bDate - aDate;
+    }
+    const aDate = new Date(a.orderDate).getTime();
+    const bDate = new Date(b.orderDate).getTime();
+
+    return bDate - aDate;
   });
 };

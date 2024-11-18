@@ -35,6 +35,7 @@ import {
   getDate,
   loadCached,
 } from "../../commonFiles/commonFunctions";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 const orderButton = {
   borderRadius: "0",
@@ -59,6 +60,7 @@ const Cart = () => {
   const [emptyCart, setEmptyCart] = useState(false);
   const [fetchError, setFetchError] = useState("");
 
+  const navigate = useNavigate();
   const getCartList = async (customerId: string) => {
     try {
       setIsLoading(true);
@@ -105,6 +107,7 @@ const Cart = () => {
     try {
       await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
       handleRemove(customerId, card.prodId);
+      navigate("/account/orders");
     } catch (error) {
       console.log("error>>>>", error);
       toast("Unable to place your order. Please try again later.", {

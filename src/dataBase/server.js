@@ -337,18 +337,22 @@ server.get("/api/orders/get/:customerId", async (req, res) => {
 });
 
 server.get("/api/getdogfood/:type", async (req, res) => {
+  const { type } = req.params;
   try {
-    const getProducts = [];
-    const { type } = req.params;
-    const data = await Products.find();
-    data.map((doc) => {
-      doc.products.map((product) => {
-        if (product.subCategory === type) {
-          getProducts.push(product);
-        }
+    if (type != undefined) {
+      const getProducts = [];
+      const data = await Products.find();
+      data.map((doc) => {
+        doc.products.map((product) => {
+          if (product.subCategory === type) {
+            getProducts.push(product);
+          }
+        });
       });
-    });
-    res.status(200).json(getProducts);
+      res.status(200).json(getProducts);
+    } else {
+      throw new Error("Type not found");
+    }
   } catch (error) {
     console.error("Error retrieving products:" + type, error);
     res.status(500).json({ message: "Error retrieving products" + type });

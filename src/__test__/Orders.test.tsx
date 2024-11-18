@@ -7,7 +7,13 @@ import {
 } from "@testing-library/react";
 import Orders from "../Componet/Account/Orders";
 import Wrapper from "../setupTest/Wrapper";
-import { mockAxiosGet, mockStorageGetItem, mockUser } from "../__mocks__/globalMock";
+import {
+  mockAxiosGet,
+  mockCompress,
+  mockDecompress,
+  mockStorageGetItem,
+  mockUser,
+} from "../__mocks__/globalMock";
 import { generateRandomOrderId, getDate } from "../commonFiles/commonFunctions";
 
 vi.mock("react-lottie-player", () => {
@@ -15,8 +21,6 @@ vi.mock("react-lottie-player", () => {
     default: vi.fn(),
   };
 });
-
-
 
 const mockItemWishlist = [
   {
@@ -489,11 +493,16 @@ describe("Orders", () => {
   });
 
   it(`${getTestCaseNumber()} should display product details in Orders from cache`, async () => {
+    mockDecompress.mockImplementation(() => {
+      return JSON.stringify(mockItemWishlist);
+    });
+
     mockStorageGetItem.mockImplementation((key) => {
       if (key === "cachedOrders") {
         return JSON.stringify(mockItemWishlist);
       }
     });
+
     const mockInitialState = {
       status: true,
       user: { ...mockUser, userId: "123456" },
@@ -503,6 +512,7 @@ describe("Orders", () => {
         <Orders />
       </Wrapper>
     );
+
     await waitFor(() => {
       const date = screen.getByTestId(`value_${mockItemWishlist[0].orderDate}`);
       expect(date).toBeInTheDocument();

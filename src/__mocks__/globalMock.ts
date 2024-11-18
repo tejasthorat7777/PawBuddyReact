@@ -1,13 +1,18 @@
 import axios from "axios";
+import LZString from "lz-string";
 import { vi } from "vitest";
 
 export const mockAxiosGet = vi.fn().mockImplementation(() => {});
 export const mockAxiosPost = vi.fn().mockImplementation(() => {});
 export const mockShare = vi.fn().mockImplementation(() => {});
 export const mockStorageGetItem = vi.fn().mockImplementation(() => []);
+export const mockCompress = vi.fn().mockImplementation(() => {});
+export const mockDecompress = vi.fn().mockImplementation(() => {});
 
 vi.spyOn(axios, "get").mockImplementation((...arg) => mockAxiosGet(...arg));
 vi.spyOn(axios, "post").mockImplementation(mockAxiosPost);
+vi.spyOn(LZString, "compress").mockImplementation(mockCompress);
+vi.spyOn(LZString, "decompress").mockImplementation(mockDecompress);
 
 vi.spyOn(Storage.prototype, "getItem").mockImplementation(mockStorageGetItem);
 
