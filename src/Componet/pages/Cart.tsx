@@ -36,6 +36,7 @@ import {
   loadCached,
 } from "../../commonFiles/commonFunctions";
 import { useNavigate, useNavigation } from "react-router-dom";
+import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 
 const orderButton = {
   borderRadius: "0",
@@ -59,6 +60,7 @@ const Cart = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [emptyCart, setEmptyCart] = useState(false);
   const [fetchError, setFetchError] = useState("");
+  const [navigateToPayment, setNavigateToPayment] = useState(false);
 
   const navigate = useNavigate();
   const getCartList = async (customerId: string) => {
@@ -93,7 +95,7 @@ const Cart = () => {
   }, [customerId]);
 
   const handleOrder = async (customerId: string, card: CartListData) => {
-    setIsLoading(true);
+    setNavigateToPayment(true);
     const customerName = user.name;
     const orderDate = getDate();
     const orderId = generateRandomOrderId();
@@ -107,7 +109,8 @@ const Cart = () => {
     try {
       await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
       handleRemove(customerId, card.prodId);
-      navigate("/account/orders");
+      // navigate("/account/orders");
+      navigate("/payments/");
     } catch (error) {
       console.log("error>>>>", error);
       toast("Unable to place your order. Please try again later.", {
@@ -136,6 +139,22 @@ const Cart = () => {
       console.error("Error:", error);
     }
   };
+
+  if (navigateToPayment) {
+    return (
+      <div
+        style={{ ...h100w100, ...flexDiv, backgroundColor: "#597081" }}
+        data-testid="waiting"
+      >
+        <Waiting />
+        <div>
+          <span>Please wait a moment...</span>
+          <br />
+          <span>We’re redirecting to Payment</span>
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       style={{
