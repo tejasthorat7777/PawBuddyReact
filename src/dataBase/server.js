@@ -73,6 +73,7 @@ server.post("/api/wishlist/dumped", async (req, res) => {
       prodDiscrip,
       prodImg,
       selected,
+      prodDiscount
     } = req.body;
 
     const newItem = {
@@ -82,6 +83,7 @@ server.post("/api/wishlist/dumped", async (req, res) => {
       prodDiscrip,
       prodImg,
       selected,
+      prodDiscount
     };
 
     const customerWishlist = await wishlistInfo.findOne({ customerId });
@@ -134,8 +136,16 @@ server.post("/api/addProduct", async (req, res) => {
 
 server.post("/api/cart/dumped", async (req, res) => {
   try {
-    const { customerId, prodId, prodPrice, prodDiscrip, prodImg, rating } =
-      req.body;
+    const {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      rating,
+      prodDiscount,
+      prodName
+    } = req.body;
 
     const newItem = {
       customerId,
@@ -144,6 +154,8 @@ server.post("/api/cart/dumped", async (req, res) => {
       prodDiscrip,
       prodImg,
       rating,
+      prodDiscount,
+      prodName
     };
 
     const customerCartList = await cartList.findOne({ customerId });
@@ -205,6 +217,8 @@ server.post("/api/orders/dumped", async (req, res) => {
       orderId,
       customerName,
       orderDate,
+      prodDiscount,
+      prodName
     } = req.body;
 
     const newItem = {
@@ -216,6 +230,8 @@ server.post("/api/orders/dumped", async (req, res) => {
       orderId,
       customerName,
       orderDate,
+      prodDiscount,
+      prodName
     };
 
     const updatedOrderslist = await ordersInfo.findOneAndUpdate(
@@ -333,6 +349,25 @@ server.get("/api/orders/get/:customerId", async (req, res) => {
   } catch (error) {
     console.error("Error retrieving orders:", error);
     res.status(500).json({ message: "Error retrieving orders" });
+  }
+});
+
+server.get("/api/payments/get/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const latestOrder = await ordersInfo
+      .findOne({ customerId })
+      .sort({ createdAt: -1 });
+
+    if (!latestOrder) {
+      return res.status(200).json({ items: [] });
+    }
+
+    res.status(200).json(latestOrder);
+  } catch (error) {
+    console.error("Error retrieving latest order:", error);
+    res.status(500).json({ message: "Error retrieving latest order" });
   }
 });
 

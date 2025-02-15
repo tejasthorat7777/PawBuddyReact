@@ -13,6 +13,8 @@ const cartSchema = new mongoose.Schema({
       prodImg: String,
       prodPrice: String,
       rating: Number,
+      prodDiscount: String,
+      prodName: String,
     },
   ],
 });

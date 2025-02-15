@@ -11,17 +11,19 @@ import {
   Pagination,
   Typography,
 } from "@mui/material";
-import { isItemExists } from "./commonFunctions";
-import { homeStyle } from "./commonTheme";
+import {
+  getDiscountedPrice,
+  isItemExists,
+} from "../../commonFiles/commonFunctions";
+import { homeStyle } from "../../commonFiles/commonTheme";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddIcon from "@mui/icons-material/Add";
-import { iRenderProducts } from "./commonTypes";
+import { iRenderProducts } from "../../commonFiles/commonTypes";
 
-export const RenderProducts: React.FC<iRenderProducts> = (props) => {
-
+const RenderProducts: React.FC<iRenderProducts> = (props) => {
   const productsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -64,13 +66,16 @@ export const RenderProducts: React.FC<iRenderProducts> = (props) => {
                     display: "-webkit-box",
                     WebkitLineClamp: 1,
                     WebkitBoxOrient: "vertical",
-                    maxWidth: "100%",
+                    maxWidth: "80%",
                     textOverflow: "ellipsis",
                   }}
                 >
                   {card.prodName}
                 </Typography>
-                <Typography>{`₹ ${card.prodPrice}.00`}</Typography>
+                <Typography>{`₹ ${getDiscountedPrice(
+                  card.prodPrice,
+                  card.prodDiscount
+                )}.00`}</Typography>
               </CardContent>
               <CardActions sx={{ backgroundColor: "#00111c" }}>
                 <Button
@@ -134,3 +139,4 @@ export const RenderProducts: React.FC<iRenderProducts> = (props) => {
     </>
   );
 };
+export default RenderProducts;

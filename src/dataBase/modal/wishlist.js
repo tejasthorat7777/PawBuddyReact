@@ -14,6 +14,7 @@ const wishlistSchema = new mongoose.Schema({
       prodImg: String,
       prodPrice: String,
       selected: Boolean,
+      prodDiscount: String,
     },
   ],
 });

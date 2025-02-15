@@ -1,6 +1,6 @@
 import { ProductData } from "../../commonFiles/commonTypes";
 import axios from "axios";
-import ProductPage from "../../commonFiles/ProductPage";
+import ProductPage from "../ProductPage/ProductPage";
 import { loadCached } from "../../commonFiles/commonFunctions";
 
 const Home = () => {

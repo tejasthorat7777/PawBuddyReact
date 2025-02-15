@@ -50,6 +50,22 @@ export type State = {
   user: UserData;
 };
 
+export type OrderDetail = {
+  orderDate:string;
+  customerName:string,
+  address:string,
+  paymentId:string,
+  discountPrice:number,
+  prodPrice:number,
+  tax:{
+    cgst:number,
+    sgst:number
+  },
+  qty:number,
+  prodName:string,
+  prodImg:string,
+
+}
 export type ProductData = {
   prodId: string;
   prodName: string;
@@ -78,15 +94,18 @@ export type WishListData = {
   prodDiscrip: string;
   prodImg: string;
   prodPrice: string;
+  prodDiscount: string;
   selected: boolean;
 };
 
 export type CartListData = {
+  prodName: string;
   prodId: string;
   prodDiscrip: string;
   prodImg: string;
   prodPrice: string;
   rating: number;
+  prodDiscount: string;
 };
 
 export type OrdersData = {
@@ -99,4 +118,5 @@ export type OrdersData = {
   customerName: string;
   orderId: string;
   orderDate: string;
+  prodDiscount: string;
 };

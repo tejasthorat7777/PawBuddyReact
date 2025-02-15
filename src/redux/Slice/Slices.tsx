@@ -22,11 +22,11 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    userInfo: (state, action: PayloadAction<{ user: State["user"] }>) => {
+    userInfo: (state:any, action: PayloadAction<{ user: State["user"] }>) => {
       state.status = true;
       state.user = action.payload.user;
     },
-    logout: (state) => {
+    logout: (state:any) => {
       return {
         ...state,
         status: false,

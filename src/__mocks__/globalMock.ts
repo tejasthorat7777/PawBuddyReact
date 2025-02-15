@@ -5,7 +5,7 @@ import { vi } from "vitest";
 export const mockAxiosGet = vi.fn().mockImplementation(() => {});
 export const mockAxiosPost = vi.fn().mockImplementation(() => {});
 export const mockShare = vi.fn().mockImplementation(() => {});
-export const mockStorageGetItem = vi.fn().mockImplementation(() => []);
+export const mockStorageGetItem = vi.fn().mockImplementation(() => {});
 export const mockCompress = vi.fn().mockImplementation(() => {});
 export const mockDecompress = vi.fn().mockImplementation(() => {});
 

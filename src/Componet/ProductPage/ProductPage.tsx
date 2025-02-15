@@ -1,22 +1,26 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store/store";
+import { RootState } from "../../redux/store/store";
 import { useEffect, useState } from "react";
 import {
   CartListData,
   iProductPage,
   ProductData,
   WishListData,
-} from "./commonTypes";
+} from "../../commonFiles/commonTypes";
 import axios from "axios";
-import { clearData, isItemExists } from "./commonFunctions";
+import {
+  clearData,
+  isItemExists,
+  pawBuddyLogError,
+} from "../../commonFiles/commonFunctions";
 import { toast, ToastContainer } from "react-toastify";
-import { flexDiv, h100w100, homeStyle } from "./commonTheme";
+import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
 import { CircularProgress } from "@mui/material";
-import { BadRequest } from "../Lottie/lottieComponent/BadRequest";
-import { RenderProducts } from "./RenderProducts";
+import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
+import RenderProducts from "./RenderProducts";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "./commonCss/toast.module.css";
-import { EmptyCart } from "../Lottie/lottieComponent/EmptyCart";
+import styles from "../../commonFiles/commonCss/toast.module.css";
+import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
 
 /**
  * following code is temporarily need to change it with good LOTTIE
@@ -39,8 +43,9 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const [wishlistItems, setWishlistItems] = useState<WishListData[]>([]);
   const [cartList, setCartList] = useState<CartListData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [fetchProduct, setFetchProduct] = useState(false);
-  const [empty, setEmpty] = useState(false);
+  const [productFetchError, setProductFetchError] = useState(false);
+  const [emptyList, setEmptyList] = useState(false);
+  const moduleName = "ProductPage";
 
   const getProducts = async () => {
     try {
@@ -49,12 +54,11 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
       if (data.length) {
         setProducts(data);
       } else {
-        setEmpty(true);
+        setEmptyList(true);
       }
     } catch (error) {
-      setFetchProduct(true);
-      // TODO handle error
-      console.log("error ", error);
+      setProductFetchError(true);
+      pawBuddyLogError(moduleName, error);
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +73,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         setWishlistItems(getData.data.items);
       }
     } catch (error) {
-      console.log("error>>>", error);
+      pawBuddyLogError(moduleName, error);
     }
   };
 
@@ -80,8 +84,14 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         setCartList(getData.data.items);
       }
     } catch (error) {
-      console.log("error>>>", error);
+      pawBuddyLogError(moduleName, error);
     }
+  };
+
+  const cleanUp = () => {
+    setProducts([]);
+    setWishlistItems([]);
+    setCartList([]);
   };
 
   useEffect(() => {
@@ -92,9 +102,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
       getCartList(customerId);
     }
     return () => {
-      setProducts([]);
-      setWishlistItems([]);
-      setCartList([]);
+      cleanUp();
     };
   }, [customerId]);
 
@@ -164,7 +172,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
       toast("Error updating wishlist. Please try again later.", {
         autoClose: 1000,
       });
-      console.error("Error:", error);
+      pawBuddyLogError(moduleName, error);
     }
   };
 
@@ -180,7 +188,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
       toast("Sorry, Error in sharing", {
         autoClose: 1000,
       });
-      console.log("Error sharing", error);
+      pawBuddyLogError(moduleName, error);
     }
   };
 
@@ -194,7 +202,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
             }}
           />
         </div>
-      ) : fetchProduct ? (
+      ) : productFetchError ? (
         <div style={{ ...h100w100, ...flexDiv }}>
           <BadRequest />
           Sorry No Product Found
@@ -211,7 +219,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
           cartList={cartList}
         />
       ) : null}
-      {empty && <EmptyCartComponent />}
+      {emptyList && <EmptyCartComponent />}
       <ToastContainer
         position="bottom-left"
         toastClassName={styles.toast}

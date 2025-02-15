@@ -24,6 +24,7 @@ import axios from "axios";
 import {
   formattedValue,
   generateProductId,
+  getDiscountedPrice,
 } from "../../commonFiles/commonFunctions";
 import { ProductData } from "../../commonFiles/commonTypes";
 import { useSelector } from "react-redux";
@@ -139,13 +140,6 @@ const AddProduct = () => {
       reader.readAsDataURL(file); // Convert image to base64 string
     }
   };
-
-  const handleFinalPrice = (price: string, discount: string) => {
-    const priceBeforeDis = Number(price) * Number(discount);
-    const finalPrice = Number(price) - priceBeforeDis / 100;
-    setFinalPrice(finalPrice.toString());
-  };
-
   return (
     <div style={homeStyle.outerDiv}>
       {isLoading ? (
@@ -478,10 +472,11 @@ const AddProduct = () => {
               {finalPrice || "Final Price after Discount per Product"}
               <SendButton
                 operationOnData={() => {
-                  handleFinalPrice(
+                  const finalPrice = getDiscountedPrice(
                     addProduct.prodPrice,
                     addProduct.prodDiscount
                   );
+                  setFinalPrice(finalPrice);
                 }}
                 text={"Show"}
                 style={{

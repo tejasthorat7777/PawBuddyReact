@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiUrl, loadCached } from "../../commonFiles/commonFunctions";
-import ProductPage from "../../commonFiles/ProductPage";
+import ProductPage from "../ProductPage/ProductPage";
 type iAccessories = {
   accessoryType: string;
 };

@@ -109,3 +109,17 @@ export const sortOrderByDate = (orders: OrdersData[]) => {
     return bDate - aDate;
   });
 };
+
+export const pawBuddyLogError = (moduleName: string, msg: any) => {
+  console.log(`Error in ${moduleName} : ${msg}`);
+};
+
+export const pawBuddyLogInfo = (moduleName: string, msg: any) => {
+  console.log(`FYI ${moduleName} : ${msg}`);
+};
+
+export const getDiscountedPrice = (price: string, discount: string) => {
+  const priceBeforeDis = Number(price) * Number(discount);
+  const finalPrice = Number(price) - priceBeforeDis / 100;
+  return finalPrice.toString();
+};

@@ -33,6 +33,7 @@ import {
   clearData,
   generateRandomOrderId,
   getDate,
+  getDiscountedPrice,
   loadCached,
 } from "../../commonFiles/commonFunctions";
 import { useNavigate, useNavigation } from "react-router-dom";
@@ -109,7 +110,6 @@ const Cart = () => {
     try {
       await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
       handleRemove(customerId, card.prodId);
-      // navigate("/account/orders");
       navigate("/payments/");
     } catch (error) {
       console.log("error>>>>", error);
@@ -234,7 +234,7 @@ const Cart = () => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {card.prodDiscrip}
+                    {card.prodDiscrip || card.prodName}
                   </Typography>
                   <div
                     style={{
@@ -250,7 +250,10 @@ const Cart = () => {
                     >
                       <Typography
                         style={cartStyle.priceText}
-                      >{`₹ ${card.prodPrice}.00`}</Typography>
+                      >{`₹ ${getDiscountedPrice(
+                        card.prodPrice,
+                        card.prodDiscount
+                      )}.00`}</Typography>
                       <StarRating rating={card.rating} />
                     </Box>
                     <CardActions sx={{ padding: "0", marginTop: "2%" }}>
