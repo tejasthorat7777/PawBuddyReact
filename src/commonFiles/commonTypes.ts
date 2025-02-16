@@ -10,6 +10,7 @@ export type UserData = {
   username: string;
   password: string;
   userId: string;
+  address: string;
 };
 
 export type iProductPage = {
@@ -50,22 +51,6 @@ export type State = {
   user: UserData;
 };
 
-export type OrderDetail = {
-  orderDate:string;
-  customerName:string,
-  address:string,
-  paymentId:string,
-  discountPrice:number,
-  prodPrice:number,
-  tax:{
-    cgst:number,
-    sgst:number
-  },
-  qty:number,
-  prodName:string,
-  prodImg:string,
-
-}
 export type ProductData = {
   prodId: string;
   prodName: string;
@@ -119,4 +104,19 @@ export type OrdersData = {
   orderId: string;
   orderDate: string;
   prodDiscount: string;
+  /**
+   * //TODO for future reference
+ *tax:{
+    CGST:number,
+    SCGST:number
+  }
+ */
+};
+
+export type iOrderSummary = {
+  lastOrder: OrdersData;
+  getPaymentId: (orderId: string) => string;
+  discount: (price: string, discount: string) => string;
+  getFinalPrice: () => number;
+  cartStyle: any;
 };

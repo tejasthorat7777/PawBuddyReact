@@ -1,5 +1,6 @@
 import { OrdersData } from "./commonTypes";
 import LZString from "lz-string";
+import moment from 'moment'
 
 export const generateRandomUserId = () => {
   const min = Math.pow(10, 11);
@@ -122,4 +123,28 @@ export const getDiscountedPrice = (price: string, discount: string) => {
   const priceBeforeDis = Number(price) * Number(discount);
   const finalPrice = Number(price) - priceBeforeDis / 100;
   return finalPrice.toString();
+};
+
+export const getMonthNumber = (month: string): string => {
+  const months: Record<string, string> = {
+    January: "01",
+    February: "02",
+    March: "03",
+    April: "04",
+    May: "05",
+    June: "06",
+    July: "07",
+    August: "08",
+    September: "09",
+    October: "10",
+    November: "11",
+    December: "12",
+  };
+
+  return months[month];
+};
+export const getPaymentId = (orderId: string) => {
+  const cleanOrderId = orderId.replace(/-/g, "");
+  const timestamp = moment().format("HHmm");
+  return `${cleanOrderId}${timestamp}`;
 };

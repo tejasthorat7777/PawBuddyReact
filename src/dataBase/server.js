@@ -43,6 +43,22 @@ server.post("/api/sendUsersInfo", async (req, res) => {
   }
 });
 
+server.post("/api/saveAddress", async (req, res) => {
+  try {
+    const { username, updatedAddress } = req.body;
+    const user = await UserInfo.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.address = updatedAddress;
+    await user.save();
+    res.status(200).json({ message: "Address updated successfully", user });
+  } catch (error) {
+    console.error("Error updating address:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 server.post("/api/wishlist/remove", async (req, res) => {
   try {
     const { customerId, prodId } = req.body;
@@ -73,7 +89,7 @@ server.post("/api/wishlist/dumped", async (req, res) => {
       prodDiscrip,
       prodImg,
       selected,
-      prodDiscount
+      prodDiscount,
     } = req.body;
 
     const newItem = {
@@ -83,7 +99,7 @@ server.post("/api/wishlist/dumped", async (req, res) => {
       prodDiscrip,
       prodImg,
       selected,
-      prodDiscount
+      prodDiscount,
     };
 
     const customerWishlist = await wishlistInfo.findOne({ customerId });
@@ -144,7 +160,7 @@ server.post("/api/cart/dumped", async (req, res) => {
       prodImg,
       rating,
       prodDiscount,
-      prodName
+      prodName,
     } = req.body;
 
     const newItem = {
@@ -155,7 +171,7 @@ server.post("/api/cart/dumped", async (req, res) => {
       prodImg,
       rating,
       prodDiscount,
-      prodName
+      prodName,
     };
 
     const customerCartList = await cartList.findOne({ customerId });
@@ -218,7 +234,7 @@ server.post("/api/orders/dumped", async (req, res) => {
       customerName,
       orderDate,
       prodDiscount,
-      prodName
+      prodName,
     } = req.body;
 
     const newItem = {
@@ -231,7 +247,7 @@ server.post("/api/orders/dumped", async (req, res) => {
       customerName,
       orderDate,
       prodDiscount,
-      prodName
+      prodName,
     };
 
     const updatedOrderslist = await ordersInfo.findOneAndUpdate(

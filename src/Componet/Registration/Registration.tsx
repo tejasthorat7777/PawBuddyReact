@@ -57,6 +57,7 @@ const initialUserData: UserData = {
   username: "",
   password: "",
   userId: generateRandomUserId().toString(),
+  address: "",
 };
 
 export default function Registration() {
@@ -83,8 +84,7 @@ export default function Registration() {
     } catch (error) {
       console.log("Error>>>>", error);
       setUploadError(true);
-    }
-    finally{
+    } finally {
       setIsloading(false);
     }
   };
