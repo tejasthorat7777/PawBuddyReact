@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cartStyle, flexDiv } from "../../commonFiles/commonTheme";
+import { cartStyle, flexDiv, h100w100 } from "../../commonFiles/commonTheme";
 import {
   apiUrl,
   getPaymentId,
@@ -10,40 +10,16 @@ import { RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
 import { OrdersData } from "../../commonFiles/commonTypes";
 import OrderSummary from "./OrderSummary";
-import powerRanger from "../../assets/power_ranger.jpg";
+import { CircularProgress } from "@mui/material";
 
 const PaymentAll = () => {
   const user = useSelector((state: RootState) => state.user);
-  const customerId = user.userId;
-
-  const initialCred = {
-    prodId: "",
-    prodName: "Samurai power Rangers",
-    prodDiscrip: "",
-    prodImg: powerRanger,
-    prodPrice: "500",
-    selected: false,
-    customerName: "",
-    orderId: "1234efrt56778",
-    orderDate: "16 February 2025",
-    prodDiscount: "10",
-  };
-  const [lastOrder, setLastOrder] = useState<OrdersData>(initialCred);
-  
+  const lastOrderDetails = user.lastOrder;
+  console.log("✌️lastOrderDetails --->", lastOrderDetails);
+  const [selectedOption, setSelectedOption] = useState("");
 
   const moduleName = "PayemntPage";
-  const getLastOrder = async () => {
-    try {
-      const orderDetail: { data: { items: OrdersData[] } } = await axios.get(
-        `${apiUrl}/api/payments/get/${customerId}`
-      );
-      const lastOrderIndex = orderDetail.data.items.length - 1;
-      setLastOrder(orderDetail.data.items[lastOrderIndex]);
-    } catch (error) {
-      setLastOrder(initialCred);
-      pawBuddyLogError(moduleName, error);
-    }
-  };
+  const paymentOptions = ["Card", "UPI", "Wallet"];
 
   const discount = (price: string, discount: string) => {
     const discountOnProduct = Number(price) * Number(discount);
@@ -51,9 +27,9 @@ const PaymentAll = () => {
   };
 
   const getFinalPrice = () => {
-    const payablePrice = Number(lastOrder.prodPrice); //+ Number(lastorder.tax.CGST) + Number(lastorder.tax.SGST)
+    const payablePrice = Number(lastOrderDetails.prodPrice); //+ Number(lastorder.tax.CGST) + Number(lastorder.tax.SGST)
     const discountedPrice = Number(
-      discount(lastOrder.prodPrice, lastOrder.prodDiscount)
+      discount(lastOrderDetails.prodPrice, lastOrderDetails.prodDiscount)
     );
     const finalPrice = payablePrice - discountedPrice;
 
@@ -63,12 +39,11 @@ const PaymentAll = () => {
     return finalPrice;
   };
 
-  useEffect(() => {
-    getLastOrder();
-  }, [lastOrder]);
+  const handlePayOption = (option: string) => {
+    setSelectedOption(option);
+    console.log("handle Pay Option", option);
+  };
 
-  const address1 =
-    "omkar tej apartment , Dagadoba Chauk ,near sunshine school, akurdi maharashtra 411033 pune nagpur nashik rdcfvgbh;pjlkh  xcgvhbjng hgv tyfbj";
   return (
     <div
       style={{
@@ -87,7 +62,7 @@ const PaymentAll = () => {
         }}
       >
         <OrderSummary
-          lastOrder={lastOrder}
+          lastOrder={lastOrderDetails}
           getPaymentId={getPaymentId}
           discount={discount}
           getFinalPrice={getFinalPrice}
@@ -96,12 +71,53 @@ const PaymentAll = () => {
         {/* right div*/}
         <div
           style={{
-            backgroundColor: "white",
+            backgroundColor: "grey",
             width: "50%",
             height: "100%",
             padding: "2%",
           }}
-        ></div>
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "8%",
+              display: "flex",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              fontSize: "24px",
+              marginTop: "5%",
+            }}
+          >
+            {paymentOptions.map((payOption) => (
+              <div
+                style={{
+                  width: "33%",
+                  height: "100%",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  color: selectedOption === payOption ? "black" : "white",
+                  backgroundColor:
+                    selectedOption === payOption ? "white" : "grey",
+                  padding: "2%",
+                }}
+                onClick={() => {
+                  handlePayOption(payOption);
+                }}
+              >
+                {payOption}
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              height: "80%",
+              width: "100%",
+              backgroundColor: "white",
+            }}
+          >
+            Hello
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const OverflowText: React.FC<OverflowTextProps> = ({ text }) => (
 const OrderSummary: React.FC<iOrderSummary> = (props) => {
   const moduleName = "OrderSummary";
   const user = useSelector((state: RootState) => state.user);
-  const userName = user.username;
+  const username = user.username;
   const userAddress = user.address ?? "";
   const [openModal, setOpenModal] = useState<boolean>(true);
   const [address, setAddress] = useState(userAddress);
@@ -62,14 +62,17 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
       return;
     }
     try {
-      axios.post(`${apiUrl}/api/saveAddress`, { updatedAddress, userName });
+      await axios.post(`${apiUrl}/api/saveAddress`, {
+        updatedAddress,
+        username,
+      });
     } catch (error) {
       pawBuddyLogError(moduleName, error);
     }
   };
   return (
     <div style={paymentStyle.outerDiv}>
-      {!openModal && (
+      <div>
         <div>
           <div
             style={{
@@ -107,7 +110,10 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
                     {label}
                   </div>
                   <div
-                    style={{ ...paymentStyle.middleSign, textAlign: "center" }}
+                    style={{
+                      ...paymentStyle.middleSign,
+                      textAlign: "center",
+                    }}
                   >
                     :
                   </div>
@@ -149,7 +155,7 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
           />
 
           <div style={paymentStyle.addressOuter}>
-            <div style={{ height: "100%", width: "70%", fontSize: "20px" }}>
+            <div style={{ height: "100%", width: "20%", fontSize: "20px" }}>
               Address -{" "}
             </div>
             <div
@@ -162,16 +168,18 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
             </div>
           </div>
         </div>
-      )}
-      <AddressModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        onSubmit={(enteredAddress: string) => {
-          setAddress(enteredAddress);
-          updateAddress(enteredAddress);
-          setOpenModal(false);
-        }}
-      />
+        {!address && (
+          <AddressModal
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            onSubmit={(enteredAddress: string) => {
+              setAddress(enteredAddress);
+              updateAddress(enteredAddress);
+              setOpenModal(false);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -11,6 +11,7 @@ export type UserData = {
   password: string;
   userId: string;
   address: string;
+  lastOrder: OrdersData;
 };
 
 export type iProductPage = {

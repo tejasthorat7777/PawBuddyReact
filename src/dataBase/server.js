@@ -368,25 +368,6 @@ server.get("/api/orders/get/:customerId", async (req, res) => {
   }
 });
 
-server.get("/api/payments/get/:customerId", async (req, res) => {
-  try {
-    const { customerId } = req.params;
-
-    const latestOrder = await ordersInfo
-      .findOne({ customerId })
-      .sort({ createdAt: -1 });
-
-    if (!latestOrder) {
-      return res.status(200).json({ items: [] });
-    }
-
-    res.status(200).json(latestOrder);
-  } catch (error) {
-    console.error("Error retrieving latest order:", error);
-    res.status(500).json({ message: "Error retrieving latest order" });
-  }
-});
-
 server.get("/api/getdogfood/:type", async (req, res) => {
   const { type } = req.params;
   try {

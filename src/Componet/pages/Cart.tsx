@@ -17,9 +17,9 @@ import {
 } from "../../commonFiles/commonTheme";
 import StarRating from "../../commonFiles/StarRating";
 import { Quantity } from "../../commonFiles/Quantity";
-import { CartListData } from "../../commonFiles/commonTypes";
+import { CartListData, OrdersData } from "../../commonFiles/commonTypes";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -38,6 +38,7 @@ import {
 } from "../../commonFiles/commonFunctions";
 import { useNavigate, useNavigation } from "react-router-dom";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
+import { updateLastOrder } from "../../redux/Slice/Slices";
 
 const orderButton = {
   borderRadius: "0",
@@ -62,6 +63,8 @@ const Cart = () => {
   const [emptyCart, setEmptyCart] = useState(false);
   const [fetchError, setFetchError] = useState("");
   const [navigateToPayment, setNavigateToPayment] = useState(false);
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const getCartList = async (customerId: string) => {
@@ -108,7 +111,20 @@ const Cart = () => {
       ...card,
     };
     try {
+      const lastOrderDetails: OrdersData = {
+        prodId: newItem.prodId,
+        prodName: newItem.prodName,
+        prodDiscrip: newItem.prodDiscrip,
+        prodImg: newItem.prodImg,
+        prodPrice: newItem.prodPrice,
+        selected: false,
+        customerName: newItem.customerName,
+        orderId: newItem.orderId,
+        orderDate: newItem.orderDate,
+        prodDiscount: newItem.prodDiscount,
+      };
       await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
+      dispatch(updateLastOrder(lastOrderDetails));
       handleRemove(customerId, card.prodId);
       navigate("/payments/");
     } catch (error) {
