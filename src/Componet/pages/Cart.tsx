@@ -126,7 +126,7 @@ const Cart = () => {
       await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
       dispatch(updateLastOrder(lastOrderDetails));
       handleRemove(customerId, card.prodId);
-      navigate("/payments/");
+      window.open("/payments/", "_blank");
     } catch (error) {
       console.log("error>>>>", error);
       toast("Unable to place your order. Please try again later.", {

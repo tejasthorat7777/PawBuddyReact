@@ -25,11 +25,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ orderData }) => {
     <div
       style={{
         backgroundColor: "#ffffff",
-        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
         borderRadius: "0.5rem",
         padding: "1.5rem",
-        position: "sticky",
-        top: "1.5rem",
+        marginBottom: "1.5rem",
       }}
     >
       <h2
@@ -44,7 +43,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ orderData }) => {
       </h2>
 
       {/* Order items */}
-      <ul style={{ marginTop: "-1rem", borderTop: "1px solid #e5e7eb" }}>
+      <ul style={{ marginTop: "-1rem"}}>
         {orderData.items.map((item) => (
           <li
             key={item.id}
@@ -117,9 +116,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ orderData }) => {
       {/* Price breakdown */}
       <div
         style={{
-          borderTop: "1px solid #e5e7eb",
+          // borderTop: "1px solid #e5e7eb",
           paddingTop: "1rem",
-          marginTop: "1.5rem",
+          // marginTop: "1.5rem",
         }}
       >
         <div

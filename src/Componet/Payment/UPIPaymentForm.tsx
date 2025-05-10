@@ -137,6 +137,19 @@ const UPIPaymentForm: React.FC<UPIPaymentFormProps> = ({
             </p>
           </div>
 
+          <div style={{ textAlign: "center" }}>
+            <p
+              style={{
+                fontSize: "0.875rem",
+                color: "#6B7280",
+                marginBottom: 8,
+              }}
+            >
+              Amount: ₹3,284
+            </p>
+          </div>
+
+
           {/* UPI App Options */}
           <div style={{ marginBottom: "1.5rem" }}>
             <p
@@ -170,7 +183,7 @@ const UPIPaymentForm: React.FC<UPIPaymentFormProps> = ({
                   <img
                     src={app.logo}
                     alt={app.name}
-                    style={{ width: 32, height: 32, marginBottom: 4 }}
+                    style={{ width: 40, height: 40, marginBottom: 4 }}
                   />
                   <span style={{ fontSize: "0.75rem", color: "#374151" }}>
                     {app.name}
@@ -253,7 +266,7 @@ const UPIPaymentForm: React.FC<UPIPaymentFormProps> = ({
             <img
               src="https://i.imgur.com/kXg40L7.png"
               alt="QR Code"
-              style={{ width: 192, height: 192 }}
+              style={{ width: 100, height: 100 }}
             />
             <button
               title="Refresh QR code"
@@ -276,18 +289,6 @@ const UPIPaymentForm: React.FC<UPIPaymentFormProps> = ({
             Scan this QR code using any UPI app to pay
           </p>
 
-          <div
-            style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem" }}
-          >
-            {upiApps.map((app) => (
-              <img
-                key={app.id}
-                src={app.logo}
-                alt={app.name}
-                style={{ width: 32, height: 32 }}
-              />
-            ))}
-          </div>
 
           <div style={{ textAlign: "center" }}>
             <p

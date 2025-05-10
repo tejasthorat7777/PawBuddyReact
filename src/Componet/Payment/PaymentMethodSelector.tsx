@@ -64,7 +64,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
                 alignItems: "center",
               }}
             >
-              <h3 style={{ fontWeight: 500 }}>Credit / Debit Card</h3>
+              <h3 style={{ fontWeight: 500,fontSize:"1rem"}}>Credit / Debit Card</h3>
               {selected === "card" && (
                 <span style={{ color: "#4f46e5" }}>
                   <Check size={18} />
@@ -110,7 +110,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
             </div>
             <p
               style={{
-                fontSize: "0.875rem",
+                fontSize: "0.8rem",
                 color: "#6b7280",
                 marginTop: "0.25rem",
               }}

@@ -6,6 +6,8 @@ import UPIPaymentForm from "./UPIPaymentForm";
 import OrderSummary from "./OrderSummary_1";
 import { flexDiv } from "../../commonFiles/commonTheme";
 import PaymentMethodSelector from "./PaymentMethodSelector";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Button } from "@mui/material";
 
 const orderData = {
   items: [
@@ -42,51 +44,40 @@ const PaymentPage: React.FC = () => {
   }
 
   return (
-    <div style={{ minHeight: "100vh"}}>
+    <div style={{ minHeight: "100vh" }}>
       <div style={{ ...flexDiv, padding: "2%" }}>
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "3rem",
-            alignItems: "start",
+            display: "flex",
             width: "100%",
+            flexDirection: "row",
           }}
         >
+          {/* Order summary */}
           <div
             style={{
+              gridColumn: "span 7",
               display: "flex",
+              justifyContent: "center",
               alignItems: "center",
-              marginBottom: "1.5rem",
+              position: "absolute",
+              top: "7%",
+              left: "15%",
             }}
           >
-            <button
-              style={{
-                marginRight: "1rem",
-                padding: "0.5rem",
-                borderRadius: "9999px",
-                backgroundColor: "transparent",
-                transition: "background-color 0.2s ease",
-              }}
-              onClick={handleBackToShopping}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f3f4f6")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.backgroundColor = "transparent")
-              }
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <h1
-              style={{ fontSize: "1.25rem", fontWeight: 500, color: "#111827" }}
-            >
-              Checkout
-            </h1>
+            <OrderSummary orderData={orderData} />
           </div>
 
           {/* Payment form */}
-          <section style={{ gridColumn: "span 7" }}>
+          <div
+            style={{
+              gridColumn: "span 7",
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginLeft: "40rem",
+            }}
+          >
             <div
               style={{
                 backgroundColor: "#ffffff",
@@ -94,6 +85,11 @@ const PaymentPage: React.FC = () => {
                 borderRadius: "0.5rem",
                 padding: "1.5rem",
                 marginBottom: "1.5rem",
+                width: "85%",
+                scale: "0.94",
+                height: "600px", // Set a fixed height here
+                overflowY: "auto", // Allows scrolling if content overflows
+                transition: "height 0.3s ease", // Option
               }}
             >
               <h2
@@ -126,12 +122,7 @@ const PaymentPage: React.FC = () => {
                 )}
               </div>
             </div>
-          </section>
-
-          {/* Order summary */}
-          <section style={{ gridColumn: "span 5" }}>
-            <OrderSummary orderData={orderData} />
-          </section>
+          </div>
         </div>
       </div>
     </div>
