@@ -4,8 +4,7 @@ import Registration from "./Componet/Registration/Registration.js";
 import Template from "./RenderAutomation/Template.js";
 import { useLocation } from "react-router-dom";
 import LoginForm from "./Componet/Login/LoginForm.js";
-import PaymentAll from "./Componet/Payment/PaymentAll.js";
-
+import PaymentsAllNew from "./Componet/Payment/PaymentsAllNew";
 function App() {
   const location = useLocation();
   const [regi, setRegi] = useState(location.pathname.includes("registration"));
@@ -25,7 +24,7 @@ function App() {
       ) : login ? (
         <LoginForm />
       ) : payment ? (
-        <PaymentAll />
+        <PaymentsAllNew />
       ) : (
         <Template />
       )}

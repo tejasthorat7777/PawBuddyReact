@@ -1,21 +1,13 @@
-import { useEffect, useState } from "react";
-import { cartStyle, flexDiv, h100w100 } from "../../commonFiles/commonTheme";
-import {
-  apiUrl,
-  getPaymentId,
-  pawBuddyLogError,
-} from "../../commonFiles/commonFunctions";
-import axios from "axios";
+import { useState } from "react";
+import { cartStyle, flexDiv } from "../../commonFiles/commonTheme";
+import { getPaymentId } from "../../commonFiles/commonFunctions";
 import { RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
-import { OrdersData } from "../../commonFiles/commonTypes";
 import OrderSummary from "./OrderSummary";
-import { CircularProgress } from "@mui/material";
 
 const PaymentAll = () => {
   const user = useSelector((state: RootState) => state.user);
   const lastOrderDetails = user.lastOrder;
-  console.log("✌️lastOrderDetails --->", lastOrderDetails);
   const [selectedOption, setSelectedOption] = useState("");
 
   const moduleName = "PayemntPage";
