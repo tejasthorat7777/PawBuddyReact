@@ -12,7 +12,7 @@
     "test": "vitest run --coverage",
     "cypress": "npx cypress open",
     "cypressReport": "node -e \"require('child_process').execSync('npx cypress run --spec ' + process.argv[1] + ' --reporter mochawesome', { stdio: 'inherit' })\"",
-    "start": "concurrently \"npm run server\" \"npm run dev\""
+    "start": "npm run server && npm run dev"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -32,11 +32,13 @@
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
     "axios": "^1.7.2",
+    "bcryptjs": "^3.0.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsdom": "^24.1.0",
+    "jsonwebtoken": "^9.0.3",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.509.0",
     "lz-string": "^1.5.0",

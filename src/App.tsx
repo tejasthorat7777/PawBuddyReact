@@ -1,28 +1,35 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Registration from "./Componet/Registration/Registration.js";
 import Template from "./RenderAutomation/Template.js";
 import { useLocation } from "react-router-dom";
-import LoginForm from "./Componet/Login/LoginForm.js";
 import PaymentsAllNew from "./Componet/Payment/PaymentsAllNew";
+import Login from "./Componet/Auth/Login.tsx";
+import Register from "./Componet/Auth/Register.tsx";
+
 function App() {
   const location = useLocation();
-  const [regi, setRegi] = useState(location.pathname.includes("registration"));
-  const [login, setLogin] = useState(location.pathname.includes("login"));
-  const [payment, setPayment] = useState(location.pathname.includes("payments"));
+  const [payment, setPayment] = useState(
+    location.pathname.includes("payments")
+  );
+  const [authLogin, setAuthLogin] = useState(
+    location.pathname === "/auth/login"
+  );
+  const [authRegister, setAuthRegister] = useState(
+    location.pathname === "/auth/register"
+  );
 
   useEffect(() => {
-    setRegi(location.pathname.includes("registration"));
-    setLogin(location.pathname.includes("login"));
     setPayment(location.pathname.includes("payments"));
+    setAuthLogin(location.pathname === "/auth/login");
+    setAuthRegister(location.pathname === "/auth/register");
   }, [location]);
 
   return (
     <>
-      {regi ? (
-        <Registration />
-      ) : login ? (
-        <LoginForm />
+      {authLogin ? (
+        <Login />
+      ) : authRegister ? (
+        <Register />
       ) : payment ? (
         <PaymentsAllNew />
       ) : (

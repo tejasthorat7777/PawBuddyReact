@@ -8,6 +8,8 @@ import { Products } from "./modal/product.js";
 import { cartList } from "./modal/cart.js";
 import { ordersInfo } from "./modal/orders.js";
 import dotenv from "dotenv";
+import authRoutes from "./routes/auth.js";
+import { authenticateToken } from "./middleware/auth.js";
 dotenv.config();
 
 const server = express();
@@ -29,6 +31,10 @@ server.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
 });
 
+// ######################################### AUTH ROUTES #####################################################
+server.use("/api/auth", authRoutes);
+
+
 // ######################################### POST METHODS #####################################################
 
 server.post("/api/sendUsersInfo", async (req, res) => {
@@ -43,7 +49,7 @@ server.post("/api/sendUsersInfo", async (req, res) => {
   }
 });
 
-server.post("/api/saveAddress", async (req, res) => {
+server.post("/api/saveAddress", authenticateToken, async (req, res) => {
   try {
     const { username, updatedAddress } = req.body;
     const user = await UserInfo.findOne({ username });
