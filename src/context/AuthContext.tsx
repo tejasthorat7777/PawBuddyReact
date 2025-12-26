@@ -11,7 +11,6 @@ import {
   LoginData,
   RegisterData,
 } from "../services/authService";
-import { toast } from "react-toastify";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -71,15 +70,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (response.success && response.data) {
         setUser(response.data.user);
-        toast.success(response.message || "Login successful!");
+        // toast
         return true;
       }
 
-      toast.error(response.message || "Login failed");
+      // toast.error(response.message || "Login failed");
       return false;
     } catch (error: any) {
       const errorMessage = error.message || "Login failed. Please try again.";
-      toast.error(errorMessage);
+      // toast.error(errorMessage);
       console.error("Login error:", error);
       return false;
     } finally {
@@ -97,16 +96,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (response.success && response.data) {
         setUser(response.data.user);
-        toast.success(response.message || "Registration successful!");
+        // toast.success(response.message || "Registration successful!");
         return true;
       }
 
-      toast.error(response.message || "Registration failed");
+      // toast.error(response.message || "Registration failed");
       return false;
     } catch (error: any) {
       const errorMessage =
         error.message || "Registration failed. Please try again.";
-      toast.error(errorMessage);
+      // toast.error(errorMessage);
       console.error("Registration error:", error);
       return false;
     } finally {
@@ -122,7 +121,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
       await authService.logout();
       setUser(null);
-      toast.info("Logged out successfully");
+      // toast.info("Logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);
       // Even if API call fails, clear local state

@@ -112,7 +112,7 @@ export const loginCss = {
   },
 
   innerDiv: {
-    height: "55%",
+    height: "65%",
     width: "30%",
     borderRadius: "20px",
     padding: "1%",
@@ -130,8 +130,8 @@ export const loginCss = {
   buttonDiv: {
     ...flexDiv,
     width: "100%",
-    height: "20%",
-    marginTop: "2%",
+    // height: "20%",
+    // marginTop: "2%",
     padding: "2%",
     borderRadius: "10px",
   },
@@ -155,7 +155,6 @@ export const loginCss = {
   },
 
   inputOuterDiv: {
-    height: "50%",
     width: "100%",
     padding: "5%",
     margin: "2% 0",
