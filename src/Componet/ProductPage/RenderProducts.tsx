@@ -24,7 +24,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { iRenderProducts } from "../../commonFiles/commonTypes";
 
 const RenderProducts: React.FC<iRenderProducts> = (props) => {
-  const productsPerPage = 8;
+  const productsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (
@@ -42,15 +42,31 @@ const RenderProducts: React.FC<iRenderProducts> = (props) => {
 
   return (
     <>
-      <Grid container spacing={3} key="gridOuter">
+      <Grid container spacing={2} key="gridOuter">
         {currentProducts.map((card, index) => (
-          <Grid item md={3} key={index}>
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2.4}
+            xl={2}
+            key={index}
+            sx={{ display: "flex" }}
+          >
             <Card
-              sx={{ maxWidth: "75%", maxHeight: "100%" }}
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                margin: "0 auto",
+              }}
               key={index}
               data-testid={`product_${card.prodId}`}
             >
-              <CardActionArea style={{ height: "10rem", padding: 10 }}>
+              <CardActionArea
+                style={{ height: "10rem", padding: 10, flexShrink: 0 }}
+              >
                 <CardMedia sx={homeStyle.cardMedia} title={card.prodName}>
                   <img
                     src={card.prodImg}
@@ -58,15 +74,19 @@ const RenderProducts: React.FC<iRenderProducts> = (props) => {
                   />
                 </CardMedia>
               </CardActionArea>
-              <CardContent sx={homeStyle.cardContent}>
+              <CardContent
+                sx={{
+                  ...homeStyle.cardContent,
+                  padding: "12px",
+                }}
+              >
                 <Typography
                   style={{
                     fontSize: "14px",
-                    overflow: "hidden",
                     display: "-webkit-box",
-                    WebkitLineClamp: 1,
+                    WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",
-                    maxWidth: "80%",
+                    maxWidth: "60%",
                     textOverflow: "ellipsis",
                   }}
                 >
@@ -77,7 +97,15 @@ const RenderProducts: React.FC<iRenderProducts> = (props) => {
                   card.prodDiscount
                 )}.00`}</Typography>
               </CardContent>
-              <CardActions sx={{ backgroundColor: "#00111c" }}>
+              <CardActions
+                sx={{
+                  backgroundColor: "#00111c",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Button
                   data-testid={`share_${card.prodId}`}
                   style={homeStyle.IconButton}
@@ -87,9 +115,9 @@ const RenderProducts: React.FC<iRenderProducts> = (props) => {
                 >
                   <ShareOutlinedIcon />
                 </Button>
+
                 <Button
                   data-testid={`wishlist_${card.prodId}`}
-                  id={`wishlist_${card.prodId}`}
                   onClick={() => props.addToWishlist(card)}
                   style={homeStyle.IconButton}
                 >
@@ -104,11 +132,10 @@ const RenderProducts: React.FC<iRenderProducts> = (props) => {
                     />
                   )}
                 </Button>
+
                 <Button
                   data-testid={`cart_${card.prodId}`}
-                  onClick={() => {
-                    props.addTocart(card);
-                  }}
+                  onClick={() => props.addTocart(card)}
                   style={homeStyle.IconButton}
                 >
                   {isItemExists(props.cartList, card.prodId) ? (
@@ -122,20 +149,6 @@ const RenderProducts: React.FC<iRenderProducts> = (props) => {
           </Grid>
         ))}
       </Grid>
-      <Container style={homeStyle.PaginationDiv}>
-        <Pagination
-          shape="rounded"
-          color="primary"
-          count={Math.ceil(props.products.length / productsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-          sx={{
-            "& .MuiPaginationItem-root": {
-              color: "white",
-            },
-          }}
-        />
-      </Container>
     </>
   );
 };

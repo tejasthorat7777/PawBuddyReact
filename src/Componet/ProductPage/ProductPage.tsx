@@ -15,7 +15,7 @@ import {
 } from "../../commonFiles/commonFunctions";
 import { toast, ToastContainer } from "react-toastify";
 import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Container, Pagination } from "@mui/material";
 import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 import RenderProducts from "./RenderProducts";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,7 +27,7 @@ import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
  */
 const EmptyCartComponent = () => {
   return (
-    <div style={{ ...h100w100, ...flexDiv }}>
+    <div style={{ ...h100w100, ...flexDiv, marginTop: "10%" }}>
       No Product Found
       <EmptyCart />
     </div>
@@ -45,6 +45,8 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [productFetchError, setProductFetchError] = useState(false);
   const [emptyList, setEmptyList] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
   const moduleName = "ProductPage";
 
   const getProducts = async () => {
@@ -62,6 +64,13 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value);
   };
 
   const getWishList = async (customerId: string) => {
@@ -193,9 +202,9 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   };
 
   return (
-    <div style={{ ...homeStyle.outerDiv, paddingLeft: "5%" }}>
+    <div style={{ ...homeStyle.outerDiv }}>
       {isLoading ? (
-        <div style={{ ...h100w100, ...flexDiv }}>
+        <div style={{ ...h100w100, ...flexDiv, marginTop: "20%" }}>
           <CircularProgress
             sx={{
               color: "#ffb703",
@@ -210,14 +219,32 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
           Please try again...
         </div>
       ) : products.length > 0 ? (
-        <RenderProducts
-          products={products}
-          handleShare={handleShare}
-          addToWishlist={addToWishlist}
-          addTocart={addTocart}
-          wishlistItems={wishlistItems}
-          cartList={cartList}
-        />
+        <>
+          <div style={{ padding: "2px", minHeight: "82vh" }}>
+            <RenderProducts
+              products={products}
+              handleShare={handleShare}
+              addToWishlist={addToWishlist}
+              addTocart={addTocart}
+              wishlistItems={wishlistItems}
+              cartList={cartList}
+            />
+          </div>
+          <Container style={flexDiv}>
+            <Pagination
+              shape="rounded"
+              color="primary"
+              count={Math.ceil(products.length / productsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  color: "white",
+                },
+              }}
+            />
+          </Container>
+        </>
       ) : null}
       {emptyList && <EmptyCartComponent />}
       <ToastContainer

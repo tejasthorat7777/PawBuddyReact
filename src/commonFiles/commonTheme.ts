@@ -159,6 +159,8 @@ export const loginCss = {
 export const homeStyle = {
   IconButton: {
     color: "white",
+    minWidth: 0,
+    padding: 8
   },
 
   PaginationDiv: {
@@ -168,10 +170,10 @@ export const homeStyle = {
   },
 
   outerDiv: {
-    height: "100%",
     width: "100%",
     backgroundColor: "#597081",
-    padding: "2%",
+    padding: "16px",
+    minHeight: "92vh",
   },
 
   commonDiv: {
@@ -181,7 +183,7 @@ export const homeStyle = {
   },
 
   cardContent: {
-    height: "5%",
+    height: "auto",
     backgroundColor: "#00111c",
     color: "white",
     ...flexDiv,
@@ -271,7 +273,7 @@ export const businessAddproduct = {
     padding: "2%",
     fontFamily: "cursive",
     borderRadius: "5px",
-    color:"black"
+    color: "black"
   },
   prodPriceQuantWeight: {
     width: "45%",

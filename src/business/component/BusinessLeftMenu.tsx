@@ -78,6 +78,7 @@ export default function BusinessLeftMenu() {
 
   return (
     <div
+      className="left-menu-container"
       style={{
         backgroundColor: "#00111c",
         flex: "1 1 auto",
@@ -88,6 +89,8 @@ export default function BusinessLeftMenu() {
         height: "92vh",
         color: "white",
         padding: "0",
+        overflowY: "auto",
+        overflowX: "hidden",
       }}
     >
       <Container
