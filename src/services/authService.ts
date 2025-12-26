@@ -1,19 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Add request interceptor to include token in all requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -35,12 +35,12 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        
+        const refreshToken = localStorage.getItem("refreshToken");
+
         if (!refreshToken) {
           // No refresh token, redirect to login
           authService.logout();
-          window.location.href = '/login';
+          window.location.href = "/login";
           return Promise.reject(error);
         }
 
@@ -50,9 +50,9 @@ api.interceptors.response.use(
         });
 
         const { accessToken } = response.data.data;
-        
+
         // Save new access token
-        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem("accessToken", accessToken);
 
         // Retry original request with new token
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -60,7 +60,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Refresh failed, logout user
         authService.logout();
-        window.location.href = '/login';
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }
@@ -114,18 +114,26 @@ class AuthService {
    */
   async register(userData: RegisterData): Promise<AuthResponse> {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, userData);
-      
+      const response = await axios.post(
+        `${API_URL}/api/auth/register`,
+        userData
+      );
+
       if (response.data.success && response.data.data) {
         // Save tokens to localStorage
-        localStorage.setItem('accessToken', response.data.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(response.data.data.user));
       }
-      
+
       return response.data;
     } catch (error: any) {
-      throw error.response?.data || { success: false, message: 'Registration failed' };
+      throw (
+        error.response?.data || {
+          success: false,
+          message: "Registration failed",
+        }
+      );
     }
   }
 
@@ -134,18 +142,21 @@ class AuthService {
    */
   async login(credentials: LoginData): Promise<AuthResponse> {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, credentials);
-      
+      const response = await axios.post(
+        `${API_URL}/api/auth/login`,
+        credentials
+      );
+
       if (response.data.success && response.data.data) {
         // Save tokens to localStorage
-        localStorage.setItem('accessToken', response.data.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(response.data.data.user));
       }
-      
+
       return response.data;
     } catch (error: any) {
-      throw error.response?.data || { success: false, message: 'Login failed' };
+      throw error.response?.data || { success: false, message: "Login failed" };
     }
   }
 
@@ -155,14 +166,14 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // Call logout endpoint to invalidate refresh token
-      await api.post('/api/auth/logout');
+      await api.post("/api/auth/logout");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       // Clear local storage regardless of API call success
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
     }
   }
 
@@ -171,17 +182,17 @@ class AuthService {
    */
   async getCurrentUser(): Promise<UserProfile | null> {
     try {
-      const response = await api.get('/api/auth/me');
-      
+      const response = await api.get("/api/auth/me");
+
       if (response.data.success && response.data.data) {
         // Update stored user data
-        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+        localStorage.setItem("user", JSON.stringify(response.data.data.user));
         return response.data.data.user;
       }
-      
+
       return null;
     } catch (error) {
-      console.error('Get current user error:', error);
+      console.error("Get current user error:", error);
       return null;
     }
   }
@@ -189,16 +200,24 @@ class AuthService {
   /**
    * Change password
    */
-  async changePassword(currentPassword: string, newPassword: string): Promise<AuthResponse> {
+  async changePassword(
+    currentPassword: string,
+    newPassword: string
+  ): Promise<AuthResponse> {
     try {
-      const response = await api.put('/api/auth/change-password', {
+      const response = await api.put("/api/auth/change-password", {
         currentPassword,
         newPassword,
       });
-      
+
       return response.data;
     } catch (error: any) {
-      throw error.response?.data || { success: false, message: 'Password change failed' };
+      throw (
+        error.response?.data || {
+          success: false,
+          message: "Password change failed",
+        }
+      );
     }
   }
 
@@ -206,7 +225,7 @@ class AuthService {
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     return !!token;
   }
 
@@ -214,7 +233,7 @@ class AuthService {
    * Get stored user data
    */
   getStoredUser(): UserProfile | null {
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem("user");
     if (userStr) {
       try {
         return JSON.parse(userStr);
@@ -229,7 +248,7 @@ class AuthService {
    * Get access token
    */
   getAccessToken(): string | null {
-    return localStorage.getItem('accessToken');
+    return localStorage.getItem("accessToken");
   }
 
   /**
@@ -237,8 +256,8 @@ class AuthService {
    */
   async refreshToken(): Promise<string | null> {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      
+      const refreshToken = localStorage.getItem("refreshToken");
+
       if (!refreshToken) {
         return null;
       }
@@ -249,13 +268,13 @@ class AuthService {
 
       if (response.data.success && response.data.data) {
         const { accessToken } = response.data.data;
-        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem("accessToken", accessToken);
         return accessToken;
       }
 
       return null;
     } catch (error) {
-      console.error('Token refresh error:', error);
+      console.error("Token refresh error:", error);
       this.logout();
       return null;
     }

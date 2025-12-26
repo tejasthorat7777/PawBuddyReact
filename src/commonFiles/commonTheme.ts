@@ -97,6 +97,12 @@ export const universalDiv = {
   ...flexDiv,
 };
 
+export const redAlert = {
+  color: "#ff6b6b",
+  paddingTop: "5px",
+  paddingLeft: "5px",
+};
+
 export const loginCss = {
   outerDiv: {
     ...flexDiv,
@@ -160,7 +166,7 @@ export const homeStyle = {
   IconButton: {
     color: "white",
     minWidth: 0,
-    padding: 8
+    padding: 8,
   },
 
   PaginationDiv: {
@@ -211,7 +217,7 @@ export const cartStyle = {
     fontSize: "65%",
     backgroundColor: "grey",
     fontWeight: "400",
-    padding: "2%"
+    padding: "2%",
   },
   cardStyle: {
     width: "75%",
@@ -273,7 +279,7 @@ export const businessAddproduct = {
     padding: "2%",
     fontFamily: "cursive",
     borderRadius: "5px",
-    color: "black"
+    color: "black",
   },
   prodPriceQuantWeight: {
     width: "45%",
