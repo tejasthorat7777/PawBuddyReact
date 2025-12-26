@@ -243,7 +243,7 @@ const Register: React.FC = () => {
         <div className="auth-footer">
           <p>
             Already have an account?{" "}
-            <Link to="/login" className="auth-link">
+            <Link to="/auth/login" className="auth-link">
               Login here
             </Link>
           </p>

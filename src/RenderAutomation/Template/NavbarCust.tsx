@@ -79,8 +79,8 @@ export default function NavbarCust() {
     { text: "Contact Us", icon: <CallIcon />, path: "/contact" },
     { text: "Business Login", icon: <StoreIcon />, path: "/businesslogin" },
     user != ""
-      ? { text: "Logout", icon: <Logout />, path: "/login" }
-      : { text: "Log-In", icon: <Login />, path: "/login" },
+      ? { text: "Logout", icon: <Logout />, path: "auth/login" }
+      : { text: "Log-In", icon: <Login />, path: "auth/login" },
   ];
 
   const handleLogout = () => {
@@ -92,7 +92,7 @@ export default function NavbarCust() {
   return (
     <div style={innerNav}>
       <div>
-        <Link to={"/registration"}>
+        <Link to={"/auth/registration"}>
           <Tooltip title="click to get Register">
             <img
               src={logo}
