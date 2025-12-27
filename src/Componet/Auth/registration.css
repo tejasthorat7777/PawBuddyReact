@@ -181,10 +181,6 @@ input[type="password"] {
   margin-top: 10px;
 }
 
-input:focus {
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-}
-
 /* Responsive Design */
 @media (max-width: 1200px) {
   .grid1 {
