@@ -152,6 +152,7 @@ export const loginCss = {
     padding: "5%",
     fontFamily: "cursive",
     backgroundColor: "transparent",
+    caretColor: "#ffffff",
   },
 
   inputOuterDiv: {
