@@ -134,9 +134,5 @@ export const generateRefreshToken = (user) => {
  * @returns {Object} Decoded token payload
  */
 export const verifyRefreshToken = (token) => {
-  try {
-    return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-  } catch (error) {
-    throw error;
-  }
+return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 };
