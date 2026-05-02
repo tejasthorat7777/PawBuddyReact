@@ -9,12 +9,13 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import StoreIcon from "@mui/icons-material/Store";
-import { persistor, RootState } from "../../redux/store/store";
+import { persistor } from "../../redux/store/store";
 import { logout } from "../../redux/Slice/Slices";
 import { clearAllData } from "../../commonFiles/commonFunctions";
+import { useAuth } from "../../context/AuthContext";
 
 const inputStyle = {
   width: "100%",
@@ -42,7 +43,7 @@ const navLeft = {
 };
 
 export default function NavbarCust() {
-  const user = useSelector((state: RootState) => state.user.userId);
+  const user = useAuth(); // Access user from AuthContext
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -78,7 +79,7 @@ export default function NavbarCust() {
     { text: "Orders", icon: <AddShoppingCartIcon />, path: "/account/orders" },
     { text: "Contact Us", icon: <CallIcon />, path: "/contact" },
     { text: "Business Login", icon: <StoreIcon />, path: "/businesslogin" },
-    user != ""
+    user
       ? { text: "Logout", icon: <Logout />, path: "auth/login" }
       : { text: "Log-In", icon: <Login />, path: "auth/login" },
   ];

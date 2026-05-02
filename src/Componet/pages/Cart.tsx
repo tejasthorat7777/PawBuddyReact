@@ -39,6 +39,7 @@ import {
 import { useNavigate, useNavigation } from "react-router-dom";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { updateLastOrder } from "../../redux/Slice/Slices";
+import { useAuth } from "../../context/AuthContext";
 
 const orderButton = {
   borderRadius: "0",
@@ -56,7 +57,7 @@ const CartIsEmpty = () => {
   );
 };
 const Cart = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const { user } = useAuth();
   const customerId = user.userId;
   const [cartList, setCartList] = useState<CartListData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -268,7 +269,7 @@ const Cart = () => {
                         style={cartStyle.priceText}
                       >{`₹ ${getDiscountedPrice(
                         card.prodPrice,
-                        card.prodDiscount
+                        card.prodDiscount,
                       )}.00`}</Typography>
                       <StarRating rating={card.rating} />
                     </Box>

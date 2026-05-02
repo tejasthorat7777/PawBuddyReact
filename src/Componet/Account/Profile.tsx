@@ -1,7 +1,6 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import { flexDiv, homeStyle } from "../../commonFiles/commonTheme";
+import { useAuth } from "../../context/AuthContext";
 
 const styles = {
   padding: "5%",
@@ -20,7 +19,7 @@ const outerDiv = {
 };
 
 const Profile = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const { user } = useAuth();
   return (
     <div
       style={{

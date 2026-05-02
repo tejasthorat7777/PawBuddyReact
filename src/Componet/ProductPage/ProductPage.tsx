@@ -1,6 +1,4 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   CartListData,
   iProductPage,
@@ -21,6 +19,7 @@ import RenderProducts from "./RenderProducts";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
+import { useAuth } from "../../context/AuthContext";
 
 /**
  * following code is temporarily need to change it with good LOTTIE
@@ -36,7 +35,7 @@ const EmptyCartComponent = () => {
 
 const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const user = useSelector((state: RootState) => state.user);
+  const { user } = useAuth();
   const customerId = user.userId;
 
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -49,7 +48,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const productsPerPage = 12;
   const moduleName = "ProductPage";
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await callback();
@@ -64,38 +63,44 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [callback, moduleName]);
 
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
-    value: number
+    value: number,
   ) => {
     setCurrentPage(value);
   };
 
-  const getWishList = async (customerId: string) => {
-    try {
-      const getData = await axios.get(
-        `${apiUrl}/api/wishlist/get/${customerId}`
-      );
-      if (getData.data.items.length > 0) {
-        setWishlistItems(getData.data.items);
+  const getWishList = useCallback(
+    async (customerId: string) => {
+      try {
+        const getData = await axios.get(
+          `${apiUrl}/api/wishlist/get/${customerId}`,
+        );
+        if (getData.data.items.length > 0) {
+          setWishlistItems(getData.data.items);
+        }
+      } catch (error) {
+        pawBuddyLogError(moduleName, error);
       }
-    } catch (error) {
-      pawBuddyLogError(moduleName, error);
-    }
-  };
+    },
+    [apiUrl, moduleName],
+  );
 
-  const getCartList = async (customerId: string) => {
-    try {
-      const getData = await axios.get(`${apiUrl}/api/cart/get/${customerId}`);
-      if (getData.data.items.length > 0) {
-        setCartList(getData.data.items);
+  const getCartList = useCallback(
+    async (customerId: string) => {
+      try {
+        const getData = await axios.get(`${apiUrl}/api/cart/get/${customerId}`);
+        if (getData.data.items.length > 0) {
+          setCartList(getData.data.items);
+        }
+      } catch (error) {
+        pawBuddyLogError(moduleName, error);
       }
-    } catch (error) {
-      pawBuddyLogError(moduleName, error);
-    }
-  };
+    },
+    [apiUrl, moduleName],
+  );
 
   const cleanUp = () => {
     setProducts([]);
@@ -113,7 +118,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
     return () => {
       cleanUp();
     };
-  }, [customerId]);
+  }, [cacheKey, customerId, getCartList, getProducts, getWishList]);
 
   const addTocart = async (item: ProductData) => {
     if (!customerId) {
@@ -133,7 +138,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         await axios.post(`${apiUrl}/api/cart/dumped`, dumpedData);
       } else {
         setCartList((prevCartList) =>
-          prevCartList.filter((cartList) => cartList.prodId !== item.prodId)
+          prevCartList.filter((cartList) => cartList.prodId !== item.prodId),
         );
         toast("Item removed from Cart", { autoClose: 1000 });
         await axios.post(`${apiUrl}/api/cart/remove`, {
@@ -172,8 +177,8 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         });
         setWishlistItems((prevWishlistItems) =>
           prevWishlistItems.filter(
-            (wishlistItem) => wishlistItem.prodId !== item.prodId
-          )
+            (wishlistItem) => wishlistItem.prodId !== item.prodId,
+          ),
         );
         toast("Item removed from Wishlist", { autoClose: 1000 });
       }

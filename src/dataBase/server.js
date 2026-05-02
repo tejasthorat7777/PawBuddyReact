@@ -10,6 +10,7 @@ import { ordersInfo } from "./modal/orders.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import { authenticateToken } from "./middleware/auth.js";
+import process from "process";
 dotenv.config();
 
 const server = express();
@@ -398,9 +399,9 @@ server.get("/api/getdogfood/:type", async (req, res) => {
 });
 
 server.get("/api/accessories/:type", async (req, res) => {
+   const { type } = req.params;
   try {
     const getProducts = [];
-    const { type } = req.params;
     const data = await Products.find();
     data.map((doc) => {
       doc.products.map((product) => {

@@ -24,6 +24,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { clearData, loadCached } from "../../commonFiles/commonFunctions";
+import { useAuth } from "../../context/AuthContext";
 
 const EmptyCartComponent = () => {
   return (
@@ -40,7 +41,7 @@ const Wishlist = () => {
   const [fetchError, setFetchError] = useState(false);
   const [emptyCart, setEmptyCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector((state: RootState) => state.user);
+  const { user } = useAuth();
   const customerId = user.userId;
   const apiUrl = import.meta.env.VITE_API_URL;
 

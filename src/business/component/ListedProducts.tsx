@@ -14,14 +14,13 @@ import {
   h100w100,
   homeStyle,
 } from "../../commonFiles/commonTheme";
-import { RootState } from "../../redux/store/store";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ProductData } from "../../commonFiles/commonTypes";
 import { EmptyList } from "../../Lottie/lottieComponent/EmptyList";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { apiUrl } from "../../commonFiles/commonFunctions";
+import { useAuth } from "../../context/AuthContext";
 
 function ListedProducts() {
   const headers = [
@@ -33,7 +32,7 @@ function ListedProducts() {
     "Discount(%)",
     "Quantity",
   ];
-  const user = useSelector((state: RootState) => state.user);
+    const { user } = useAuth();
   const customerId = user.userId;
   const [products, setProducts] = useState<ProductData[]>([]);
   const [isLoading, setIsLoading] = useState(false);

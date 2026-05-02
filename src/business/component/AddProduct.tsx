@@ -27,8 +27,7 @@ import {
   getDiscountedPrice,
 } from "../../commonFiles/commonFunctions";
 import { ProductData } from "../../commonFiles/commonTypes";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
+import { useAuth } from "../../context/AuthContext";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -63,7 +62,8 @@ const getSubCategory = (subcat: string) => {
 };
 
 const AddProduct = () => {
-  const userId = useSelector((state: RootState) => state.user.userId);
+  const { user } = useAuth();
+  const userId = user.userId;
   const condition = ["Condition", "New", "Used", "Refurbished"];
   const category = ["category", "Food", "Accessories", "Shampoo", "Bathroom"];
 

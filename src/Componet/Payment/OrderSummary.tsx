@@ -3,14 +3,13 @@ import { iOrderSummary } from "../../commonFiles/commonTypes";
 import { paymentStyle } from "./paymentStyle";
 import React, { useState } from "react";
 import AddressModal from "./AddressModal";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
 import axios from "axios";
 import {
   apiUrl,
   pawBuddyLogError,
   pawBuddyLogInfo,
 } from "../../commonFiles/commonFunctions";
+import { useAuth } from "../../context/AuthContext";
 
 type OverflowTextProps = {
   text: string;
@@ -31,7 +30,7 @@ const OverflowText: React.FC<OverflowTextProps> = ({ text }) => (
 
 const OrderSummary: React.FC<iOrderSummary> = (props) => {
   const moduleName = "OrderSummary";
-  const user = useSelector((state: RootState) => state.user);
+  const { user } = useAuth();
   const username = user.username;
   const userAddress = user.address ?? "";
   const [openModal, setOpenModal] = useState<boolean>(true);
@@ -47,7 +46,7 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
       value: `${
         props.discount(
           props.lastOrder.prodPrice,
-          props.lastOrder.prodDiscount
+          props.lastOrder.prodDiscount,
         ) || 500
       }.00 Rs.`,
     },

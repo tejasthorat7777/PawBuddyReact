@@ -29,6 +29,7 @@ import {
 import { OrdersData } from "../../commonFiles/commonTypes";
 import { EmptyOrders } from "../../Lottie/lottieComponent/EmptyOrders";
 import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmptyCart";
+import { useAuth } from "../../context/AuthContext";
 
 const NoOrder = () => {
   return (
@@ -45,8 +46,7 @@ function Orders() {
   const [orders, setOrders] = useState<OrdersData[]>([]);
   const [noOrder, setNoOrder] = useState(false);
   const [fetchError, setFetchError] = useState("");
-
-  const user = useSelector((state: RootState) => state.user);
+    const { user } = useAuth();
   const customerId = user.userId;
 
   const getOrderDetails = async (customerId: string) => {

@@ -13,7 +13,7 @@ import {
 } from "../services/authService";
 
 interface AuthContextType {
-  user: UserProfile | null;
+  user: UserProfile;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginData) => Promise<boolean>;
