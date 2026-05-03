@@ -13,7 +13,7 @@ import {
 } from "../../commonFiles/commonFunctions";
 import { toast, ToastContainer } from "react-toastify";
 import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
-import { CircularProgress, Container, Pagination } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { BadRequest } from "../../Lottie/lottieComponent/BadRequest";
 import RenderProducts from "./RenderProducts";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,7 +36,7 @@ const EmptyCartComponent = () => {
 const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { user } = useAuth();
-  const customerId = user.userId;
+  const customerId = user?.userId;
 
   const [products, setProducts] = useState<ProductData[]>([]);
   const [wishlistItems, setWishlistItems] = useState<WishListData[]>([]);
@@ -44,8 +44,6 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [productFetchError, setProductFetchError] = useState(false);
   const [emptyList, setEmptyList] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
   const moduleName = "ProductPage";
 
   const getProducts = useCallback(async () => {
@@ -64,13 +62,6 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
       setIsLoading(false);
     }
   }, [callback, moduleName]);
-
-  const handlePageChange = (
-    _event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setCurrentPage(value);
-  };
 
   const getWishList = useCallback(
     async (customerId: string) => {
@@ -235,20 +226,6 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
               cartList={cartList}
             />
           </div>
-          <Container style={flexDiv}>
-            <Pagination
-              shape="rounded"
-              color="primary"
-              count={Math.ceil(products.length / productsPerPage)}
-              page={currentPage}
-              onChange={handlePageChange}
-              sx={{
-                "& .MuiPaginationItem-root": {
-                  color: "white",
-                },
-              }}
-            />
-          </Container>
         </>
       ) : null}
       {emptyList && <EmptyCartComponent />}

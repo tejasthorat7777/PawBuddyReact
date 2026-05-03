@@ -27,6 +27,13 @@ export type iRenderProducts = {
   cartList: CartListData[];
 };
 
+export type iProductCard = {
+  card: ProductData;
+  addToWishlist: (card: ProductData) => void;
+  addTocart: (card: ProductData) => void;
+  wishlistItems: WishListData[];
+};
+
 export type SubmitButtonProps = {
   operationOnData: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

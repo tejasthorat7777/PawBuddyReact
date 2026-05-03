@@ -177,7 +177,7 @@ export const homeStyle = {
 
   outerDiv: {
     width: "100%",
-    backgroundColor: "#597081",
+    backgroundColor: "#fffbf5",
     padding: "16px",
     minHeight: "92vh",
   },
