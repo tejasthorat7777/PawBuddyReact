@@ -28,12 +28,12 @@ const productCardStyles = {
     position: "relative",
     borderRadius: "32px",
     backgroundColor: "#fff8e5",
-    boxShadow: "0 18px 45px rgba(0,0,0,0.12)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
     transition: "transform 200ms ease, box-shadow 200ms ease",
     overflow: "hidden",
-    "&:hover": {
+      "&:hover": {
       transform: "translateY(-3px)",
-      boxShadow: "0 24px 55px rgba(0,0,0,0.18)",
+      boxShadow: "0 12px 36px rgba(0,0,0,0.08)",
     },
   },
   badge: {

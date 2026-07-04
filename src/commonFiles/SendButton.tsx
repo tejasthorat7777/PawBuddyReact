@@ -16,8 +16,10 @@ export const SendButton: React.FC<SubmitButtonProps> = ({
       id={`btn_${text}`}
       variant="contained"
       style={{
-        position: "absolute",
-        backgroundColor: onHover ? "#597081" : "#00111c",
+        // Do not force absolute positioning here — caller controls layout
+        backgroundColor: onHover
+          ? style.backgroundColorHover || style.backgroundColor || style.background || "#597081"
+          : style.backgroundColor || style.background || "#00111c",
         fontFamily: "cursive",
         ...style,
       }}

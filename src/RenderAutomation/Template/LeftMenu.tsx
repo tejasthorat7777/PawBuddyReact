@@ -19,23 +19,8 @@ import scooper from "../../assets/poop-scooper.png";
 import spray from "../../assets/spray.png";
 import addProduct from "../../assets/add-product.png";
 import { useState } from "react";
-import {
-  CustomButton,
-  CustomAccordionSummary,
-  CustomAccordionDetails,
-  CustomAccordion,
-} from "../../commonFiles/commonTheme";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
-const customButtonContainer = {
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  justifyContent: "start",
-  alignItems: "center",
-  fontFamily: "cursive",
-  color: "white",
-};
 
 const flexCenter = {
   display: "flex",
@@ -70,6 +55,9 @@ interface SubMenuItem {
 
 export default function LeftMenu() {
   const [isExpanded, setIsExpanded] = useState("");
+  const [hovered, setHovered] = useState("");
+
+  const location = useLocation();
 
   // Todo create a field in redux which state user using business account or not
   const business = true;
@@ -142,57 +130,74 @@ export default function LeftMenu() {
   const render = () => {
     return (
       <>
-        {menu.map((menuItem, index) => (
-          <CustomAccordion
-            key={index}
-            expanded={isExpanded === menuItem.name}
-            onClick={() => handleChange(menuItem.name)}
-          >
-            <CustomAccordionSummary
-              expandIcon={
-                <ArrowForwardIosSharpIcon
-                  style={{ fontSize: "1rem", color: "white" }}
-                />
-              }
-            >
-              <div style={customButtonContainer}>
+        {menu.map((menuItem, index) => {
+          const expanded = isExpanded === menuItem.name;
+          return (
+            <div key={index} style={{ marginBottom: 12 }}>
+                  <div
+                    onClick={() => handleChange(menuItem.name)}
+                    role="button"
+                    tabIndex={0}
+                    onMouseEnter={() => setHovered(menuItem.name)}
+                    onMouseLeave={() => setHovered("")}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      cursor: "pointer",
+                      background: expanded
+                        ? "linear-gradient(90deg,#ffb366,#ff7f50)"
+                        : hovered === menuItem.name
+                        ? "#fff4ea"
+                        : "transparent",
+                      color: expanded ? "white" : "#3b3b3b",
+                      boxShadow: expanded ? "0 4px 14px rgba(255,127,80,0.18)" : "none",
+                    }}
+                  >
                 <img
                   src={menuItem.image}
                   alt={`${menuItem.header} Icon`}
-                  style={{
-                    height: "1.6em",
-                    margin: "0% 3% 1% 1%",
-                  }}
+                  style={{ height: 28, width: 28, marginRight: 12, opacity: expanded ? 1 : 0.9 }}
                 />
-                {menuItem.header}
+                <div style={{ fontWeight: 700 }}>{menuItem.header}</div>
+                <div style={{ marginLeft: "auto", opacity: 0.75 }}>
+                  <ArrowForwardIosSharpIcon style={{ fontSize: "0.9rem", transform: expanded ? "rotate(90deg)" : "rotate(0deg)", color: expanded ? "white" : "#b0b0b0" }} />
+                </div>
               </div>
-            </CustomAccordionSummary>
-            {subMenu[menuItem.name].map((subMenuItem, subIndex) => (
-              <CustomAccordionDetails
-                key={subIndex}
-                style={{
-                  borderRadius: subIndex === 2 ? "0px 0px 10px 10px" : "0px",
-                }}
-              >
-                <Link to={subMenuItem.path}>
-                  <CustomButton>
-                    <div style={customButtonContainer}>
-                      <img
-                        src={subMenuItem.subImage}
-                        alt={`${subMenuItem.subHeader} Icon`}
+
+              {expanded && (
+                <div style={{ marginTop: 8, paddingLeft: 10 }}>
+                  {subMenu[menuItem.name].map((subMenuItem, subIndex) => (
+                    <Link to={subMenuItem.path} key={subIndex} style={{ textDecoration: "none" }}>
+                      <div
+                        onMouseEnter={() => setHovered(subMenuItem.subHeader)}
+                        onMouseLeave={() => setHovered("")}
                         style={{
-                          height: "1.6em",
-                          margin: "0% 3% 1% 5%",
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px 12px",
+                          borderRadius: 8,
+                          background: hovered === subMenuItem.subHeader ? "#fff4ea" : "transparent",
+                          color: "#3b3b3b",
+                          marginBottom: 8,
+                          boxShadow: hovered === subMenuItem.subHeader ? "0 2px 8px rgba(11,11,11,0.04)" : "none",
                         }}
-                      />
-                      {subMenuItem.subHeader}
-                    </div>
-                  </CustomButton>
-                </Link>
-              </CustomAccordionDetails>
-            ))}
-          </CustomAccordion>
-        ))}
+                      >
+                        <img
+                          src={subMenuItem.subImage}
+                          alt={`${subMenuItem.subHeader} Icon`}
+                          style={{ height: 24, width: 24, marginRight: 12 }}
+                        />
+                        <div style={{ fontWeight: 600 }}>{subMenuItem.subHeader}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </>
     );
   };
@@ -201,39 +206,46 @@ export default function LeftMenu() {
     return (
       <>
         {businessMenu.map((obj, index) => (
-          <Link to={obj.path} key={index}>
-            <CustomButton>
-              <div style={customButtonContainer}>
-                <img
-                  src={obj.image}
-                  alt={`${obj.header} Icon`}
-                  style={{
-                    height: "1.6em",
-                    margin: "0% 3% 1% 5%",
-                  }}
-                />
-                {obj.header}
-              </div>
-            </CustomButton>
+          <Link to={obj.path} key={index} style={{ textDecoration: "none" }}>
+            <div
+              onMouseEnter={() => setHovered(obj.header)}
+              onMouseLeave={() => setHovered("")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "10px 12px",
+                borderRadius: 8,
+                marginBottom: 8,
+                color: "#3b3b3b",
+                cursor: "pointer",
+                background: hovered === obj.header ? "#fff4ea" : "transparent",
+              }}
+            >
+              <img src={obj.image} alt={`${obj.header} Icon`} style={{ height: 24, width: 24, marginRight: 12 }} />
+              <div style={{ fontWeight: 600 }}>{obj.header}</div>
+            </div>
           </Link>
         ))}
       </>
     );
   };
 
+  // determine active route for highlighting
+  const activePath = location.pathname || "/";
+
   return (
     <div
       className="left-menu-container"
       style={{
-        backgroundColor: "#00111c",
+        backgroundColor:"#fffbf5",
         flex: "1 1 auto",
         display: "flex",
         flexDirection: "column",
         width: "17vw",
         marginLeft: "0%",
         height: "92vh",
-        color: "white",
-        padding: "0",
+        color: "#2b2b2b",
+        padding: "20px",
         overflowY: "auto",
         overflowX: "hidden",
       }}
@@ -246,26 +258,35 @@ export default function LeftMenu() {
           marginTop: "2%",
         }}
       >
-        <Link to={"/"}>
-          <CustomButton id="homeBtn">
-            <div style={customButtonContainer}>
-              <img
-                src={homeIcon}
-                alt="Home Icon"
-                style={{
-                  height: "1.6em",
-                  margin: "0% 2% 1% 6%",
-                }}
-              />
-              Home
+        <div style={{ background: "white", padding: 18, borderRadius: 14, boxShadow: "none" }}>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <div
+              onMouseEnter={() => setHovered("Home")}
+              onMouseLeave={() => setHovered("")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "10px 12px",
+                borderRadius: 10,
+                background: activePath === "/" ? "linear-gradient(90deg,#ffb366,#ff7f50)" : hovered === "Home" ? "#fff4ea" : "transparent",
+                color: activePath === "/" ? "white" : "#3b3b3b",
+                marginBottom: 12,
+                cursor: "pointer",
+              }}
+            >
+              <img src={homeIcon} alt="Home Icon" style={{ height: 28, width: 28, marginRight: 12 }} />
+              <div style={{ fontWeight: 800 }}>Home</div>
+              <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: 8, background: activePath === "/" ? "#fff" : "transparent" }} />
             </div>
-          </CustomButton>
-        </Link>
-        {!business ? renderBusiness() : render()}
-        <div style={flexCenter}>
-          <div style={greyLine}></div>
+          </Link>
+
+          <div style={{ marginTop: 6 }}>{!business ? renderBusiness() : render()}</div>
+
+          {/* divider removed to keep left menu visually inline with product area */}
+
+          {/* Paw points removed as requested */}
         </div>
-        <div style={Object.assign({}, flexCenter, greyText)}>
+        <div style={Object.assign({}, flexCenter, greyText, { marginTop: 14 })}>
           © PawBuddy Version {version}
         </div>
       </Container>
