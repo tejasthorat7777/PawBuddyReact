@@ -7,7 +7,6 @@ import {loginCss } from "../../commonFiles/commonTheme";
 import logoImg from "../../assets/logo.png";
 import "../../commonFiles/commonCss/handleInputAuto.css";
 import { SendButton } from "../../commonFiles/SendButton";
-import { LoginDoneTick } from "../../Lottie/lottieComponent/LoginDoneTick";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -17,23 +16,14 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [lottie, setLottie] = useState(false);
   const [isRequired, setIsRequired] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
-
-  const loginSuccess = () => {
-    setLoading(false);
-    setLottie(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
-  };
 
   const handleVerifyButton = () => {
     setShowPassword(!showPassword);
   };
 
-  const handlelogIn = async (e?: any) => {
+  const handlelogIn = async (e?: React.FormEvent) => {
     if (e && e.preventDefault) e.preventDefault();
 
     if (!username || !password) {
@@ -48,12 +38,8 @@ const Login: React.FC = () => {
       const success = await login({ username, password });
 
       if (success) {
-        // Wait a bit to show the loading spinner before showing lottie
-        setTimeout(() => {
-          setLoading(false);
-          setLottie(true);
-          setTimeout(() => navigate("/"), 1000);
-        }, 1000);
+        setLoading(false);
+        navigate("/");
       } else {
         setLoading(false);
         setCorrectUser(true);
@@ -72,13 +58,13 @@ const Login: React.FC = () => {
       <div style={{ width: "min(1200px,90%)", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 40 }}>
         <div style={{ flex: 1, color: "#fff", paddingLeft: 60 }}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <img src={logoImg} alt="PawBuddy" style={{ height: 100, width: 200 }} />
+          <img src={logoImg} alt="PawBuddy" style={{ height: 100, width: 300 }} />
         </div>
 
         <div style={{ marginTop: 80 }}>
           <div style={{ color: "#ffb703", fontWeight: 700, letterSpacing: 2 }}>WELCOME BACK</div>
           <h1 style={{ fontSize: 56, lineHeight: 1.05, margin: "12px 0", color: "#fff" }}>
-            Good boys deserve <span style={{ color: "#ffb703", fontStyle: "italic" }}>great</span> things.
+            Good dogs deserve <span style={{ color: "#ffb703", fontStyle: "italic" }}>great</span> things.
           </h1>
           <p style={{ color: "#d1d1d1", maxWidth: 520 }}>Sign in to track orders, save favorites, and unlock member-only treats for your best friend.</p>
         </div>
@@ -137,21 +123,19 @@ const Login: React.FC = () => {
               </div>
             )}
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
               <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <input type="checkbox" /> <span style={{ color: "#8b6f61" }}>Keep me signed in</span>
               </label>
               <Link to="#" style={{ color: "#ff7f50", textDecoration: "none" }}>Forgot password?</Link>
             </div>
 
-            <div style={{ marginTop: 18 }}>
+            <div style={{ marginTop: 4, display: "flex", justifyContent: "center", alignItems: "center" }}>
               {loading ? (
-                <CircularProgress />
-              ) : lottie ? (
-                <div style={{ marginTop: "2rem" }} data-testid="loginDoneTick">
-                  <LoginDoneTick />
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", padding: "4px 0" }}>
+                  <CircularProgress />
                 </div>
-                ) : (
+              ) : (
                 <SendButton
                   operationOnData={handlelogIn}
                   style={{ height: 44, width: "100%", borderRadius: "10px", backgroundColor: "#ff7f50", background: "linear-gradient(90deg,#ff7f50,#ffb366)", color: "white", border: "none" }}
