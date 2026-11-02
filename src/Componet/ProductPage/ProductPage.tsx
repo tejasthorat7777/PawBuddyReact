@@ -76,7 +76,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         pawBuddyLogError(moduleName, error);
       }
     },
-    [apiUrl, moduleName],
+    [moduleName],
   );
 
   const getCartList = useCallback(
@@ -90,7 +90,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         pawBuddyLogError(moduleName, error);
       }
     },
-    [apiUrl, moduleName],
+    [moduleName],
   );
 
   const cleanUp = () => {
