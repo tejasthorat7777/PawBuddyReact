@@ -19,6 +19,19 @@ const mockUser = {
   password: "Pettey@7777",
   userId: "Pettey&&2022-01-26",
   username: "tejasthorat7777",
+  address: "",
+  lastOrder: {
+    prodId: "",
+    prodName: "",
+    prodDiscrip: "",
+    prodImg: "",
+    prodPrice: "",
+    selected: false,
+    customerName: "",
+    orderId: "",
+    orderDate: "",
+    prodDiscount: "",
+  },
 };
 
 const mockState = {

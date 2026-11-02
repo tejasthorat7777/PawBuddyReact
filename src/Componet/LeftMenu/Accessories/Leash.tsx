@@ -1,4 +1,4 @@
-import { Accessories } from ".";
+import { Accessories } from "../Accessories";
 
 const Leash = () => {
   return <Accessories accessoryType="leash" />;

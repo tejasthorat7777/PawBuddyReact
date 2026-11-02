@@ -29,12 +29,6 @@ const flexCenter = {
   alignItems: "center",
 };
 
-const greyLine = {
-  width: "95%",
-  backgroundColor: "grey",
-  height: "1px",
-};
-
 const greyText = {
   color: "grey",
   fontFamily: "cursive",

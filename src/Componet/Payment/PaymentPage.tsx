@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import CreditCardForm from "./CreditCardForm";
-import { ArrowLeft } from "lucide-react";
 import PaymentSuccess from "./PaymentSuccess";
 import UPIPaymentForm from "./UPIPaymentForm";
 import OrderSummary from "./OrderSummary_1";
 import { flexDiv } from "../../commonFiles/commonTheme";
 import PaymentMethodSelector from "./PaymentMethodSelector";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button } from "@mui/material";
 
 const orderData = {
   items: [

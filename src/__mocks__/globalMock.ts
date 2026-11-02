@@ -47,4 +47,17 @@ export const mockUser = {
   gender: "",
   acc_type: "",
   password: "",
+  address: "",
+  lastOrder: {
+    prodId: "",
+    prodName: "",
+    prodDiscrip: "",
+    prodImg: "",
+    prodPrice: "",
+    selected: false,
+    customerName: "",
+    orderId: "",
+    orderDate: "",
+    prodDiscount: "",
+  },
 };

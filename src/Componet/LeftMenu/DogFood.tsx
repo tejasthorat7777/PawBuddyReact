@@ -11,7 +11,7 @@ export const DogFood: React.FC<iDogFood> = ({ foodType }) => {
       if (cacheProducts) {
         return cacheProducts;
       }
-      const getData = await axios.get(`${apiUrl}/api/getdogfood/${foodType}`);
+      const getData = await axios.get(`${apiUrl}/getdogfood/${foodType}`);
       return getData.data;
     } catch (error) {
       throw new Error("Error During Fetching Products" + foodType + error);

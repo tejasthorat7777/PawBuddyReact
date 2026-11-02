@@ -13,7 +13,7 @@ import {
 } from "../services/authService";
 
 interface AuthContextType {
-  user: UserProfile;
+  user: UserProfile | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginData) => Promise<boolean>;
@@ -77,8 +77,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // toast.error(response.message || "Login failed");
       return false;
     } catch (error: any) {
-      const errorMessage = error.message || "Login failed. Please try again.";
-      // toast.error(errorMessage);
       console.error("Login error:", error);
       return false;
     } finally {
@@ -103,9 +101,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // toast.error(response.message || "Registration failed");
       return false;
     } catch (error: any) {
-      const errorMessage =
-        error.message || "Registration failed. Please try again.";
-      // toast.error(errorMessage);
       console.error("Registration error:", error);
       return false;
     } finally {

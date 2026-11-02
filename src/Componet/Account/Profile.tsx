@@ -28,7 +28,7 @@ const Profile = () => {
         overflow: "auto",
       }}
     >
-      {user.userId === "" ? (
+      {!user || user.userId === "" ? (
         <div
           style={{
             height: "100%",

@@ -38,7 +38,7 @@ export type SubmitButtonProps = {
   operationOnData: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
-  style?: React.CSSProperties;
+  style?: React.CSSProperties & { backgroundColorHover?: string };
   text: string;
 };
 
@@ -108,7 +108,7 @@ export type OrdersData = {
   prodImg: string;
   prodPrice: string;
   selected: Boolean;
-  customerName: string;
+  customerName?: string;
   orderId: string;
   orderDate: string;
   prodDiscount: string;

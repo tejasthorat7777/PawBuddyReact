@@ -1,10 +1,9 @@
 import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { API_BASE_URL } from "./apiUrl";
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -45,7 +44,7 @@ api.interceptors.response.use(
         }
 
         // Try to refresh the token
-        const response = await axios.post(`${API_URL}/api/auth/refresh`, {
+        const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
           refreshToken,
         });
 
@@ -104,6 +103,13 @@ export interface UserProfile {
   email: string;
   acc_type: string;
   name?: string;
+  age?: string;
+  breed?: string;
+  birthdate?: string;
+  identification?: string;
+  owner?: string;
+  gender?: string;
+  password?: string;
   userId: string;
   address?: string;
 }
@@ -115,7 +121,7 @@ class AuthService {
   async register(userData: RegisterData): Promise<AuthResponse> {
     try {
       const response = await axios.post(
-        `${API_URL}/api/auth/register`,
+        `${API_BASE_URL}/auth/register`,
         userData
       );
 
@@ -143,7 +149,7 @@ class AuthService {
   async login(credentials: LoginData): Promise<AuthResponse> {
     try {
       const response = await axios.post(
-        `${API_URL}/api/auth/login`,
+        `${API_BASE_URL}/auth/login`,
         credentials
       );
 
@@ -166,7 +172,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // Call logout endpoint to invalidate refresh token
-      await api.post("/api/auth/logout");
+      await api.post("/auth/logout");
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -182,7 +188,7 @@ class AuthService {
    */
   async getCurrentUser(): Promise<UserProfile | null> {
     try {
-      const response = await api.get("/api/auth/me");
+      const response = await api.get("/auth/me");
 
       if (response.data.success && response.data.data) {
         // Update stored user data
@@ -205,7 +211,7 @@ class AuthService {
     newPassword: string
   ): Promise<AuthResponse> {
     try {
-      const response = await api.put("/api/auth/change-password", {
+      const response = await api.put("/auth/change-password", {
         currentPassword,
         newPassword,
       });
@@ -262,7 +268,7 @@ class AuthService {
         return null;
       }
 
-      const response = await axios.post(`${API_URL}/api/auth/refresh`, {
+      const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
         refreshToken,
       });
 

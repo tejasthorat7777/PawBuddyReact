@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { useState } from "react";
+import { Modal, Box, TextField } from "@mui/material";
 import { SendButton } from "../../commonFiles/SendButton";
 
 interface iAddressModal {

@@ -1,4 +1,5 @@
 import { OrdersData } from "./commonTypes";
+import { API_BASE_URL } from "../services/apiUrl";
 import LZString from "lz-string";
 import moment from 'moment'
 
@@ -8,7 +9,7 @@ export const generateRandomUserId = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const apiUrl = import.meta.env.VITE_API_URL;
+export const apiUrl = API_BASE_URL;
 export const currency = "₹";
 export const formattedValue = (value: any) => {
   return value.toLowerCase().replace(/\s+/g, "");

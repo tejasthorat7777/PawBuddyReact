@@ -10,6 +10,7 @@ import {
   clearData,
   isItemExists,
   pawBuddyLogError,
+  apiUrl,
 } from "../../commonFiles/commonFunctions";
 import { toast, ToastContainer } from "react-toastify";
 import { flexDiv, h100w100, homeStyle } from "../../commonFiles/commonTheme";
@@ -34,7 +35,6 @@ const EmptyCartComponent = () => {
 };
 
 const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
-  const apiUrl = import.meta.env.VITE_API_URL;
   const { user } = useAuth();
   const customerId = user?.userId;
 
@@ -67,7 +67,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
     async (customerId: string) => {
       try {
         const getData = await axios.get(
-          `${apiUrl}/api/wishlist/get/${customerId}`,
+          `${apiUrl}/wishlist/get/${customerId}`,
         );
         if (getData.data.items.length > 0) {
           setWishlistItems(getData.data.items);
@@ -82,7 +82,7 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
   const getCartList = useCallback(
     async (customerId: string) => {
       try {
-        const getData = await axios.get(`${apiUrl}/api/cart/get/${customerId}`);
+        const getData = await axios.get(`${apiUrl}/cart/get/${customerId}`);
         if (getData.data.items.length > 0) {
           setCartList(getData.data.items);
         }
@@ -126,13 +126,13 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
         const dumpedData = { ...item, customerId };
         setCartList((prevCartList) => [...prevCartList, item]);
         toast("Item added to Cart", { autoClose: 1000 });
-        await axios.post(`${apiUrl}/api/cart/dumped`, dumpedData);
+        await axios.post(`${apiUrl}/cart/dumped`, dumpedData);
       } else {
         setCartList((prevCartList) =>
           prevCartList.filter((cartList) => cartList.prodId !== item.prodId),
         );
         toast("Item removed from Cart", { autoClose: 1000 });
-        await axios.post(`${apiUrl}/api/cart/remove`, {
+        await axios.post(`${apiUrl}/cart/remove`, {
           customerId,
           prodId: item.prodId,
         });
@@ -158,11 +158,11 @@ const ProductPage: React.FC<iProductPage> = ({ callback, cacheKey }) => {
     try {
       if (!exists) {
         const dumpedData = { ...item, customerId };
-        await axios.post(`${apiUrl}/api/wishlist/dumped`, dumpedData);
+        await axios.post(`${apiUrl}/wishlist/dumped`, dumpedData);
         setWishlistItems((prevWishlistItems) => [...prevWishlistItems, item]);
         toast("Item added to Wishlist", { autoClose: 1000 });
       } else {
-        await axios.post(`${apiUrl}/api/wishlist/remove`, {
+        await axios.post(`${apiUrl}/wishlist/remove`, {
           customerId,
           prodId: item.prodId,
         });
