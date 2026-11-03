@@ -33,6 +33,7 @@ import {
   generateRandomOrderId,
   getDate,
   getDiscountedPrice,
+  formatPrice,
   loadCached,
 } from "../../commonFiles/commonFunctions";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
@@ -264,10 +265,10 @@ const Cart = () => {
                     >
                       <Typography
                         style={cartStyle.priceText}
-                      >{`₹ ${getDiscountedPrice(
+                      >{`₹ ${formatPrice(getDiscountedPrice(
                         card.prodPrice,
                         card.prodDiscount,
-                      )}.00`}</Typography>
+                      ))}`}</Typography>
                       <StarRating rating={card.rating} />
                     </Box>
                     <CardActions sx={{ padding: "0", marginTop: "2%" }}>

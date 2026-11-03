@@ -12,6 +12,7 @@ import { Stack } from "@mui/system";
 import {
   isItemExists,
   getDiscountedPrice,
+  formatPrice,
 } from "../../commonFiles/commonFunctions";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -180,11 +181,11 @@ const ProductCard: React.FC<iProductCard> = (props) => {
 
         <Box sx={productCardStyles.priceRow}>
           <Typography sx={productCardStyles.currentPrice}>
-            {`₹ ${getDiscountedPrice(card.prodPrice, card.prodDiscount)}.00`}
+            {`₹ ${formatPrice(getDiscountedPrice(card.prodPrice, card.prodDiscount))}`}
           </Typography>
           {!!Number(card.prodDiscount) && (
             <Typography sx={productCardStyles.oldPrice}>
-              {`₹ ${card.prodPrice}.00`}
+              {`₹ ${formatPrice(card.prodPrice)}`}
             </Typography>
           )}
         </Box>
