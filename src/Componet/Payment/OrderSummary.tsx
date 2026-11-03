@@ -6,6 +6,7 @@ import AddressModal from "./AddressModal";
 import axios from "axios";
 import {
   apiUrl,
+  formatPrice,
   pawBuddyLogError,
   pawBuddyLogInfo,
 } from "../../commonFiles/commonFunctions";
@@ -39,20 +40,20 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
   const details = [
     {
       label: "Price of Product",
-      value: `${props.lastOrder.prodPrice || 500}.00 Rs.`,
+      value: `${formatPrice(props.lastOrder.prodPrice || 500)} Rs.`,
     },
     {
       label: "Discount",
-      value: `${
+      value: `${formatPrice(
         props.discount(
           props.lastOrder.prodPrice,
           props.lastOrder.prodDiscount,
         ) || 500
-      }.00 Rs.`,
+      )} Rs.`,
     },
     { label: "CGST", value: "0.00 Rs." },
     { label: "SGST", value: "0.00 Rs." },
-    { label: "Total", value: `${props.getFinalPrice()}.00 Rs.` },
+    { label: "Total", value: `${formatPrice(props.getFinalPrice())} Rs.` },
   ];
 
   const updateAddress = async (updatedAddress: string) => {

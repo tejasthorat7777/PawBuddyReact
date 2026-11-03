@@ -126,6 +126,18 @@ export const getDiscountedPrice = (price: string, discount: string) => {
   return finalPrice.toString();
 };
 
+export const formatPrice = (price: string | number) => {
+  const numericPrice = Number(price);
+  if (!Number.isFinite(numericPrice)) {
+    return String(price);
+  }
+
+  return numericPrice.toLocaleString("en-IN", {
+    useGrouping: false,
+    maximumFractionDigits: 2,
+  });
+};
+
 export const getMonthNumber = (month: string): string => {
   const months: Record<string, string> = {
     January: "01",

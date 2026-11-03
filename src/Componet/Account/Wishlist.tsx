@@ -21,7 +21,11 @@ import { FetchErrorEmptyCart } from "../../Lottie/lottieComponent/FetchErrorEmpt
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
-import { clearData, loadCached } from "../../commonFiles/commonFunctions";
+import {
+  clearData,
+  formatPrice,
+  loadCached,
+} from "../../commonFiles/commonFunctions";
 import { API_BASE_URL } from "../../services/apiUrl";
 import { useAuth } from "../../context/AuthContext";
 
@@ -208,7 +212,7 @@ const Wishlist = () => {
                     style={{
                       fontSize: "18px",
                     }}
-                  >{`₹ ${card?.prodPrice}.00`}</Typography>
+                  >{`₹ ${formatPrice(card?.prodPrice ?? "")}`}</Typography>
 
                   <CardActions
                     sx={{ padding: "0", marginTop: "5%", width: "100%" }}
