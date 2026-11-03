@@ -11,7 +11,7 @@ export const Shampoo: React.FC<iAccessories> = ({ shampooType }) => {
       if (cacheProducts) {
         return cacheProducts;
       }
-      const getData = await axios.get(`${apiUrl}/api/getdogfood/${shampooType}`);
+      const getData = await axios.get(`${apiUrl}/getdogfood/${shampooType}`);
       return getData.data;
     } catch (error) {
       throw new Error("Error During Fetching Products" + shampooType + error);

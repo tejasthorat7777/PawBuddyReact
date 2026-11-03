@@ -13,8 +13,6 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
 import { EmptyCart } from "../../Lottie/lottieComponent/EmptyCart";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import axios from "axios";
@@ -24,6 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../commonFiles/commonCss/toast.module.css";
 import { clearData, loadCached } from "../../commonFiles/commonFunctions";
+import { API_BASE_URL } from "../../services/apiUrl";
 import { useAuth } from "../../context/AuthContext";
 
 const EmptyCartComponent = () => {
@@ -42,8 +41,7 @@ const Wishlist = () => {
   const [emptyCart, setEmptyCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
-  const customerId = user.userId;
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const customerId = user?.userId ?? "";
 
   const getWishList = async (customerId: string) => {
     try {
@@ -55,7 +53,7 @@ const Wishlist = () => {
         return;
       }
       const getData = await axios.get(
-        `${apiUrl}/api/wishlist/get/${customerId}`
+        `${API_BASE_URL}/wishlist/get/${customerId}`
       );
       if (getData.data.items.length === 0) {
         setEmptyCart(true);
@@ -83,7 +81,7 @@ const Wishlist = () => {
 
   const handleXmark = async (customerId: string, prodId: string) => {
     try {
-      await axios.post(`${apiUrl}/api/wishlist/remove`, {
+      await axios.post(`${API_BASE_URL}/wishlist/remove`, {
         customerId,
         prodId,
       });

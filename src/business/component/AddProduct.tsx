@@ -21,6 +21,7 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
+import { API_BASE_URL } from "../../services/apiUrl";
 import {
   formattedValue,
   generateProductId,
@@ -63,7 +64,7 @@ const getSubCategory = (subcat: string) => {
 
 const AddProduct = () => {
   const { user } = useAuth();
-  const userId = user.userId;
+  const userId = user?.userId ?? "";
   const condition = ["Condition", "New", "Used", "Refurbished"];
   const category = ["category", "Food", "Accessories", "Shampoo", "Bathroom"];
 
@@ -115,8 +116,7 @@ const AddProduct = () => {
     setIsLoading(true);
     try {
       event.preventDefault();
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await axios.post(`${apiUrl}/api/addProduct`, {
+      await axios.post(`${API_BASE_URL}/addProduct`, {
         customerId: userId,
         products: addProduct,
       });

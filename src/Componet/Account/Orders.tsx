@@ -14,8 +14,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import LZString from "lz-string";
-import { RootState } from "../../redux/store/store";
-import { useSelector } from "react-redux";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
 import { ClickableText } from "../../commonFiles/Clickabletext";
 import axios from "axios";
@@ -46,8 +44,8 @@ function Orders() {
   const [orders, setOrders] = useState<OrdersData[]>([]);
   const [noOrder, setNoOrder] = useState(false);
   const [fetchError, setFetchError] = useState("");
-    const { user } = useAuth();
-  const customerId = user.userId;
+  const { user } = useAuth();
+  const customerId = user?.userId ?? "";
 
   const getOrderDetails = async (customerId: string) => {
     try {
@@ -58,7 +56,7 @@ function Orders() {
         setIsLoading(false);
         return;
       }
-      const getData = await axios.get(`${apiUrl}/api/orders/get/${customerId}`);
+      const getData = await axios.get(`${apiUrl}/orders/get/${customerId}`);
       if (getData.data.items.length === 0) {
         setNoOrder(true);
       } else {

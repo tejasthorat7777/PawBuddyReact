@@ -2,9 +2,9 @@ import { ProductData } from "../../commonFiles/commonTypes";
 import axios from "axios";
 import ProductPage from "../ProductPage/ProductPage";
 import { loadCached } from "../../commonFiles/commonFunctions";
+import { apiUrl } from "../../commonFiles/commonFunctions";
 
 const Home = () => {
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const getAllProducts = async () => {
     try {
@@ -13,7 +13,7 @@ const Home = () => {
         return cacheProducts;
       }
       let Products: ProductData[] = [];
-      const getData = await axios.get(`${apiUrl}/api/getProducts`);
+      const getData = await axios.get(`${apiUrl}/getProducts`);
       const data = getData.data;
       data.map((doc: any) => {
         doc.products.map((product: ProductData) => {

@@ -1,4 +1,4 @@
-import { Shampoo } from ".";
+import { Shampoo } from "../Shampoo";
 
 const Shining = () => {
   return <Shampoo shampooType="shinigshampoo" />;

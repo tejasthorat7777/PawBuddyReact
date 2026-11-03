@@ -9,7 +9,6 @@ import Orders from "../Componet/Account/Orders";
 import Wrapper from "../setupTest/Wrapper";
 import {
   mockAxiosGet,
-  mockCompress,
   mockDecompress,
   mockStorageGetItem,
   mockUser,

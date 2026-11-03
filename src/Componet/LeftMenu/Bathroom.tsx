@@ -12,7 +12,7 @@ export const Bathroom: React.FC<iAccessories> = ({ bathroomType }) => {
         return cacheProducts;
       }
       const getData = await axios.get(
-        `${apiUrl}/api/getdogfood/${bathroomType}`
+        `${apiUrl}/getdogfood/${bathroomType}`
       );
       return getData.data;
     } catch (error) {

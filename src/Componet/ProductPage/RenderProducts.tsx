@@ -5,7 +5,7 @@ import ProductCard from "./ProductCard";
 
 const RenderProducts: React.FC<iRenderProducts> = (props) => {
   const productsPerPage = 12;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage] = useState(1);
 
   const currentProducts = useMemo(() => {
     const indexOfLastProduct = currentPage * productsPerPage;

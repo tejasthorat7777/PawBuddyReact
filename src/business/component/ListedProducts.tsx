@@ -32,17 +32,16 @@ function ListedProducts() {
     "Discount(%)",
     "Quantity",
   ];
-    const { user } = useAuth();
-  const customerId = user.userId;
+  const { user } = useAuth();
+  const customerId = user?.userId ?? "";
   const [products, setProducts] = useState<ProductData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const getProduct = async (customerId: string) => {
     setIsLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       const getData = await axios.get(
-        `${apiUrl}/api/busi/getProducts/${customerId}`
+        `${apiUrl}/busi/getProducts/${customerId}`
       );
       const products = getData.data[0].products;
       setProducts(products);
@@ -55,7 +54,7 @@ function ListedProducts() {
 
   const handleDelete = async (customerId: string, prodId: string) => {
     try {
-      await axios.post(`${apiUrl}/api/busi/delete`, {
+      await axios.post(`${apiUrl}/busi/delete`, {
         customerId,
         prodId,
       });

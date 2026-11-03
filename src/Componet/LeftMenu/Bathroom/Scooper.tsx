@@ -1,4 +1,4 @@
-import { Bathroom } from ".";
+import { Bathroom } from "../Bathroom";
 
 const Scooper = () => {
   return <Bathroom bathroomType="wastescooper" />;

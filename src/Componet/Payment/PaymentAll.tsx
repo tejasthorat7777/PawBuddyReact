@@ -10,7 +10,6 @@ const PaymentAll = () => {
   const lastOrderDetails = user.lastOrder;
   const [selectedOption, setSelectedOption] = useState("");
 
-  const moduleName = "PayemntPage";
   const paymentOptions = ["Card", "UPI", "Wallet"];
 
   const discount = (price: string, discount: string) => {

@@ -31,8 +31,8 @@ const OverflowText: React.FC<OverflowTextProps> = ({ text }) => (
 const OrderSummary: React.FC<iOrderSummary> = (props) => {
   const moduleName = "OrderSummary";
   const { user } = useAuth();
-  const username = user.username;
-  const userAddress = user.address ?? "";
+  const username = user?.username ?? "";
+  const userAddress = user?.address ?? "";
   const [openModal, setOpenModal] = useState<boolean>(true);
   const [address, setAddress] = useState(userAddress);
 
@@ -61,7 +61,7 @@ const OrderSummary: React.FC<iOrderSummary> = (props) => {
       return;
     }
     try {
-      await axios.post(`${apiUrl}/api/saveAddress`, {
+      await axios.post(`${apiUrl}/saveAddress`, {
         updatedAddress,
         username,
       });

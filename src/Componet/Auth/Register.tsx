@@ -106,7 +106,7 @@ const Register: React.FC = () => {
       newErrors.email = "Email is required";
       isValid = false;
     } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email)
+      !/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(formData.email)
     ) {
       newErrors.email = "Please enter a valid email";
       isValid = false;
@@ -160,6 +160,7 @@ const Register: React.FC = () => {
 
     // Remove confirmPassword before sending to API
     const { confirmPassword, ...registerData } = formData;
+    void confirmPassword;
 
     const success = await register(registerData);
 
@@ -170,261 +171,202 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="sign-up">
-      <div className="out-box">
-        <div className="pic">
-          <img src={registrationImage} alt="Registration" />
-        </div>
-        <div className="in-box">
-          <div className="details">
-            <h1
-              style={{
-                fontFamily: "cursive",
-                padding: "1%",
-              }}
-            >
-              Join <i>PawBuddy</i> - Create Your Account!
-            </h1>
+    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#09212e" }}>
+      <div style={{ width: "45%", backgroundColor: "#5b7d8f", padding: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <img src={registrationImage} alt="Registration" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+      </div>
+      <div style={{ width: "55%", backgroundColor: "#09212e", padding: "32px 48px", minHeight: "100vh", overflowY: "auto", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div style={{ width: "100%", margin: "0 auto", minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 22 }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "linear-gradient(90deg,#ffb366,#ff7f50)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, color: "#fff" }}>🐾</div>
+            <h1 style={{ fontSize: 38, color: "#ffb703", fontStyle: "italic", margin: 0, fontWeight: 700 }}>Join PawBuddy — Create Your Account!</h1>
           </div>
-          <div className="grid">
-            <div className="grid1">
-              <label style={{ fontFamily: "cursive" }}>Full Name</label>
-              <label style={{ fontFamily: "cursive" }}>Username</label>
-              <input
-                type="text"
-                name="name"
-                className={errors.name ? "input-error" : ""}
-                value={formData.name}
-                placeholder={
-                  errors.name && !formData.name
-                    ? errors.name
-                    : "Enter your full name"
-                }
-                title={errors.name}
-                autoComplete="off"
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-              <input
-                type="text"
-                name="username"
-                className={errors.username ? "input-error" : ""}
-                value={formData.username}
-                placeholder={
-                  errors.username && !formData.username
-                    ? errors.username
-                    : "Enter username"
-                }
-                title={errors.username}
-                autoComplete="off"
-                onChange={handleChange}
-                disabled={isLoading}
-              />
 
-              <label style={{ fontFamily: "cursive" }}>Email</label>
-              <label style={{ fontFamily: "cursive" }}>Breed</label>
-              <input
-                type="email"
-                name="email"
-                className={errors.email ? "input-error" : ""}
-                placeholder={
-                  errors.email && !formData.email
-                    ? errors.email
-                    : "Enter your email"
-                }
-                title={errors.email}
-                autoComplete="off"
-                value={formData.email}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-              <input
-                type="text"
-                name="breed"
-                className={errors.breed ? "input-error" : ""}
-                value={formData.breed}
-                placeholder={
-                  errors.breed && !formData.breed ? errors.breed : "Enter breed"
-                }
-                title={errors.breed}
-                autoComplete="off"
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-
-              <label style={{ fontFamily: "cursive" }}>Password</label>
-              <label style={{ fontFamily: "cursive" }}>Confirm Password</label>
-              <input
-                type="password"
-                name="password"
-                className={errors.password ? "input-error" : ""}
-                value={formData.password}
-                placeholder={
-                  errors.password && !formData.password
-                    ? errors.password
-                    : "Create a password"
-                }
-                title={errors.password}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                className={errors.confirmPassword ? "input-error" : ""}
-                value={formData.confirmPassword}
-                placeholder={
-                  errors.confirmPassword && !formData.confirmPassword
-                    ? errors.confirmPassword
-                    : "Confirm password"
-                }
-                title={errors.confirmPassword}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-
-              <label style={{ fontFamily: "cursive" }}>Age</label>
-              <label style={{ fontFamily: "cursive" }}>Account Type</label>
-              <input
-                type="text"
-                name="age"
-                value={formData.age}
-                placeholder="Enter age"
-                autoComplete="off"
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-
-              <FormControl
-                sx={{
-                  maxWidth: "50%",
-                  "& .MuiInputLabel-root": {
-                    color: "white",
-                    fontFamily: "cursive",
-                    "&.Mui-focused": { color: "white" },
-                    "&.MuiInputLabel-shrink": {
-                      transform: "translate(14px, -6px) scale(0.75)",
-                    },
-                  },
-                }}
-                size="small"
-              >
-                <StyledSelect
-                  labelId="acc-type-label"
-                  id="acc_type"
-                  name="acc_type"
-                  label="Account Type"
-                  value={formData.acc_type}
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      acc_type: event.target.value as string,
-                    });
-                  }}
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", minHeight: "calc(100vh - 240px)", justifyContent: "space-between" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  placeholder="Enter your full name"
+                  onChange={handleChange}
                   disabled={isLoading}
-                >
-                  {accountType.map((acc_type, index) => (
-                    <CustomMenuItem
-                      value={acc_type.toLowerCase()}
-                      key={`acc_type${acc_type}_${index}`}
-                    >
-                      {acc_type}
-                    </CustomMenuItem>
-                  ))}
-                </StyledSelect>
-              </FormControl>
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                  title={errors.name}
+                />
+                {errors.name && <span style={{ color: "red", fontSize: 12 }}>{errors.name}</span>}
+              </div>
 
-              <label style={{ fontFamily: "cursive" }}>Birthdate</label>
-              <label style={{ fontFamily: "cursive" }}>Gender :</label>
-              <input
-                type="date"
-                name="birthdate"
-                value={formData.birthdate}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-              <RadioGroup
-                row
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-              >
-                <FormControlLabel
-                  value="male"
-                  control={
-                    <Radio
-                      sx={{
-                        color: "white",
-                        "&.Mui-checked": { color: "white" },
-                        "& .MuiSvgIcon-root": { fontSize: 18 },
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      style={{ fontSize: "90%", fontFamily: "cursive" }}
-                    >
-                      Male
-                    </Typography>
-                  }
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  placeholder="Enter username"
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                  title={errors.username}
                 />
-                <FormControlLabel
-                  value="female"
-                  control={
-                    <Radio
-                      sx={{
-                        color: "white",
-                        "&.Mui-checked": { color: "white" },
-                        "& .MuiSvgIcon-root": { fontSize: 18 },
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      style={{ fontSize: "90%", fontFamily: "cursive" }}
-                    >
-                      Female
-                    </Typography>
-                  }
+                {errors.username && <span style={{ color: "red", fontSize: 12 }}>{errors.username}</span>}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  placeholder="Enter your email"
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                  title={errors.email}
                 />
-              </RadioGroup>
+                {errors.email && <span style={{ color: "red", fontSize: 12 }}>{errors.email}</span>}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Breed</label>
+                <input
+                  type="text"
+                  name="breed"
+                  value={formData.breed}
+                  placeholder="Enter breed"
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                  title={errors.breed}
+                />
+                {errors.breed && <span style={{ color: "red", fontSize: 12 }}>{errors.breed}</span>}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  placeholder="Create a password"
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                  title={errors.password}
+                />
+                {errors.password && <span style={{ color: "red", fontSize: 12 }}>{errors.password}</span>}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  placeholder="Confirm password"
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                  title={errors.confirmPassword}
+                />
+                {errors.confirmPassword && <span style={{ color: "red", fontSize: 12 }}>{errors.confirmPassword}</span>}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Age</label>
+                <input
+                  type="text"
+                  name="age"
+                  value={formData.age}
+                  placeholder="Enter age"
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Account Type</label>
+                <FormControl sx={{ width: "100%" }} size="small">
+                  <StyledSelect
+                    id="acc_type"
+                    name="acc_type"
+                    value={formData.acc_type}
+                    onChange={(event) => {
+                      setFormData({
+                        ...formData,
+                        acc_type: event.target.value as string,
+                      });
+                    }}
+                    disabled={isLoading}
+                    sx={{ backgroundColor: "#0a1620", color: "#b8c5d0", fontSize: 16 }}
+                  >
+                    {accountType.map((acc_type, index) => (
+                      <CustomMenuItem value={acc_type.toLowerCase()} key={`acc_type${acc_type}_${index}`}>
+                        {acc_type}
+                      </CustomMenuItem>
+                    ))}
+                  </StyledSelect>
+                </FormControl>
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Birthdate</label>
+                <input
+                  type="date"
+                  name="birthdate"
+                  value={formData.birthdate}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: "none", fontSize: 16, background: "#0a1620", color: "#b8c5d0" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: 15, color: "#b8c5d0", fontWeight: 700, marginBottom: 10, display: "block" }}>Gender</label>
+                <RadioGroup row name="gender" value={formData.gender} onChange={handleChange}>
+                  <FormControlLabel
+                    value="male"
+                    control={<Radio sx={{ color: "#ffb703", "&.Mui-checked": { color: "#ffb703" } }} />}
+                    label={<Typography style={{ fontSize: 16, color: "#b8c5d0" }}>Male</Typography>}
+                  />
+                  <FormControlLabel
+                    value="female"
+                    control={<Radio sx={{ color: "#ffb703", "&.Mui-checked": { color: "#ffb703" } }} />}
+                    label={<Typography style={{ fontSize: 16, color: "#b8c5d0" }}>Female</Typography>}
+                  />
+                </RadioGroup>
+              </div>
             </div>
-          </div>
-          <div className="submit-container">
-            <SendButton
-              operationOnData={handleSubmit}
-              text={isLoading ? "Creating..." : "SUBMIT"}
-              style={{
-                position: "relative",
-                fontSize: "16px",
-                marginTop: "10px",
-                left: "auto",
-                bottom: "auto",
-              }}
-            />
-          </div>
-          <div
-            className="auth-footer"
-            style={{
-              textAlign: "center",
-              marginTop: "10px",
-              color: "wheat",
-            }}
-          >
-            <p style={{ fontFamily: "cursive" }}>
-              Already have an account?{" "}
-              <Link
-                to="/auth/login"
+
+            <div style={{ marginTop: 28, textAlign: "center" }}>
+              <SendButton
+                operationOnData={handleSubmit}
+                text={isLoading ? "Creating..." : "SUBMIT"}
                 style={{
-                  color: "#ffd700",
-                  textDecoration: "none",
-                  fontWeight: "bold",
+                  height: 48,
+                  width: 220,
+                  borderRadius: 12,
+                  background: "linear-gradient(90deg,#ff7f50,#ffb366)",
+                  color: "white",
+                  border: "none",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  opacity: isLoading ? 0.7 : 1,
                 }}
-              >
+              />
+            </div>
+
+            <div style={{ marginTop: 16, textAlign: "center", fontSize: 14, color: "#b8c5d0" }}>
+              Already have an account?{" "}
+              <Link to="/auth/login" style={{ color: "#ffb703", textDecoration: "none", fontWeight: 700 }}>
                 Login here
               </Link>
-            </p>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

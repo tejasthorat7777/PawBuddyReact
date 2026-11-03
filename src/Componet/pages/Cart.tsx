@@ -19,8 +19,7 @@ import StarRating from "../../commonFiles/StarRating";
 import { Quantity } from "../../commonFiles/Quantity";
 import { CartListData, OrdersData } from "../../commonFiles/commonTypes";
 import { LoginRequired } from "../../Lottie/lottieComponent/LoginRequired";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -36,7 +35,6 @@ import {
   getDiscountedPrice,
   loadCached,
 } from "../../commonFiles/commonFunctions";
-import { useNavigate, useNavigation } from "react-router-dom";
 import { Waiting } from "../../Lottie/lottieComponent/Waiting";
 import { updateLastOrder } from "../../redux/Slice/Slices";
 import { useAuth } from "../../context/AuthContext";
@@ -58,7 +56,7 @@ const CartIsEmpty = () => {
 };
 const Cart = () => {
   const { user } = useAuth();
-  const customerId = user.userId;
+  const customerId = user?.userId ?? "";
   const [cartList, setCartList] = useState<CartListData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [emptyCart, setEmptyCart] = useState(false);
@@ -67,7 +65,6 @@ const Cart = () => {
 
   const dispatch = useDispatch();
 
-  const navigate = useNavigate();
   const getCartList = async (customerId: string) => {
     try {
       setIsLoading(true);
@@ -77,7 +74,7 @@ const Cart = () => {
         setIsLoading(false);
         return;
       }
-      const getData = await axios.get(`${apiUrl}/api/cart/get/${customerId}`);
+      const getData = await axios.get(`${apiUrl}/cart/get/${customerId}`);
       if (getData.data.items.length === 0) {
         setEmptyCart(true);
       } else {
@@ -101,7 +98,7 @@ const Cart = () => {
 
   const handleOrder = async (customerId: string, card: CartListData) => {
     setNavigateToPayment(true);
-    const customerName = user.name;
+    const customerName = user?.name;
     const orderDate = getDate();
     const orderId = generateRandomOrderId();
     const newItem = {
@@ -124,7 +121,7 @@ const Cart = () => {
         orderDate: newItem.orderDate,
         prodDiscount: newItem.prodDiscount,
       };
-      await axios.post(`${apiUrl}/api/orders/dumped`, newItem);
+      await axios.post(`${apiUrl}/orders/dumped`, newItem);
       dispatch(updateLastOrder(lastOrderDetails));
       handleRemove(customerId, card.prodId);
       window.open("/payments/", "_blank");
@@ -140,7 +137,7 @@ const Cart = () => {
 
   const handleRemove = async (customerId: string, prodId: string) => {
     try {
-      await axios.post(`${apiUrl}/api/cart/remove`, {
+      await axios.post(`${apiUrl}/cart/remove`, {
         customerId,
         prodId,
       });

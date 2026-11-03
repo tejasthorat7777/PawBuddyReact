@@ -1,0 +1,404 @@
+import express from "express";
+import bodyParser from "body-parser";
+import { UserInfo } from "./modal/userInfo.js";
+import cors from "cors";
+import { wishlistInfo } from "./modal/wishlist.js";
+import { Products } from "./modal/product.js";
+import { cartList } from "./modal/cart.js";
+import { ordersInfo } from "./modal/orders.js";
+import authRoutes from "./routes/auth.js";
+import { authenticateToken } from "./middleware/auth.js";
+
+const app = express();
+app.use(cors());
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json());
+
+// ######################################### AUTH ROUTES #####################################################
+app.use("/api/auth", authRoutes);
+
+
+// ######################################### POST METHODS #####################################################
+
+app.post("/api/sendUsersInfo", async (req, res) => {
+  const information = req.body;
+  try {
+    const newUser = new UserInfo(information);
+    await newUser.save();
+    res.status(200).json({ message: "User created successfully!" });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Error submitting user data" });
+  }
+});
+
+app.post("/api/saveAddress", authenticateToken, async (req, res) => {
+  try {
+    const { username, updatedAddress } = req.body;
+    const user = await UserInfo.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.address = updatedAddress;
+    await user.save();
+    res.status(200).json({ message: "Address updated successfully", user });
+  } catch (error) {
+    console.error("Error updating address:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/api/wishlist/remove", async (req, res) => {
+  try {
+    const { customerId, prodId } = req.body;
+
+    const updatedWishlist = await wishlistInfo.findOneAndUpdate(
+      { customerId },
+      { $pull: { items: { prodId } } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Item removed from wishlist successfully!",
+      wishlist: updatedWishlist,
+    });
+  } catch (error) {
+    console.error("Error removing item from wishlist:", error);
+    res.status(500).json({ message: "Error removing item" });
+  }
+});
+
+app.post("/api/wishlist/dumped", async (req, res) => {
+  try {
+    const {
+      customerId,
+      prodId,
+      prodName,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      selected,
+      prodDiscount,
+    } = req.body;
+
+    const newItem = {
+      prodId,
+      prodName,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      selected,
+      prodDiscount,
+    };
+
+    const customerWishlist = await wishlistInfo.findOne({ customerId });
+    const productExists = customerWishlist?.items.some(
+      (item) => item.prodId === prodId
+    );
+
+    if (productExists) {
+      return res.status(200).json({
+        message: "Item already in wishlist",
+        wishlist: customerWishlist,
+      });
+    }
+
+    const updatedWishlist = await wishlistInfo.findOneAndUpdate(
+      { customerId },
+      { $push: { items: newItem } },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      message: "Item added to wishlist successfully!",
+      wishlist: updatedWishlist,
+    });
+  } catch (error) {
+    console.error("Error updating wishlist:", error);
+    res.status(500).json({ message: "Error submitting item" });
+  }
+});
+
+app.post("/api/addProduct", async (req, res) => {
+  try {
+    const { customerId, products } = req.body;
+    const existingCustomer = await Products.findOne({ customerId });
+
+    if (existingCustomer) {
+      existingCustomer.products.push(products);
+      await existingCustomer.save();
+    } else {
+      const newProduct = new Products({ customerId, products: products });
+      await newProduct.save();
+    }
+
+    res.status(200).json({ message: "Product(s) added successfully!" });
+  } catch (error) {
+    console.error("Error uploading product:", error);
+    res.status(500).json({ message: "Failed to upload product", error });
+  }
+});
+
+app.post("/api/cart/dumped", async (req, res) => {
+  try {
+    const {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      rating,
+      prodDiscount,
+      prodName,
+    } = req.body;
+
+    const newItem = {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      rating,
+      prodDiscount,
+      prodName,
+    };
+
+    const customerCartList = await cartList.findOne({ customerId });
+    const productExists = customerCartList?.items.some(
+      (item) => item.prodId === prodId
+    );
+
+    if (productExists) {
+      return res.status(200).json({
+        message: "Item already in wishlist",
+        cartList: customerCartList,
+      });
+    }
+
+    const updatedCartlist = await cartList.findOneAndUpdate(
+      { customerId },
+      { $push: { items: newItem } },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      message: "Item added to wishlist successfully!",
+      cartList: updatedCartlist,
+    });
+  } catch (error) {
+    console.error("Error updating wishlist:", error);
+    res.status(500).json({ message: "Error submitting item" });
+  }
+});
+
+app.post("/api/cart/remove", async (req, res) => {
+  try {
+    const { customerId, prodId } = req.body;
+
+    const updateCartlist = await cartList.findOneAndUpdate(
+      { customerId },
+      { $pull: { items: { prodId } } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Item removed from wishlist successfully!",
+      cartlist: updateCartlist,
+    });
+  } catch (error) {
+    console.error("Error removing item from wishlist:", error);
+    res.status(500).json({ message: "Error removing item" });
+  }
+});
+
+app.post("/api/orders/dumped", async (req, res) => {
+  try {
+    const {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      orderId,
+      customerName,
+      orderDate,
+      prodDiscount,
+      prodName,
+    } = req.body;
+
+    const newItem = {
+      customerId,
+      prodId,
+      prodPrice,
+      prodDiscrip,
+      prodImg,
+      orderId,
+      customerName,
+      orderDate,
+      prodDiscount,
+      prodName,
+    };
+
+    const updatedOrderslist = await ordersInfo.findOneAndUpdate(
+      { customerId },
+      { $push: { items: newItem } },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      message: "Item added to orders successfully!",
+      cartList: updatedOrderslist,
+    });
+  } catch (error) {
+    console.error("Error updating orders:", error);
+    res.status(500).json({ message: "Error submitting item" });
+  }
+});
+
+app.post("/api/busi/delete", async (req, res) => {
+  try {
+    const { customerId, prodId } = req.body;
+
+    const upadtedProductlist = await Products.findOneAndUpdate(
+      { customerId },
+      { $pull: { products: { prodId } } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Item removed from Product list",
+      productList: upadtedProductlist,
+    });
+  } catch (error) {
+    console.error("Error removing item from Product list:", error);
+    res.status(500).json({ message: "Error removing item" });
+  }
+});
+
+// ######################################### GET METHODS #####################################################
+
+app.get("/api/getUsersInfo/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await UserInfo.findOne({ username });
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Error retrieving user data" });
+  }
+});
+
+app.get("/api/wishlist/get/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const wishlist = await wishlistInfo.findOne({ customerId });
+    if (!wishlist) {
+      return res.status(200).json({ items: [] });
+    }
+    res.status(200).json(wishlist);
+  } catch (error) {
+    console.error("Error retrieving wishlist:", error);
+    res.status(500).json({ message: "Error retrieving wishlist" });
+  }
+});
+
+app.get("/api/getProducts", async (req, res) => {
+  try {
+    const getProduct = await Products.find();
+    res.status(200).json(getProduct);
+  } catch (error) {
+    console.error("Error retrieving Products:", error);
+    res.status(500).json({ message: "Error retrieving Products" });
+  }
+});
+
+app.get("/api/cart/get/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const cartListItems = await cartList.findOne({ customerId });
+    if (!cartListItems) {
+      return res.status(200).json({ items: [] });
+    }
+    res.status(200).json(cartListItems);
+  } catch (error) {
+    console.error("Error retrieving cartList:", error);
+    res.status(500).json({ message: "Error retrieving cartList" });
+  }
+});
+
+app.get("/api/busi/getProducts/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+    let getProduct;
+    if (customerId) {
+      getProduct = await Products.find({ customerId });
+    }
+    res.status(200).json(getProduct);
+  } catch (error) {
+    console.error("Error retrieving products:", error);
+    res.status(500).json({ message: "Error retrieving products", error });
+  }
+});
+
+app.get("/api/orders/get/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const orders = await ordersInfo.findOne({ customerId });
+    if (!orders) {
+      return res.status(200).json({ items: [] });
+    }
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error retrieving orders:", error);
+    res.status(500).json({ message: "Error retrieving orders" });
+  }
+});
+
+app.get("/api/getdogfood/:type", async (req, res) => {
+  const { type } = req.params;
+  try {
+    if (type != undefined) {
+      const getProducts = [];
+      const data = await Products.find();
+      data.map((doc) => {
+        doc.products.map((product) => {
+          if (product.subCategory === type) {
+            getProducts.push(product);
+          }
+        });
+      });
+      res.status(200).json(getProducts);
+    } else {
+      throw new Error("Type not found");
+    }
+  } catch (error) {
+    console.error("Error retrieving products:" + type, error);
+    res.status(500).json({ message: "Error retrieving products" + type });
+  }
+});
+
+app.get("/api/accessories/:type", async (req, res) => {
+   const { type } = req.params;
+  try {
+    const getProducts = [];
+    const data = await Products.find();
+    data.map((doc) => {
+      doc.products.map((product) => {
+        if (product.subCategory === type) {
+          getProducts.push(product);
+        }
+      });
+    });
+    res.status(200).json(getProducts);
+  } catch (error) {
+    console.error("Error retrieving products:" + type, error);
+    res.status(500).json({ message: "Error retrieving products" + type });
+  }
+});
+
+export default app;
